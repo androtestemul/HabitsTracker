@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Трекер привычек</string>
+    <string name="empty_list">Список пуст</string>
+    <string name="add_habit">Добавить привычку</string>
+    <string name="habit_priority_high">Высокий</string>
+    <string name="habit_priority_middle">Средний</string>
+    <string name="habit_priority_low">Низкий</string>
+    <string name="habit_type_bad">Плохая</string>
+    <string name="habit_type_good">Хорошая</string>
+    <string name="habit_type_neutral">Нейтральная</string>
+    <string name="priority_label">Приоритет:</string>
+    <string name="type_label">Тип:</string>
+    <string name="period_label">Периодичность:</string>
+    <string name="choose_a_priority_label">Выберите приоритет:</string>
+    <string name="habit_name_label">Название:</string>
+    <string name="habit_description_label">Описание:</string>
+    <string name="habit_name_content_description">Введите название привычки</string>
+    <string name="habit_description_content_description">Введите описание привычки</string>
+    <string name="habit_priority_content_description">Выберите приоритет привычки</string>
+    <string name="habit_type_label">Выберите тип:</string>
+    <string name="habit_number_of_repetitions_label">Количество повторений:</string>
+    <string name="habit_execute_count_content_description">Введите количество повторений</string>
+    <string name="habit_period_content_description">Введите периодичность привычки</string>
+    <string name="habit_period_label">Периодичность:</string>
+    <string name="habit_save_button">Сохранить</string>
+</resources>

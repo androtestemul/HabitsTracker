@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">HabitsTracker</string>
+    <string name="empty_list">List is empty</string>
+    <string name="add_habit">Add habit</string>
+    <string name="habit_priority_high">High</string>
+    <string name="habit_priority_middle">Middle</string>
+    <string name="habit_priority_low">Low</string>
+    <string name="habit_type_bad">Bad</string>
+    <string name="habit_type_good">Good</string>
+    <string name="habit_type_neutral">Neutral</string>
+    <string name="priority_label">Priority:</string>
+    <string name="type_label">Type:</string>
+    <string name="period_label">Period:</string>
+    <string name="habit_name_label">Name:</string>
+    <string name="habit_description_label">Description:</string>
+    <string name="choose_a_priority_label">Choose a priority:</string>
+    <string name="habit_name_content_description">Enter a name for the habit</string>
+    <string name="habit_description_content_description">Enter a description for the habit</string>
+    <string name="habit_priority_content_description">Choose a Habit Priority</string>
+    <string name="habit_type_label">Choose a type:</string>
+    <string name="habit_number_of_repetitions_label">Number of repetitions:</string>
+    <string name="habit_execute_count_content_description">Enter the number of repetitions</string>
+    <string name="habit_period_label">Periodicity:</string>
+    <string name="habit_period_content_description">Enter the frequency of the habit</string>
+    <string name="habit_save_button">Save</string>
 </resources>
