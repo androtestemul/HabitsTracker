@@ -1,63 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/default_padding"
-    tools:context=".ui.screens.habitslist.AddEditHabit">
+    tools:context=".ui.screens.habitslist.AddEditHabitActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/default_padding">
 
-        <TextView
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/headerTextInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/habit_name_label" />
+            android:layout_marginTop="10dp"
+            android:hint="@string/habit_name_hint"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:hintTextAppearance="@style/TextAppearance">
 
-        <EditText
-            android:id="@+id/nameEditText"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/headerEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="#757575" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/descriptionTextInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/habit_name_content_description"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:minHeight="48dp"
-            android:textColorHint="#757575" />
+            android:layout_marginTop="10dp"
+            android:hint="@string/habit_description_hint"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:hintTextAppearance="@style/TextAppearance">
 
-        <TextView
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/descriptionEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textColorHint="#616161" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/priorityTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/habit_description_label" />
+            android:layout_marginTop="10dp"
+            android:hint="@string/habit_priority_hint"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
-        <EditText
-            android:id="@+id/descriptionEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/habit_description_content_description"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:minHeight="48dp"
-            android:textColorHint="#757575" />
+            <AutoCompleteTextView
+                android:id="@+id/priorityEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/choose_a_priority_label" />
-
-        <Spinner
-            android:id="@+id/prioritySpinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/habit_priority_content_description"
-            android:minHeight="48dp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/habitTypeLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:text="@string/habit_type_label" />
 
         <RadioGroup
@@ -65,42 +80,52 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <TextView
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/executeCountTextInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/habit_number_of_repetitions_label" />
+            android:layout_marginTop="10dp"
+            android:hint="@string/habit_number_of_repetitions_hint"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:hintTextAppearance="@style/TextAppearance">
 
-        <EditText
-            android:id="@+id/executeCountEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/habit_execute_count_content_description"
-            android:importantForAutofill="no"
-            android:inputType="number"
-            android:minHeight="48dp"
-            android:textColorHint="#757575" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/executeCountEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:textColorHint="#616161" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/habit_period_label" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/periodEditText"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/periodTextInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/habit_period_content_description"
-            android:importantForAutofill="no"
-            android:inputType="textPersonName"
-            android:minHeight="48dp"
-            android:textColorHint="#757575" />
+            android:layout_marginTop="10dp"
+            android:hint="@string/habit_period_hint"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:hintTextAppearance="@style/TextAppearance">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/periodEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textColorHint="#616161" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/saveButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/habit_save_button" />
+
+
     </LinearLayout>
 </ScrollView>

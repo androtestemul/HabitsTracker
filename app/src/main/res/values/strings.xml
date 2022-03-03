@@ -11,16 +11,23 @@
     <string name="priority_label">Priority:</string>
     <string name="type_label">Type:</string>
     <string name="period_label">Period:</string>
-    <string name="habit_name_label">Name:</string>
-    <string name="habit_description_label">Description:</string>
-    <string name="choose_a_priority_label">Choose a priority:</string>
-    <string name="habit_name_content_description">Enter a name for the habit</string>
-    <string name="habit_description_content_description">Enter a description for the habit</string>
-    <string name="habit_priority_content_description">Choose a Habit Priority</string>
+
+    <!-- ***** AddEditHabit ***** -->
+    <string name="header_add">Adding a Habit</string>
+    <string name="header_edit">Editing a Habit</string>
+
+    <string name="habit_name_hint">Name</string>
+    <string name="habit_description_hint">Description</string>
+    <string name="habit_number_of_repetitions_hint">Number of repetitions</string>
+    <string name="habit_period_hint">Periodicity</string>
+    <string name="habit_priority_hint">Priority</string>
+
     <string name="habit_type_label">Choose a type:</string>
-    <string name="habit_number_of_repetitions_label">Number of repetitions:</string>
-    <string name="habit_execute_count_content_description">Enter the number of repetitions</string>
-    <string name="habit_period_label">Periodicity:</string>
-    <string name="habit_period_content_description">Enter the frequency of the habit</string>
+
     <string name="habit_save_button">Save</string>
+    <!-- ************************ -->
+
+    <!-- ***** Errors ***** -->
+    <string name="required_field_err">Required field!</string>
+    <!-- ************************ -->
 </resources>

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/default_padding"
     tools:context=".ui.screens.habitslist.HabitsListActivity">
 
     <androidx.recyclerview.widget.RecyclerView

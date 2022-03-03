@@ -12,16 +12,20 @@
     <string name="priority_label">Приоритет:</string>
     <string name="type_label">Тип:</string>
     <string name="period_label">Периодичность:</string>
-    <string name="choose_a_priority_label">Выберите приоритет:</string>
-    <string name="habit_name_label">Название:</string>
-    <string name="habit_description_label">Описание:</string>
-    <string name="habit_name_content_description">Введите название привычки</string>
-    <string name="habit_description_content_description">Введите описание привычки</string>
-    <string name="habit_priority_content_description">Выберите приоритет привычки</string>
+
+
+    <!-- ***** AddEditHabit ***** -->
+    <string name="header_add">Добавление привычки</string>
+    <string name="header_edit">Редактирование привычки</string>
+    <string name="habit_name_hint">Название</string>
+    <string name="habit_description_hint">Описание</string>
+    <string name="habit_period_hint">Периодичность</string>
+    <string name="habit_number_of_repetitions_hint">Количество повторений</string>
+    <string name="habit_priority_hint">Приоритет</string>
     <string name="habit_type_label">Выберите тип:</string>
-    <string name="habit_number_of_repetitions_label">Количество повторений:</string>
-    <string name="habit_execute_count_content_description">Введите количество повторений</string>
-    <string name="habit_period_content_description">Введите периодичность привычки</string>
-    <string name="habit_period_label">Периодичность:</string>
     <string name="habit_save_button">Сохранить</string>
+    <!-- ************************ -->
+
+    <string name="required_field_err">Обязательное поле!</string>
+    <!-- ************************ -->
 </resources>

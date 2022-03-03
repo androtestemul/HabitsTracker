@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HabitsTracker">
         <activity
-            android:name=".ui.screens.habitslist.AddEditHabit"
+            android:name=".ui.screens.habitslist.AddEditHabitActivity"
             android:exported="false" />
         <activity
             android:name=".ui.screens.habitslist.HabitsListActivity"

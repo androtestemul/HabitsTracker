@@ -1,19 +1,16 @@
 package com.apska.habitstracker.model
 
+import android.content.Context
+import android.os.Parcelable
 import com.apska.habitstracker.R
+import kotlinx.parcelize.Parcelize
 
-sealed class HabitType {
-    abstract val name: String
-}
+@Parcelize
+enum class HabitType(val value: Int) : Parcelable {
+    BAD(R.string.habit_type_bad),
+    GOOD(R.string.habit_type_good),
+    NEUTRAL(R.string.habit_type_neutral);
 
-class Bad : HabitType() {
-    override val name = R.string.habit_type_bad.toString()
-}
+    fun getTextValue(context: Context) = context.getString(value)
 
-class Good : HabitType() {
-    override val name = R.string.habit_type_good.toString()
-}
-
-class Neutral : HabitType() {
-    override val name = R.string.habit_type_neutral.toString()
 }

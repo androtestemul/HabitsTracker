@@ -1,14 +1,24 @@
 package com.apska.habitstracker.ui.screens.habitslist
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.apska.habitstracker.databinding.ActivityHabitsListBinding
+import com.apska.habitstracker.model.Habit
+import kotlin.properties.Delegates
 
 class HabitsListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHabitsListBinding
+    private lateinit var resultAddLauncher: ActivityResultLauncher<Intent>
+    private lateinit var resultEditLauncher: ActivityResultLauncher<Intent>
+    private lateinit var habitsAdapter: HabitsAdapter
+    private var clickedHabitPosition by Delegates.notNull<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,15 +30,57 @@ class HabitsListActivity : AppCompatActivity() {
         (recyclerView.layoutManager as LinearLayoutManager)
             .orientation = LinearLayoutManager.VERTICAL
 
-        val habitsAdapter = HabitsAdapter()
+        habitsAdapter = HabitsAdapter()
         recyclerView.adapter = habitsAdapter
 
-        if (habitsAdapter.itemCount == 0) {
-            binding.emptyListTextView.visibility = View.VISIBLE
+        habitsAdapter.onHabitItemClickListener = object : HabitsAdapter.OnHabitItemClickListener {
+            override fun onItemClick(habitPosition: Int) {
+                clickedHabitPosition = habitPosition
+
+                resultEditLauncher.launch(AddEditHabitActivity
+                    .getIntent(this@HabitsListActivity, habitsAdapter.habitsList[habitPosition]))
+            }
+        }
+
+        resultAddLauncher = registerForActivityResult(ActivityResultContracts
+            .StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.let { intent ->
+                    val habit = intent.getParcelableExtra<Habit>(AddEditHabitActivity.EXTRA_HABIT)
+
+                    habit?.let {
+                        habitsAdapter.addHabit(it)
+                        setEmptyListVisibility()
+                    }
+                }
+            }
+        }
+
+        resultEditLauncher = registerForActivityResult(ActivityResultContracts
+            .StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.let { intent ->
+                    val habit = intent.getParcelableExtra<Habit>(AddEditHabitActivity.EXTRA_HABIT)
+
+                    habit?.let {
+                        habitsAdapter.replaceHabit(it, clickedHabitPosition)
+                    }
+                }
+            }
         }
 
         binding.floatingActionButtonAddHabit.setOnClickListener {
+            resultAddLauncher.launch(AddEditHabitActivity.getIntent(this))
+        }
 
+        setEmptyListVisibility()
+    }
+
+    fun setEmptyListVisibility() {
+        if (habitsAdapter.itemCount != 0 && binding.emptyListTextView.visibility != View.GONE) {
+            binding.emptyListTextView.visibility = View.GONE
+        } else if (habitsAdapter.itemCount == 0 && binding.emptyListTextView.visibility != View.VISIBLE) {
+            binding.emptyListTextView.visibility = View.VISIBLE
         }
     }
 }
