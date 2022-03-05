@@ -1,26 +1,22 @@
 package com.apska.habitstracker.ui.screens.habitslist
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.Insets
-import android.graphics.drawable.GradientDrawable
-import android.os.Build
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.View
-import android.view.ViewGroup
-import android.view.WindowInsets
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.EditText
+import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.setMargins
 import androidx.core.view.size
 import com.apska.habitstracker.R
 import com.apska.habitstracker.databinding.ActivityAddEditHabitBinding
 import com.apska.habitstracker.model.Habit
 import com.apska.habitstracker.model.HabitPriority
 import com.apska.habitstracker.model.HabitType
+import com.apska.habitstracker.ui.ColorPicker
 import com.apska.habitstracker.ui.ColorPickerView
 import com.apska.habitstracker.ui.screens.FieldValidator
 import com.google.android.material.textfield.TextInputLayout
@@ -134,8 +130,15 @@ class AddEditHabitActivity : AppCompatActivity() {
 
         setupValidatorListeners()
 
-        buildColorPicker()
-
+        ColorPicker(this, binding.colorsPickerView, binding.rootLinearLayout, selectedColor,
+            object : ColorPicker.OnColorClickListener {
+                override fun onColorClick(colorPickerView: ColorPickerView) {
+                    selectedColor = colorPickerView.canvasBackgroundColor
+                    binding.selectedColorPickerView.canvasBackgroundColor = selectedColor
+                    binding.selectedColorTextView.text =
+                        getText(R.string.habit_color_selected_label)
+                }
+            })
     }
 
     private fun isFieldsValid(): Boolean {
@@ -210,90 +213,4 @@ class AddEditHabitActivity : AppCompatActivity() {
 
     private fun validatePriority() =
         validateEmptyField(binding.priorityTextInputLayout, binding.priorityEditText)
-
-    private fun getScreenWidth(activity: Activity): Int {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            val windowMetrics = activity.windowManager.currentWindowMetrics
-            val insets: Insets = windowMetrics.windowInsets
-                .getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
-            windowMetrics.bounds.width() - insets.left - insets.right
-        } else {
-            val displayMetrics = DisplayMetrics()
-            @Suppress("DEPRECATION")
-            activity.windowManager.defaultDisplay.getMetrics(displayMetrics)
-            displayMetrics.widthPixels
-        }
-    }
-
-    private fun buildColorPicker() {
-        val squareTotalCount = 16
-        val startDegree: Float = 360 / squareTotalCount.toFloat() / 2
-
-        val intColors = ArrayList<Int>(16)
-
-        for (i in 0 until squareTotalCount) {
-            val degree = startDegree + (startDegree * 2 * i)
-            val hueColor = Color.HSVToColor(floatArrayOf(degree, 100f, 100f))
-            intColors.add(hueColor)
-        }
-
-        val drawable = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
-            intArrayOf(Color.RED, *intColors.toIntArray(), Color.RED))
-
-        drawable.shape = GradientDrawable.RECTANGLE
-        drawable.gradientType = GradientDrawable.LINEAR_GRADIENT
-
-        binding.colorsPickerView.background = drawable
-
-        val squareOnScreenCount = 4
-        //val squareMarginWidthPercent = 25
-        val screenWidth =
-            getScreenWidth(this) - binding.rootLinearLayout.paddingLeft - binding.rootLinearLayout.paddingRight
-        //val squareFullWidth: Int = screenWidth/squareOnScreenCount
-
-        val squareMarginWidth: Int = screenWidth / squareOnScreenCount / 6
-        //val squareMarginWidth: Int = squareFullWidth * squareMarginWidthPercent/100
-
-        val squareWidth: Int = squareMarginWidth * 4
-        //val squareWidth: Int = squareMarginWidth*4
-
-
-        val layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT)
-        layoutParams.setMargins(squareMarginWidth)
-        layoutParams.width = squareWidth
-        layoutParams.height = squareWidth
-
-
-        for (i in 0 until squareTotalCount) {
-            val squareView = ColorPickerView(this, layoutParams, intColors[i])
-
-            if (squareView.canvasBackgroundColor == selectedColor) {
-                squareView.isViewSelected = true
-            }
-
-            squareView.setOnClickListener {
-                val clickedSquareView = it as ColorPickerView
-
-                if (clickedSquareView.isViewSelected) {
-                    return@setOnClickListener
-                }
-
-                //Снимаем флаг isViewSelected с предыдущей выбранной View
-                if (selectedColor != Color.WHITE) {
-                    (binding.colorsPickerView
-                        .getChildAt(intColors.indexOf(selectedColor)) as ColorPickerView).isViewSelected =
-                        false
-                }
-
-                selectedColor = clickedSquareView.canvasBackgroundColor
-                clickedSquareView.isViewSelected = true
-
-                binding.selectedColorPickerView.canvasBackgroundColor = selectedColor
-                binding.selectedColorTextView.text = getText(R.string.habit_color_selected_label)
-            }
-
-            binding.colorsPickerView.addView(squareView)
-        }
-    }
 }
