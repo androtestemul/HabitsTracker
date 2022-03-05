@@ -8,6 +8,7 @@
     tools:context=".ui.screens.habitslist.AddEditHabitActivity">
 
     <LinearLayout
+        android:id="@+id/rootLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -54,17 +55,18 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/priorityTextInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:hint="@string/habit_priority_hint"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+            android:hint="@string/habit_priority_hint">
 
             <AutoCompleteTextView
                 android:id="@+id/priorityEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="none" />
+                android:inputType="none"
+                tools:ignore="LabelFor" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -72,7 +74,8 @@
             android:id="@+id/habitTypeLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="5dp"
             android:text="@string/habit_type_label" />
 
         <RadioGroup
@@ -85,7 +88,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:hint="@string/habit_number_of_repetitions_hint"
             app:endIconMode="clear_text"
             app:errorEnabled="true"
@@ -120,10 +123,52 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/selectedColorTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/habit_color_not_selected_label"
+                tools:text="@string/habit_color_not_selected_label"/>
+
+            <com.apska.habitstracker.ui.ColorPickerView
+                android:id="@+id/selected_color_picker_view"
+                android:layout_width="80dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="10dp"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/habit_color_choose_label"
+            tools:text="@string/habit_color_choose_label"/>
+
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <LinearLayout
+                android:id="@+id/colorsPickerView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+
         <Button
             android:id="@+id/saveButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:text="@string/habit_save_button" />
 
 

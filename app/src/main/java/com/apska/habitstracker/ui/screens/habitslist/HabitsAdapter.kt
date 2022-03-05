@@ -1,13 +1,13 @@
 package com.apska.habitstracker.ui.screens.habitslist
 
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.apska.habitstracker.R
 import com.apska.habitstracker.databinding.HabitListItemBinding
 import com.apska.habitstracker.model.Habit
-
 
 
 class HabitsAdapter : RecyclerView.Adapter<HabitsAdapter.HabitsViewHolder>() {
@@ -59,7 +59,8 @@ class HabitsAdapter : RecyclerView.Adapter<HabitsAdapter.HabitsViewHolder>() {
                 priorityTextView.text = habit.priority.getTextValue(this.root.context)
                 typeTextView.text = habit.type.getTextValue(this.root.context)
                 periodTextView.text = habit.period
-                colorView.setBackgroundColor(Color.parseColor(habit.color))
+
+                colorView.canvasBackgroundColor = habit.color
             }
         }
     }

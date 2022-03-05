@@ -23,6 +23,9 @@
     <string name="habit_priority_hint">Priority</string>
 
     <string name="habit_type_label">Choose a type:</string>
+    <string name="habit_color_selected_label">Selected color:</string>
+    <string name="habit_color_not_selected_label">No color selected:</string>
+    <string name="habit_color_choose_label">Choose a color:</string>
 
     <string name="habit_save_button">Save</string>
     <!-- ************************ -->

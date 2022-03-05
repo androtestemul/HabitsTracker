@@ -12,12 +12,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <View
+        <com.apska.habitstracker.ui.ColorPickerView
             android:id="@+id/colorView"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:padding="@dimen/default_padding"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

@@ -11,5 +11,5 @@ data class Habit(
     val type: HabitType,
     val executeCount: Int,
     val period: String,
-    val color: String = "#ff0000"
+    val color: Int
 ) : Parcelable
