@@ -16,8 +16,7 @@ import com.apska.habitstracker.databinding.ActivityAddEditHabitBinding
 import com.apska.habitstracker.model.Habit
 import com.apska.habitstracker.model.HabitPriority
 import com.apska.habitstracker.model.HabitType
-import com.apska.habitstracker.ui.ColorPicker
-import com.apska.habitstracker.ui.ColorPickerView
+import com.apska.habitstracker.ui.view.colorpicker.ColorPicker
 import com.apska.habitstracker.ui.screens.FieldValidator
 import com.google.android.material.textfield.TextInputLayout
 
@@ -37,7 +36,7 @@ class AddEditHabitActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddEditHabitBinding
     private var selectedPriorityIndex = -1
-    private var selectedColor = Color.WHITE
+    private var selectedColorFromPicker = Color.WHITE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,7 +82,7 @@ class AddEditHabitActivity : AppCompatActivity() {
                 (habitTypeRadioGroup.getChildAt(habit.type.ordinal) as RadioButton).isChecked = true
                 selectedColorPickerView.canvasBackgroundColor = habit.color
                 selectedColorPickerView.visibility = View.VISIBLE
-                selectedColor = habit.color
+                selectedColorFromPicker = habit.color
                 selectedColorTextView.text = getText(R.string.habit_color_selected_label)
             }
 
@@ -119,7 +118,7 @@ class AddEditHabitActivity : AppCompatActivity() {
                 type = type,
                 executeCount = binding.executeCountEditText.text.toString().toInt(),
                 period = binding.periodEditText.text.toString(),
-                color = selectedColor
+                color = selectedColorFromPicker
             )
 
             val intent = Intent()
@@ -130,15 +129,15 @@ class AddEditHabitActivity : AppCompatActivity() {
 
         setupValidatorListeners()
 
-        ColorPicker(this, binding.colorsPickerView, binding.rootLinearLayout, selectedColor,
-            object : ColorPicker.OnColorClickListener {
-                override fun onColorClick(colorPickerView: ColorPickerView) {
-                    selectedColor = colorPickerView.canvasBackgroundColor
-                    binding.selectedColorPickerView.canvasBackgroundColor = selectedColor
-                    binding.selectedColorTextView.text =
-                        getText(R.string.habit_color_selected_label)
-                }
-            })
+        ColorPicker(this, binding.colorsPickerView, binding.rootLinearLayout).apply {
+            this.selectedColor = selectedColorFromPicker
+
+            onColorClickListener = ColorPicker.OnColorClickListener { colorPickerView ->
+                selectedColorFromPicker = colorPickerView.canvasBackgroundColor
+                binding.selectedColorPickerView.canvasBackgroundColor = selectedColor
+                binding.selectedColorTextView.text = getText(R.string.habit_color_selected_label)
+            }
+        }
     }
 
     private fun isFieldsValid(): Boolean {

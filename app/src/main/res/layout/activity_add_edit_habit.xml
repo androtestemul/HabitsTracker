@@ -137,7 +137,7 @@
                 android:text="@string/habit_color_not_selected_label"
                 tools:text="@string/habit_color_not_selected_label"/>
 
-            <com.apska.habitstracker.ui.ColorPickerView
+            <com.apska.habitstracker.ui.view.colorview.ColorViewFramed
                 android:id="@+id/selected_color_picker_view"
                 android:layout_width="80dp"
                 android:layout_height="60dp"

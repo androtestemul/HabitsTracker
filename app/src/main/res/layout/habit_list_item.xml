@@ -9,7 +9,7 @@
     android:layout_marginBottom="@dimen/default_margin"
     android:background="@drawable/habit_list_item_background">
 
-    <com.apska.habitstracker.ui.ColorPickerView
+    <com.apska.habitstracker.ui.view.colorview.ColorViewFramed
         android:id="@+id/colorView"
         android:layout_width="@dimen/list_image_square_width"
         android:layout_height="@dimen/list_image_square_width"

@@ -1,4 +1,4 @@
-package com.apska.habitstracker.ui
+package com.apska.habitstracker.ui.view.colorpicker
 
 import android.app.Activity
 import android.graphics.Color
@@ -8,20 +8,20 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.view.setMargins
 import com.apska.habitstracker.getScreenWidth
+import com.apska.habitstracker.ui.view.colorview.ColorViewSelectable
 
 class ColorPicker(
     activity: Activity,
     parent: ViewGroup,
-    root: View,
-    private var selectedColor: Int = Color.WHITE,
-    private var onColorClickListener: OnColorClickListener
+    root: View
 ) {
 
-    interface OnColorClickListener {
+    fun interface OnColorClickListener {
         fun onColorClick(colorPickerView: ColorPickerView)
     }
 
-
+    var selectedColor: Int = Color.WHITE
+    var onColorClickListener: OnColorClickListener? = null
 
     private val squareTotalCount = 16
     private val startDegree: Float = 360 / squareTotalCount.toFloat() / 2
@@ -56,10 +56,14 @@ class ColorPicker(
         layoutParams.height = squareWidth
 
         for (i in 0 until squareTotalCount) {
-            val squareView = ColorPickerView(activity, layoutParams, intColors[i])
+            val squareView = ColorPickerView(activity, layoutParams)
 
-            if (squareView.canvasBackgroundColor == selectedColor) {
-                squareView.isViewSelected = true
+            squareView.apply {
+                canvasBackgroundColor = intColors[i]
+
+                if (canvasBackgroundColor == selectedColor) {
+                    isViewSelected = true
+                }
             }
 
             squareView.setOnClickListener {
@@ -78,7 +82,7 @@ class ColorPicker(
                 selectedColor = colorPickerView.canvasBackgroundColor
                 colorPickerView.isViewSelected = true
 
-                onColorClickListener.onColorClick(colorPickerView)
+                onColorClickListener?.onColorClick(colorPickerView)
             }
 
             parent.addView(squareView)
