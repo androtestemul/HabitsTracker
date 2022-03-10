@@ -12,7 +12,7 @@ import com.apska.habitstracker.ui.view.colorview.ColorViewSelectable
 
 class ColorPicker(
     activity: Activity,
-    parent: ViewGroup,
+    private val parent: ViewGroup,
     root: View
 ) {
 
@@ -21,6 +21,18 @@ class ColorPicker(
     }
 
     var selectedColor: Int = Color.WHITE
+        set(value) {
+            field = value
+            val selectedColorIndex = intColors.indexOf(value)
+
+            if (selectedColorIndex >= 0) {
+                (parent.getChildAt(selectedColorIndex) as ColorPickerView).apply {
+                    isViewSelected = true
+                    invalidate()
+                }
+            }
+        }
+
     var onColorClickListener: OnColorClickListener? = null
 
     private val squareTotalCount = 16
@@ -58,13 +70,7 @@ class ColorPicker(
         for (i in 0 until squareTotalCount) {
             val squareView = ColorPickerView(activity, layoutParams)
 
-            squareView.apply {
-                canvasBackgroundColor = intColors[i]
-
-                if (canvasBackgroundColor == selectedColor) {
-                    isViewSelected = true
-                }
-            }
+            squareView.canvasBackgroundColor = intColors[i]
 
             squareView.setOnClickListener {
                 val colorPickerView = it as ColorPickerView

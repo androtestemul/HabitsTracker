@@ -1,4 +1,4 @@
-package com.apska.habitstracker.ui.screens.habitslist
+package com.apska.habitstracker.ui.screens.addedithabit
 
 import android.text.Editable
 import android.text.TextWatcher

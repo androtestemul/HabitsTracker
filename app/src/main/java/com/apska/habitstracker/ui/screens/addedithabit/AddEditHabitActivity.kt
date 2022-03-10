@@ -1,4 +1,4 @@
-package com.apska.habitstracker.ui.screens.habitslist
+package com.apska.habitstracker.ui.screens.addedithabit
 
 import android.content.Context
 import android.content.Intent
