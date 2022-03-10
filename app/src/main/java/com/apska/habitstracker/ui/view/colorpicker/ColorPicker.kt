@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.view.setMargins
 import com.apska.habitstracker.getScreenWidth
-import com.apska.habitstracker.ui.view.colorview.ColorViewSelectable
 
 class ColorPicker(
     activity: Activity,

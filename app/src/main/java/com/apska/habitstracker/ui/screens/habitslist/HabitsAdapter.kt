@@ -1,7 +1,5 @@
 package com.apska.habitstracker.ui.screens.habitslist
 
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView

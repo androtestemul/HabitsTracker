@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.apska.habitstracker.databinding.ActivityHabitsListBinding
 import com.apska.habitstracker.model.Habit
 import com.apska.habitstracker.ui.screens.addedithabit.AddEditHabitActivity
-import kotlin.properties.Delegates
 
 class HabitsListActivity : AppCompatActivity() {
 

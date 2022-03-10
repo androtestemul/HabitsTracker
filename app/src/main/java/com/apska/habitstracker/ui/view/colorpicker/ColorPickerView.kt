@@ -3,7 +3,6 @@ package com.apska.habitstracker.ui.view.colorpicker
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.LinearLayout
-import com.apska.habitstracker.ui.view.colorview.ColorViewSelectable
 import com.apska.habitstracker.ui.view.colorview.ColorViewSelected
 
 
