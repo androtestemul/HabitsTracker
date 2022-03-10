@@ -15,11 +15,16 @@ import kotlin.properties.Delegates
 
 class HabitsListActivity : AppCompatActivity() {
 
+    companion object {
+        private const val KEY_HABIT_LIST = "habit_list"
+        private const val KEY_CLICKED_HABIT_POSITION = "clicked_habit_position"
+    }
+
     private lateinit var binding: ActivityHabitsListBinding
     private lateinit var resultAddLauncher: ActivityResultLauncher<Intent>
     private lateinit var resultEditLauncher: ActivityResultLauncher<Intent>
     private lateinit var habitsAdapter: HabitsAdapter
-    private var clickedHabitPosition by Delegates.notNull<Int>()
+    private var clickedHabitPosition = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,11 +78,31 @@ class HabitsListActivity : AppCompatActivity() {
         binding.floatingActionButtonAddHabit.setOnClickListener {
             resultAddLauncher.launch(AddEditHabitActivity.getIntent(this))
         }
+    }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putParcelableArrayList(KEY_HABIT_LIST, habitsAdapter.habitsList)
+        outState.putInt(KEY_CLICKED_HABIT_POSITION, clickedHabitPosition)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        savedInstanceState.getParcelableArrayList<Habit>(KEY_HABIT_LIST)?.let {
+            habitsAdapter.habitsList = it
+        }
+
+        clickedHabitPosition = savedInstanceState.getInt(KEY_CLICKED_HABIT_POSITION)
+    }
+
+    override fun onResume() {
+        super.onResume()
         setEmptyListVisibility()
     }
 
-    fun setEmptyListVisibility() {
+    private fun setEmptyListVisibility() {
         if (habitsAdapter.itemCount != 0 && binding.emptyListTextView.visibility != View.GONE) {
             binding.emptyListTextView.visibility = View.GONE
         } else if (habitsAdapter.itemCount == 0 && binding.emptyListTextView.visibility != View.VISIBLE) {
