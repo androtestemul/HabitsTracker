@@ -2,4 +2,6 @@
 <resources>
     <dimen name="default_margin">8dp</dimen>
     <dimen name="default_padding">8dp</dimen>
+    <dimen name="list_image_margin">16dp</dimen>
+    <dimen name="list_image_square_width">40dp</dimen>
 </resources>

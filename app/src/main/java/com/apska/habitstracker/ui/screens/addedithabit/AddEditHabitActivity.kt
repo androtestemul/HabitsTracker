@@ -1,33 +1,29 @@
-package com.apska.habitstracker.ui.screens.habitslist
+package com.apska.habitstracker.ui.screens.addedithabit
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.Insets
-import android.graphics.drawable.GradientDrawable
-import android.os.Build
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.View
-import android.view.ViewGroup
-import android.view.WindowInsets
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.setMargins
-import androidx.core.view.size
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import com.apska.habitstracker.R
 import com.apska.habitstracker.databinding.ActivityAddEditHabitBinding
 import com.apska.habitstracker.model.Habit
 import com.apska.habitstracker.model.HabitPriority
 import com.apska.habitstracker.model.HabitType
-import com.apska.habitstracker.ui.ColorPickerView
+import com.apska.habitstracker.ui.view.colorpicker.ColorPicker
 import com.apska.habitstracker.ui.screens.FieldValidator
 import com.google.android.material.textfield.TextInputLayout
 
 class AddEditHabitActivity : AppCompatActivity() {
 
     companion object {
+        private const val KEY_SELECTED_PRIORITY_INDEX = "selected_priority_index"
+        private const val KEY_SELECTED_TYPE_INDEX = "selected_type_index"
         const val EXTRA_HABIT = "habit"
 
         fun getIntent(context: Context, habit: Habit? = null): Intent {
@@ -40,8 +36,10 @@ class AddEditHabitActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityAddEditHabitBinding
+    private lateinit var priorityEditText: AppCompatAutoCompleteTextView
     private var selectedPriorityIndex = -1
-    private var selectedColor = Color.WHITE
+    private var selectedTypeIndex = -1
+    private var selectedColorFromPicker = Color.WHITE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,9 +53,9 @@ class AddEditHabitActivity : AppCompatActivity() {
                 habitPriority.getTextValue(this)
             })
 
-        val priorityEditText = binding.priorityEditText as? AutoCompleteTextView
+        priorityEditText = binding.priorityEditText as AppCompatAutoCompleteTextView
 
-        priorityEditText?.apply {
+        priorityEditText.apply {
             setAdapter(priorityAdapter)
             setOnItemClickListener { _, _, position, _ ->
                 selectedPriorityIndex = position
@@ -66,8 +64,18 @@ class AddEditHabitActivity : AppCompatActivity() {
 
         HabitType.values().forEach { habitType ->
             val radioButton = RadioButton(this)
+            radioButton.id = habitType.ordinal
             radioButton.text = habitType.getTextValue(this)
+
+            if (habitType.ordinal == selectedTypeIndex) {
+                radioButton.isChecked = true
+            }
+
             binding.habitTypeRadioGroup.addView(radioButton)
+        }
+
+        binding.habitTypeRadioGroup.setOnCheckedChangeListener { _, checkedId ->
+            selectedTypeIndex = checkedId
         }
 
         if (intent.hasExtra(EXTRA_HABIT)) {
@@ -77,7 +85,9 @@ class AddEditHabitActivity : AppCompatActivity() {
                 ?: throw Exception("Не удалось получить привычку из переданного Intent.")
 
             selectedPriorityIndex = habit.priority.ordinal
-            priorityEditText?.setText(habit.priority.getTextValue(this), false)
+            priorityEditText.setText(habit.priority.getTextValue(this), false)
+
+
 
             binding.apply {
                 headerEditText.setText(habit.header)
@@ -87,7 +97,7 @@ class AddEditHabitActivity : AppCompatActivity() {
                 (habitTypeRadioGroup.getChildAt(habit.type.ordinal) as RadioButton).isChecked = true
                 selectedColorPickerView.canvasBackgroundColor = habit.color
                 selectedColorPickerView.visibility = View.VISIBLE
-                selectedColor = habit.color
+                selectedColorFromPicker = habit.color
                 selectedColorTextView.text = getText(R.string.habit_color_selected_label)
             }
 
@@ -103,27 +113,14 @@ class AddEditHabitActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            var type: HabitType? = null
-
-            for (i in 0..binding.habitTypeRadioGroup.size) {
-                if ((binding.habitTypeRadioGroup.getChildAt(i) as RadioButton).isChecked) {
-                    type = HabitType.values()[i]
-                    break
-                }
-            }
-
-            if (type == null) {
-                type = HabitType.values()[HabitType.values().lastIndex]
-            }
-
             val newHabit = Habit(
                 header = binding.headerEditText.text.toString(),
                 description = binding.descriptionEditText.text.toString(),
                 priority = HabitPriority.values()[selectedPriorityIndex],
-                type = type,
+                type = HabitType.values()[selectedTypeIndex],
                 executeCount = binding.executeCountEditText.text.toString().toInt(),
                 period = binding.periodEditText.text.toString(),
-                color = selectedColor
+                color = selectedColorFromPicker
             )
 
             val intent = Intent()
@@ -134,8 +131,38 @@ class AddEditHabitActivity : AppCompatActivity() {
 
         setupValidatorListeners()
 
-        buildColorPicker()
+        ColorPicker(this, binding.colorsPickerView, binding.rootLinearLayout).apply {
+            this.selectedColor = selectedColorFromPicker
 
+            onColorClickListener = ColorPicker.OnColorClickListener { colorPickerView ->
+                selectedColorFromPicker = colorPickerView.canvasBackgroundColor
+                binding.selectedColorPickerView.canvasBackgroundColor = selectedColor
+                binding.selectedColorTextView.text = getText(R.string.habit_color_selected_label)
+            }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        priorityEditText.setText("",false)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(KEY_SELECTED_PRIORITY_INDEX, selectedPriorityIndex)
+        outState.putInt(KEY_SELECTED_TYPE_INDEX, selectedTypeIndex)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        selectedPriorityIndex = savedInstanceState.getInt(KEY_SELECTED_PRIORITY_INDEX)
+        selectedTypeIndex = savedInstanceState.getInt(KEY_SELECTED_TYPE_INDEX)
+
+        if (selectedPriorityIndex != -1) {
+            priorityEditText.setText(HabitPriority.values()[selectedPriorityIndex].getTextValue(this),
+                false)
+        }
     }
 
     private fun isFieldsValid(): Boolean {
@@ -210,90 +237,4 @@ class AddEditHabitActivity : AppCompatActivity() {
 
     private fun validatePriority() =
         validateEmptyField(binding.priorityTextInputLayout, binding.priorityEditText)
-
-    private fun getScreenWidth(activity: Activity): Int {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            val windowMetrics = activity.windowManager.currentWindowMetrics
-            val insets: Insets = windowMetrics.windowInsets
-                .getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
-            windowMetrics.bounds.width() - insets.left - insets.right
-        } else {
-            val displayMetrics = DisplayMetrics()
-            @Suppress("DEPRECATION")
-            activity.windowManager.defaultDisplay.getMetrics(displayMetrics)
-            displayMetrics.widthPixels
-        }
-    }
-
-    private fun buildColorPicker() {
-        val squareTotalCount = 16
-        val startDegree: Float = 360 / squareTotalCount.toFloat() / 2
-
-        val intColors = ArrayList<Int>(16)
-
-        for (i in 0 until squareTotalCount) {
-            val degree = startDegree + (startDegree * 2 * i)
-            val hueColor = Color.HSVToColor(floatArrayOf(degree, 100f, 100f))
-            intColors.add(hueColor)
-        }
-
-        val drawable = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
-            intArrayOf(Color.RED, *intColors.toIntArray(), Color.RED))
-
-        drawable.shape = GradientDrawable.RECTANGLE
-        drawable.gradientType = GradientDrawable.LINEAR_GRADIENT
-
-        binding.colorsPickerView.background = drawable
-
-        val squareOnScreenCount = 4
-        //val squareMarginWidthPercent = 25
-        val screenWidth =
-            getScreenWidth(this) - binding.rootLinearLayout.paddingLeft - binding.rootLinearLayout.paddingRight
-        //val squareFullWidth: Int = screenWidth/squareOnScreenCount
-
-        val squareMarginWidth: Int = screenWidth / squareOnScreenCount / 6
-        //val squareMarginWidth: Int = squareFullWidth * squareMarginWidthPercent/100
-
-        val squareWidth: Int = squareMarginWidth * 4
-        //val squareWidth: Int = squareMarginWidth*4
-
-
-        val layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT)
-        layoutParams.setMargins(squareMarginWidth)
-        layoutParams.width = squareWidth
-        layoutParams.height = squareWidth
-
-
-        for (i in 0 until squareTotalCount) {
-            val squareView = ColorPickerView(this, layoutParams, intColors[i])
-
-            if (squareView.canvasBackgroundColor == selectedColor) {
-                squareView.isViewSelected = true
-            }
-
-            squareView.setOnClickListener {
-                val clickedSquareView = it as ColorPickerView
-
-                if (clickedSquareView.isViewSelected) {
-                    return@setOnClickListener
-                }
-
-                //Снимаем флаг isViewSelected с предыдущей выбранной View
-                if (selectedColor != Color.WHITE) {
-                    (binding.colorsPickerView
-                        .getChildAt(intColors.indexOf(selectedColor)) as ColorPickerView).isViewSelected =
-                        false
-                }
-
-                selectedColor = clickedSquareView.canvasBackgroundColor
-                clickedSquareView.isViewSelected = true
-
-                binding.selectedColorPickerView.canvasBackgroundColor = selectedColor
-                binding.selectedColorTextView.text = getText(R.string.habit_color_selected_label)
-            }
-
-            binding.colorsPickerView.addView(squareView)
-        }
-    }
 }

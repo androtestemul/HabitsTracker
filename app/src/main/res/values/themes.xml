@@ -23,6 +23,5 @@
     <style name="TextAppearance" parent="@android:style/TextAppearance">
         <item name="android:textSize">12sp</item>
     </style>
-
-
+    
 </resources>
