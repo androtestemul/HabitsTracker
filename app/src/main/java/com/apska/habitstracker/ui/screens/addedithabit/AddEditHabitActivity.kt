@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
+import androidx.core.content.ContextCompat
 import com.apska.habitstracker.R
 import com.apska.habitstracker.databinding.ActivityAddEditHabitBinding
 import com.apska.habitstracker.model.Habit
@@ -66,6 +67,7 @@ class AddEditHabitActivity : AppCompatActivity() {
             val radioButton = RadioButton(this)
             radioButton.id = habitType.ordinal
             radioButton.text = habitType.getTextValue(this)
+            radioButton.setTextColor(ContextCompat.getColor(this, R.color.primaryTextColor))
 
             if (habitType.ordinal == selectedTypeIndex) {
                 radioButton.isChecked = true

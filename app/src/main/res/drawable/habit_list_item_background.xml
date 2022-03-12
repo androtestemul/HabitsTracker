@@ -2,7 +2,7 @@
 <shape
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <solid android:color="@color/habit_list_item_background"/>
+    <solid android:color="@color/habitListItemBg"/>
     <corners
         android:radius="10dp">
     </corners>

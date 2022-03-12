@@ -14,13 +14,81 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
 
         <!-- Customize your theme here. -->
-        <item name="android:colorBackground">@color/primaryLightColor</item>
+        <item name="colorSurface">@color/forSurfaceColor</item>
+
+        <item name="android:fontFamily">@font/vollkorn</item>
+
+        <item name="android:windowBackground">@color/primaryLightColor</item>
+
+        <!--текст в полях ввода-->
+        <item name="android:textColorPrimary">@color/primaryTextColor</item>
+
+        <!--текст меток-->
         <item name="android:textColor">@color/primaryTextColor</item>
+
+        <!--цвет курсора в поле ввода, выбранные радиокнопки-->
+        <item name="android:colorControlActivated">@color/primaryTextColor</item>
+
+        <!-- material.textfield.TextInputLayout -->
+        <item name="textInputStyle">@style/Widget.App.TextInputLayout.OutlinedBox</item>
+
+        <!-- Radio Buttons -->
+        <item name="radioButtonStyle">@style/Widget.App.RadioButton</item>
     </style>
 
-    <style name="TextAppearance" parent="@android:style/TextAppearance">
-        <item name="android:textSize">12sp</item>
-        <!--<item name="android:textColor">@color/primaryTextColor</item>-->
+    <style name="Widget.App.TextInputLayout.OutlinedBox" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:textColor">@color/primaryTextColor</item>
+
+        <!-- подсказка -->
+        <item name="android:textColorHint">@color/hintColor</item>
+        <!-- посказка с фокусом -->
+        <item name="hintTextColor">@color/hintColor</item>
+
+
+
+        <!--рамка в фокусе-->
+        <!--<item name="boxStrokeColor">#D5E79E</item>-->
+        <!--рамка в разных состояниях-->
+        <item name="boxStrokeColor">@color/mtrl_outlined_stroke</item>
+        <!--рамка с ошибкой-->
+        <item name="boxStrokeErrorColor">@color/mtrl_layout_error</item>
+
+        <item name="errorIconTint">@color/mtrl_layout_error</item>
+
+        <!--толщина рамки без фокуса-->
+        <item name="boxStrokeWidth">2dp</item>
+        <!--толщина рамки в фокусе-->
+        <item name="boxStrokeWidthFocused">3dp</item>
+
+
+
+        <!-- текст ошибки и подсказки при ошибке-->
+        <item name="errorTextColor">@color/textColorError</item>
+
+        <!--цвет иконки в конце поля ввода-->
+        <item name="endIconTint">@color/primaryTextColor</item>
+
+        <!--<item name="helperTextTextColor">#5DCAA9</item>-->
+        <!-- The color of the label when it is collapsed and the text field is active -->
+        <!--<item name="placeholderTextColor">#F5B8B1</item>-->
+
+        <item name="shapeAppearance">@style/ShapeAppearance.App.SmallComponent</item>
+    </style>
+
+    <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSize">6dp</item>
+    </style>
+
+    <style name="Widget.App.TextInputLayout.OutlinedBox.ExposedDropdownMenu" parent="Widget.App.TextInputLayout.OutlinedBox">
+        <item name="materialThemeOverlay">
+            @style/ThemeOverlay.MaterialComponents.AutoCompleteTextView.OutlinedBox
+        </item>
+        <item name="endIconMode">dropdown_menu</item>
+    </style>
+
+    <style name="Widget.App.RadioButton" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
+        <item name="android:textColor">@color/primaryTextColor</item>
     </style>
 
 </resources>

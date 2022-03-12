@@ -4,4 +4,7 @@
     <dimen name="default_padding">8dp</dimen>
     <dimen name="list_image_margin">16dp</dimen>
     <dimen name="list_image_square_width">40dp</dimen>
+    <dimen name="habit_list_item_padding">16dp</dimen>
+    <dimen name="habit_list_text_margin">4dp</dimen>
+    <dimen name="priority_list_item_padding">16dp</dimen>
 </resources>

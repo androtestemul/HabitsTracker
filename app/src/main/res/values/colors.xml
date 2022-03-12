@@ -10,7 +10,16 @@
     <color name="secondaryDarkColor">#34515e</color>
     <color name="secondaryTextColor">#fafafa</color>
 
-    <color name="errorColor">#EE3E93</color>
+    <color name="onSurfaceColor">#FFFFFF</color>
+    <color name="errorColor">#F46363</color>
+    <color name="textColorError">#36F591</color>
+    <color name="errorColorNotEnabled">#FFFFFF</color>
 
-    <color name="habit_list_item_background">#C4E316</color>
+    <color name="forSurfaceColor">#606B72</color>
+    <color name="hintColor">#DED6DE</color>
+    <color name="boxStrokeColor">#C4E316</color>
+
+    <color name="habitListItemBg">#747F86</color>
+
+
 </resources>
