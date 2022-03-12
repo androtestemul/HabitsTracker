@@ -97,10 +97,12 @@ class AddEditHabitActivity : AppCompatActivity() {
                 executeCountEditText.setText(habit.executeCount.toString())
                 periodEditText.setText(habit.period)
                 (habitTypeRadioGroup.getChildAt(habit.type.ordinal) as RadioButton).isChecked = true
-                selectedColorPickerView.canvasBackgroundColor = habit.color
-                selectedColorPickerView.visibility = View.VISIBLE
-                selectedColorFromPicker = habit.color
-                selectedColorTextView.text = getText(R.string.habit_color_selected_label)
+
+                if (habit.color != ColorView.DEFAULT_COLOR) {
+                    selectedColorPickerView.canvasBackgroundColor = habit.color
+                    selectedColorFromPicker = habit.color
+                    selectedColorTextView.text = getText(R.string.habit_color_selected_label)
+                }
             }
 
         } else {
