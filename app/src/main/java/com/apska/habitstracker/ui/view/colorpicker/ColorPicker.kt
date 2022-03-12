@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.view.setMargins
 import com.apska.habitstracker.getScreenWidth
+import com.apska.habitstracker.ui.view.colorview.ColorView
 
 class ColorPicker(
     activity: Activity,
@@ -19,7 +20,7 @@ class ColorPicker(
         fun onColorClick(colorPickerView: ColorPickerView)
     }
 
-    var selectedColor: Int = Color.WHITE
+    var selectedColor: Int = ColorView.DEFAULT_COLOR
         set(value) {
             field = value
             val selectedColorIndex = intColors.indexOf(value)
@@ -79,7 +80,7 @@ class ColorPicker(
                 }
 
                 //Снимаем флаг isViewSelected с предыдущей выбранной View
-                if (selectedColor != Color.WHITE) {
+                if (selectedColor != ColorView.DEFAULT_COLOR) {
                     (parent.getChildAt(intColors.indexOf(selectedColor)) as ColorPickerView).isViewSelected =
                         false
                 }
@@ -92,5 +93,14 @@ class ColorPicker(
 
             parent.addView(squareView)
         }
+    }
+
+    fun selectedColorAsRgb() = "${Color.red(selectedColor)} ${Color.green(selectedColor)} ${Color.blue(selectedColor)}"
+
+    fun selectedColorAsHsv() : String {
+        val hsvColorArr = FloatArray(3)
+        Color.colorToHSV(selectedColor, hsvColorArr)
+
+        return "${hsvColorArr[0].toInt()} ${hsvColorArr[1].toInt() * 100} ${hsvColorArr[2].toInt() * 100}"
     }
 }

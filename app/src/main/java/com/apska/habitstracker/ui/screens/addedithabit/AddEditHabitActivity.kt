@@ -2,7 +2,6 @@ package com.apska.habitstracker.ui.screens.addedithabit
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
@@ -16,8 +15,9 @@ import com.apska.habitstracker.databinding.ActivityAddEditHabitBinding
 import com.apska.habitstracker.model.Habit
 import com.apska.habitstracker.model.HabitPriority
 import com.apska.habitstracker.model.HabitType
-import com.apska.habitstracker.ui.view.colorpicker.ColorPicker
 import com.apska.habitstracker.ui.screens.FieldValidator
+import com.apska.habitstracker.ui.view.colorpicker.ColorPicker
+import com.apska.habitstracker.ui.view.colorview.ColorView
 import com.google.android.material.textfield.TextInputLayout
 
 class AddEditHabitActivity : AppCompatActivity() {
@@ -40,7 +40,7 @@ class AddEditHabitActivity : AppCompatActivity() {
     private lateinit var priorityEditText: AppCompatAutoCompleteTextView
     private var selectedPriorityIndex = -1
     private var selectedTypeIndex = -1
-    private var selectedColorFromPicker = Color.WHITE
+    private var selectedColorFromPicker = ColorView.DEFAULT_COLOR
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -138,8 +138,22 @@ class AddEditHabitActivity : AppCompatActivity() {
 
             onColorClickListener = ColorPicker.OnColorClickListener { colorPickerView ->
                 selectedColorFromPicker = colorPickerView.canvasBackgroundColor
-                binding.selectedColorPickerView.canvasBackgroundColor = selectedColor
-                binding.selectedColorTextView.text = getText(R.string.habit_color_selected_label)
+
+                binding.apply {
+                    selectedColorPickerView.canvasBackgroundColor = selectedColor
+
+                    //устанавливается только 1 раз
+                    if (rgbLabelTextView.visibility != View.VISIBLE) {
+                        selectedColorTextView.text = getText(R.string.habit_color_selected_label)
+                        rgbLabelTextView.visibility = View.VISIBLE
+                        rgbValueTextView.visibility = View.VISIBLE
+                        hsvLabelTextView.visibility = View.VISIBLE
+                        hsvValueTextView.visibility = View.VISIBLE
+                    }
+
+                    rgbValueTextView.text = selectedColorAsRgb()
+                    hsvValueTextView.text = selectedColorAsHsv()
+                }
             }
         }
     }

@@ -10,7 +10,6 @@
     <color name="secondaryDarkColor">#34515e</color>
     <color name="secondaryTextColor">#fafafa</color>
 
-    <color name="onSurfaceColor">#FFFFFF</color>
     <color name="errorColor">#F46363</color>
     <color name="textColorError">#36F591</color>
     <color name="errorColorNotEnabled">#FFFFFF</color>

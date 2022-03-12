@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HabitsTracker</string>
+    <string name="app_name">Habits Tracker</string>
     <string name="empty_list">List is empty</string>
     <string name="add_habit">Add habit</string>
     <string name="habit_priority_high">High</string>
@@ -32,5 +32,7 @@
 
     <!-- ***** Errors ***** -->
     <string name="required_field_err">Required field!</string>
+    <string name="rgb" translatable="false">RGB:</string>
+    <string name="hsv" translatable="false">HSV:</string>
     <!-- ************************ -->
 </resources>

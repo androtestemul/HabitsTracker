@@ -75,7 +75,8 @@
         <RadioGroup
             android:id="@+id/habitTypeRadioGroup"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            tools:ignore="UselessLeaf" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/executeCountTextInputLayout"
@@ -111,27 +112,81 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="10dp">
 
             <TextView
                 android:id="@+id/selectedColorTextView"
-                android:layout_width="150dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="@dimen/default_margin"
                 android:text="@string/habit_color_not_selected_label"
-                tools:text="@string/habit_color_not_selected_label"/>
+                app:layout_constraintBottom_toBottomOf="@+id/selected_color_picker_view"
+                app:layout_constraintEnd_toStartOf="@+id/selected_color_picker_view"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.apska.habitstracker.ui.view.colorview.ColorViewFramed
                 android:id="@+id/selected_color_picker_view"
-                android:layout_width="80dp"
+                android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_marginStart="10dp"
-                />
-        </LinearLayout>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/rgbLabelTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/rgb"
+                android:visibility="invisible"
+                tools:visibility="visible"
+                app:layout_constraintStart_toEndOf="@+id/selected_color_picker_view"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/rgbValueTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_margin"
+                android:visibility="invisible"
+                tools:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/rgbLabelTextView"
+                app:layout_constraintTop_toTopOf="@+id/rgbLabelTextView"
+                tools:text="255 255 255" />
+
+            <TextView
+                android:id="@+id/hsvLabelTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin"
+                android:layout_marginBottom="8dp"
+                android:text="@string/hsv"
+                android:visibility="invisible"
+                tools:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/rgbLabelTextView"
+                app:layout_constraintTop_toBottomOf="@+id/rgbValueTextView" />
+
+            <TextView
+                android:id="@+id/hsvValueTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_margin"
+                android:visibility="invisible"
+                tools:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/hsvLabelTextView"
+                app:layout_constraintTop_toTopOf="@+id/hsvLabelTextView"
+                tools:text="360 100 100" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -149,7 +204,8 @@
                 android:id="@+id/colorsPickerView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" />
+                android:orientation="horizontal"
+                tools:ignore="UselessLeaf" />
         </HorizontalScrollView>
 
         <Button
