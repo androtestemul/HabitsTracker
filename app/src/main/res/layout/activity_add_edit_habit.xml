@@ -18,7 +18,7 @@
             android:id="@+id/headerTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/add_edit_input_margin_top"
             android:hint="@string/habit_name_hint"
             app:endIconMode="clear_text"
             app:errorEnabled="true">
@@ -35,7 +35,7 @@
             android:id="@+id/descriptionTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/add_edit_input_margin_top"
             android:hint="@string/habit_description_hint"
             app:endIconMode="clear_text"
             app:errorEnabled="true">
@@ -52,7 +52,7 @@
             style="@style/Widget.App.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/add_edit_input_margin_top"
             android:hint="@string/habit_priority_hint">
 
             <AutoCompleteTextView
@@ -68,14 +68,15 @@
             android:id="@+id/habitTypeLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginTop="@dimen/habit_type_label_margin_top"
+            android:layout_marginBottom="@dimen/habit_type_label_margin_bottom"
             android:text="@string/habit_type_label" />
 
         <RadioGroup
             android:id="@+id/habitTypeRadioGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/habit_type_radio_group_margin_bottom"
             tools:ignore="UselessLeaf" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -83,7 +84,7 @@
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/add_edit_input_margin_top"
             android:hint="@string/habit_number_of_repetitions_hint"
             app:endIconMode="clear_text"
             app:errorEnabled="true">
@@ -100,7 +101,7 @@
             android:id="@+id/periodTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/add_edit_input_margin_top"
             android:hint="@string/habit_period_hint"
             app:endIconMode="clear_text"
             app:errorEnabled="true">
@@ -115,7 +116,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="@dimen/add_edit_input_margin_top">
 
             <TextView
                 android:id="@+id/selectedColorTextView"
@@ -126,12 +127,12 @@
                 app:layout_constraintBottom_toBottomOf="@+id/selected_color_picker_view"
                 app:layout_constraintEnd_toStartOf="@+id/selected_color_picker_view"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/selected_color_picker_view" />
 
             <com.apska.habitstracker.ui.view.colorview.ColorViewFramed
                 android:id="@+id/selected_color_picker_view"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="@dimen/selected_color_wh"
+                android:layout_height="@dimen/selected_color_wh"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -142,7 +143,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/default_margin"
                 android:text="@string/rgb"
                 android:visibility="invisible"
                 tools:visibility="visible"
@@ -166,7 +167,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/default_margin"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="@dimen/default_margin"
                 android:text="@string/hsv"
                 android:visibility="invisible"
                 tools:visibility="visible"
@@ -192,13 +193,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="@string/habit_color_choose_label"
-            tools:text="@string/habit_color_choose_label"/>
+            android:text="@string/habit_color_choose_label"/>
 
         <HorizontalScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="@dimen/add_edit_input_margin_top">
 
             <LinearLayout
                 android:id="@+id/colorsPickerView"
@@ -212,7 +212,7 @@
             android:id="@+id/saveButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/add_edit_input_margin_top"
             android:text="@string/habit_save_button" />
 
 

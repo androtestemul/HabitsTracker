@@ -6,4 +6,11 @@
     <dimen name="habit_list_item_padding">16dp</dimen>
     <dimen name="habit_list_text_margin">4dp</dimen>
     <dimen name="priority_list_item_padding">16dp</dimen>
+    <dimen name="add_edit_input_margin_top">10dp</dimen>
+    <dimen name="selected_color_wh">60dp</dimen>
+    <dimen name="habit_type_radio_group_margin_bottom">10dp</dimen>
+    <dimen name="habit_type_label_margin_top">20dp</dimen>
+    <dimen name="habit_type_label_margin_bottom">5dp</dimen>
+    <dimen name="habit_list_fab_margin">32dp</dimen>
+    <dimen name="habit_list_item_header_text_size">16sp</dimen>
 </resources>
