@@ -25,6 +25,7 @@ class AddEditHabitActivity : AppCompatActivity() {
     companion object {
         private const val KEY_SELECTED_PRIORITY_INDEX = "selected_priority_index"
         private const val KEY_SELECTED_TYPE_INDEX = "selected_type_index"
+        private const val KEY_SELECTED_COLOR_FROM_PICKER = "selected_color_from_picker"
         const val EXTRA_HABIT = "habit"
 
         fun getIntent(context: Context, habit: Habit? = null): Intent {
@@ -41,6 +42,7 @@ class AddEditHabitActivity : AppCompatActivity() {
     private var selectedPriorityIndex = -1
     private var selectedTypeIndex = -1
     private var selectedColorFromPicker = ColorView.DEFAULT_COLOR
+    private lateinit var colorPicker: ColorPicker
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -135,7 +137,7 @@ class AddEditHabitActivity : AppCompatActivity() {
 
         setupValidatorListeners()
 
-        ColorPicker(this, binding.colorsPickerView, binding.rootLinearLayout).apply {
+        colorPicker = ColorPicker(this, binding.colorsPickerView, binding.rootLinearLayout).apply {
             this.selectedColor = selectedColorFromPicker
 
             onColorClickListener = ColorPicker.OnColorClickListener { colorPickerView ->
@@ -169,6 +171,7 @@ class AddEditHabitActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
         outState.putInt(KEY_SELECTED_PRIORITY_INDEX, selectedPriorityIndex)
         outState.putInt(KEY_SELECTED_TYPE_INDEX, selectedTypeIndex)
+        outState.putInt(KEY_SELECTED_COLOR_FROM_PICKER, selectedColorFromPicker)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -176,11 +179,15 @@ class AddEditHabitActivity : AppCompatActivity() {
 
         selectedPriorityIndex = savedInstanceState.getInt(KEY_SELECTED_PRIORITY_INDEX)
         selectedTypeIndex = savedInstanceState.getInt(KEY_SELECTED_TYPE_INDEX)
+        selectedColorFromPicker = savedInstanceState.getInt(KEY_SELECTED_COLOR_FROM_PICKER)
 
         if (selectedPriorityIndex != -1) {
             priorityEditText.setText(HabitPriority.values()[selectedPriorityIndex].getTextValue(this),
                 false)
         }
+
+        binding.selectedColorPickerView.canvasBackgroundColor = selectedColorFromPicker
+        colorPicker.selectedColor = selectedColorFromPicker
     }
 
     private fun isFieldsValid(): Boolean {
