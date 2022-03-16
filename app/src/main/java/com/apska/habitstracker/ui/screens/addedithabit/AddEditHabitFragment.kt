@@ -1,60 +1,85 @@
 package com.apska.habitstracker.ui.screens.addedithabit
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.RadioButton
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.apska.habitstracker.R
-import com.apska.habitstracker.databinding.ActivityAddEditHabitBinding
+import com.apska.habitstracker.databinding.FragmentAddEditHabitBinding
 import com.apska.habitstracker.model.Habit
 import com.apska.habitstracker.model.HabitPriority
 import com.apska.habitstracker.model.HabitType
 import com.apska.habitstracker.ui.screens.FieldValidator
+import com.apska.habitstracker.ui.screens.HasTitle
 import com.apska.habitstracker.ui.view.colorpicker.ColorPicker
 import com.apska.habitstracker.ui.view.colorview.ColorView
 import com.google.android.material.textfield.TextInputLayout
 
-class AddEditHabitActivity : AppCompatActivity() {
+class AddEditHabitFragment : Fragment(), HasTitle {
 
     companion object {
         private const val KEY_SELECTED_PRIORITY_INDEX = "selected_priority_index"
         private const val KEY_SELECTED_TYPE_INDEX = "selected_type_index"
-        const val EXTRA_HABIT = "habit"
+        //const val ARG_HABIT = "habit"
 
-        fun getIntent(context: Context, habit: Habit? = null): Intent {
-            return Intent(context, AddEditHabitActivity::class.java).also {
-                if (habit != null) {
-                    it.putExtra(EXTRA_HABIT, habit)
-                }
+        const val REQUEST_KEY_ADD_HABIT = "request_key_add_habit"
+        const val REQUEST_KEY_EDIT_HABIT = "request_key_edit_habit"
+        const val EXTRA_HABIT = "extra_habit"
+
+        /*fun newInstance(habit: Habit? = null): AddEditHabitFragment {
+            val fragment = AddEditHabitFragment()
+
+            habit?.let {
+                val bundle = Bundle()
+                bundle.putParcelable(ARG_HABIT, it)
+                fragment.arguments = bundle
             }
-        }
+
+            return fragment
+        }*/
     }
 
-    private lateinit var binding: ActivityAddEditHabitBinding
+    private var _binding: FragmentAddEditHabitBinding? = null
+    private val binding
+        get() = _binding!!
+
     private lateinit var priorityEditText: AppCompatAutoCompleteTextView
     private var selectedPriorityIndex = -1
     private var selectedTypeIndex = -1
     private var selectedColorFromPicker = ColorView.DEFAULT_COLOR
+    private var isEdit = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
+        _binding = FragmentAddEditHabitBinding.inflate(inflater, container, false)
 
-        binding = ActivityAddEditHabitBinding.inflate(layoutInflater)
-
-        setContentView(binding.root)
-
-        val priorityAdapter = ArrayAdapter(this,
+        val priorityAdapter = ArrayAdapter(requireContext(),
             R.layout.priority_list_item, HabitPriority.values().map { habitPriority ->
-                habitPriority.getTextValue(this)
+                habitPriority.getTextValue(requireContext())
             })
 
         priorityEditText = binding.priorityEditText as AppCompatAutoCompleteTextView
+
+        if (savedInstanceState != null) {
+            selectedPriorityIndex = savedInstanceState.getInt(KEY_SELECTED_PRIORITY_INDEX)
+            selectedTypeIndex = savedInstanceState.getInt(KEY_SELECTED_TYPE_INDEX)
+
+            if (selectedPriorityIndex != -1) {
+                priorityEditText.setText(HabitPriority.values()[selectedPriorityIndex]
+                    .getTextValue(requireContext()), false)
+            }
+        }
 
         priorityEditText.apply {
             setAdapter(priorityAdapter)
@@ -64,10 +89,11 @@ class AddEditHabitActivity : AppCompatActivity() {
         }
 
         HabitType.values().forEach { habitType ->
-            val radioButton = RadioButton(this)
+            val radioButton = RadioButton(requireContext())
             radioButton.id = habitType.ordinal
-            radioButton.text = habitType.getTextValue(this)
-            radioButton.setTextColor(ContextCompat.getColor(this, R.color.primaryTextColor))
+            radioButton.text = habitType.getTextValue(requireContext())
+            radioButton.setTextColor(ContextCompat.getColor(requireContext(),
+                R.color.primaryTextColor))
 
             if (habitType.ordinal == selectedTypeIndex) {
                 radioButton.isChecked = true
@@ -80,16 +106,15 @@ class AddEditHabitActivity : AppCompatActivity() {
             selectedTypeIndex = checkedId
         }
 
-        if (intent.hasExtra(EXTRA_HABIT)) {
-            title = getText(R.string.header_edit)
+        //val habit = arguments?.getParcelable(ARG_HABIT) as? Habit
+        val args = AddEditHabitFragmentArgs.fromBundle(requireArguments())
+        val habit = args.habit
 
-            val habit: Habit = intent.getParcelableExtra(EXTRA_HABIT)
-                ?: throw Exception("Не удалось получить привычку из переданного Intent.")
+        if (habit != null) {
+            isEdit = true
 
             selectedPriorityIndex = habit.priority.ordinal
-            priorityEditText.setText(habit.priority.getTextValue(this), false)
-
-
+            priorityEditText.setText(habit.priority.getTextValue(requireContext()), false)
 
             binding.apply {
                 headerEditText.setText(habit.header)
@@ -104,13 +129,11 @@ class AddEditHabitActivity : AppCompatActivity() {
                     selectedColorTextView.text = getText(R.string.habit_color_selected_label)
                 }
             }
-
         } else {
-            title = getText(R.string.header_add)
-
             (binding.habitTypeRadioGroup.getChildAt(HabitType.NEUTRAL.ordinal) as RadioButton).isChecked =
                 true
         }
+
 
         binding.saveButton.setOnClickListener {
             if (!isFieldsValid()) {
@@ -127,15 +150,15 @@ class AddEditHabitActivity : AppCompatActivity() {
                 color = selectedColorFromPicker
             )
 
-            val intent = Intent()
-            intent.putExtra(EXTRA_HABIT, newHabit)
-            setResult(RESULT_OK, intent)
-            finish()
+            val key = if (habit == null) REQUEST_KEY_ADD_HABIT else REQUEST_KEY_EDIT_HABIT
+
+            parentFragmentManager.setFragmentResult(key, bundleOf(EXTRA_HABIT to newHabit))
+            findNavController().popBackStack()
         }
 
         setupValidatorListeners()
 
-        ColorPicker(this, binding.colorsPickerView, binding.rootLinearLayout).apply {
+        ColorPicker(requireActivity(), binding.colorsPickerView, binding.rootLinearLayout).apply {
             this.selectedColor = selectedColorFromPicker
 
             onColorClickListener = ColorPicker.OnColorClickListener { colorPickerView ->
@@ -158,11 +181,14 @@ class AddEditHabitActivity : AppCompatActivity() {
                 }
             }
         }
+
+        return binding.root
     }
+
 
     override fun onStop() {
         super.onStop()
-        priorityEditText.setText("",false)
+        priorityEditText.setText("", false)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -171,16 +197,9 @@ class AddEditHabitActivity : AppCompatActivity() {
         outState.putInt(KEY_SELECTED_TYPE_INDEX, selectedTypeIndex)
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-
-        selectedPriorityIndex = savedInstanceState.getInt(KEY_SELECTED_PRIORITY_INDEX)
-        selectedTypeIndex = savedInstanceState.getInt(KEY_SELECTED_TYPE_INDEX)
-
-        if (selectedPriorityIndex != -1) {
-            priorityEditText.setText(HabitPriority.values()[selectedPriorityIndex].getTextValue(this),
-                false)
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun isFieldsValid(): Boolean {
@@ -255,4 +274,9 @@ class AddEditHabitActivity : AppCompatActivity() {
 
     private fun validatePriority() =
         validateEmptyField(binding.priorityTextInputLayout, binding.priorityEditText)
+
+    override fun getTitle() : Int = if (isEdit)
+        R.string.header_edit
+    else
+        R.string.header_add
 }

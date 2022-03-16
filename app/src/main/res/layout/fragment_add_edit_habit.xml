@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.screens.addedithabit.AddEditHabitActivity">
+    tools:context=".ui.screens.addedithabit.AddEditHabitFragment">
 
     <LinearLayout
         android:id="@+id/rootLinearLayout"
@@ -16,8 +16,10 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/headerTextInputLayout"
+            class="111"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_marginTop="@dimen/add_edit_input_margin_top"
             android:hint="@string/habit_name_hint"
             app:endIconMode="clear_text"

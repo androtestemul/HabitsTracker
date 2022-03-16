@@ -50,6 +50,8 @@ class HabitsAdapter : RecyclerView.Adapter<HabitsAdapter.HabitsViewHolder>() {
             }
         }
 
+
+
         fun bind(habit: Habit) {
             binding.apply {
                 headerTextView.text = habit.header
