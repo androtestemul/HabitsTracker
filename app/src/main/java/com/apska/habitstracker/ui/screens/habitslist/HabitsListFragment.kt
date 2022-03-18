@@ -42,7 +42,15 @@ class HabitsListFragment : Fragment() {
         (recyclerView.layoutManager as LinearLayoutManager)
             .orientation = LinearLayoutManager.VERTICAL
 
-        habitsAdapter = HabitsAdapter()
+        habitsAdapter = HabitsAdapter(object : HabitsAdapter.OnHabitItemClickListener {
+            override fun onItemClick(habitPosition: Int) {
+                clickedHabitPosition = habitPosition
+
+                findNavController().navigate(HabitsListFragmentDirections
+                    .actionHabitsListFragmentToAddEditHabitFragment(habitsAdapter.habitsList[habitPosition]))
+
+            }
+        })
         recyclerView.adapter = habitsAdapter
 
         if (savedInstanceState != null) {
@@ -53,15 +61,7 @@ class HabitsListFragment : Fragment() {
             clickedHabitPosition = savedInstanceState.getInt(KEY_CLICKED_HABIT_POSITION)
         }
 
-        habitsAdapter.onHabitItemClickListener = object : HabitsAdapter.OnHabitItemClickListener {
-            override fun onItemClick(habitPosition: Int) {
-                clickedHabitPosition = habitPosition
 
-                findNavController().navigate(HabitsListFragmentDirections
-                    .actionHabitsListFragmentToAddEditHabitFragment(habitsAdapter.habitsList[habitPosition]))
-
-            }
-        }
 
         parentFragmentManager.setFragmentResultListener(AddEditHabitFragment.REQUEST_KEY_ADD_HABIT,
             viewLifecycleOwner){ _, data ->
@@ -83,27 +83,6 @@ class HabitsListFragment : Fragment() {
                         habitsAdapter.replaceHabit(it, clickedHabitPosition)
                     }
                 }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityHabitsListBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        val recyclerView = binding.habitsRecyclerView
-
-        (recyclerView.layoutManager as LinearLayoutManager)
-            .orientation = LinearLayoutManager.VERTICAL
-
-        habitsAdapter = HabitsAdapter(object : HabitsAdapter.OnHabitItemClickListener {
-            override fun onItemClick(habitPosition: Int) {
-                clickedHabitPosition = habitPosition
-
-                resultEditLauncher.launch(AddEditHabitActivity
-                    .getIntent(this@HabitsListActivity, habitsAdapter.habitsList[habitPosition]))
-            }
-        })
-
-        recyclerView.adapter = habitsAdapter
 
         binding.floatingActionButtonAddHabit.setOnClickListener {
             findNavController().navigate(HabitsListFragmentDirections

@@ -47,14 +47,14 @@ class MainActivity : AppCompatActivity() {
             R.id.navHostFragment
         ) as NavHostFragment
 
-        navHostFragment.navController
+        /*navHostFragment.navController
             .addOnDestinationChangedListener {
                 controller, destination, arguments ->
 
             if (destination.id)
         })
 
-        navController = navHostFragment.navController
+        navController = navHostFragment.navController*/
 
 
     }
