@@ -8,8 +8,7 @@ import com.apska.habitstracker.databinding.HabitListItemBinding
 import com.apska.habitstracker.model.Habit
 
 
-class HabitsAdapter : RecyclerView.Adapter<HabitsAdapter.HabitsViewHolder>() {
-    lateinit var onHabitItemClickListener: OnHabitItemClickListener
+class HabitsAdapter(private val onHabitItemClickListener: OnHabitItemClickListener) : RecyclerView.Adapter<HabitsViewHolder>() {
 
     var habitsList: ArrayList<Habit> = arrayListOf()
 
@@ -19,7 +18,7 @@ class HabitsAdapter : RecyclerView.Adapter<HabitsAdapter.HabitsViewHolder>() {
 
         val binding = HabitListItemBinding.bind(view)
 
-        return HabitsViewHolder(binding)
+        return HabitsViewHolder(binding, onHabitItemClickListener)
     }
 
     override fun onBindViewHolder(holder: HabitsViewHolder, position: Int) {
@@ -36,31 +35,6 @@ class HabitsAdapter : RecyclerView.Adapter<HabitsAdapter.HabitsViewHolder>() {
     fun replaceHabit(habit: Habit, position: Int) {
         habitsList[position] = habit
         this.notifyItemChanged(position)
-    }
-
-
-    inner class HabitsViewHolder(private val binding: HabitListItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        init {
-            binding.root.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    onHabitItemClickListener.onItemClick(adapterPosition)
-                }
-            }
-        }
-
-        fun bind(habit: Habit) {
-            binding.apply {
-                headerTextView.text = habit.header
-                descriptionTextView.text = habit.description
-                priorityTextView.text = habit.priority.getTextValue(this.root.context)
-                typeTextView.text = habit.type.getTextValue(this.root.context)
-                periodTextView.text = habit.period
-
-                colorView.canvasBackgroundColor = habit.color
-            }
-        }
     }
 
     interface OnHabitItemClickListener {
