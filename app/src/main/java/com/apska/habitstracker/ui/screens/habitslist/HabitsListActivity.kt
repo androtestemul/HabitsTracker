@@ -60,17 +60,16 @@ class HabitsListActivity : AppCompatActivity() {
         (recyclerView.layoutManager as LinearLayoutManager)
             .orientation = LinearLayoutManager.VERTICAL
 
-        habitsAdapter = HabitsAdapter()
-        recyclerView.adapter = habitsAdapter
-
-        habitsAdapter.onHabitItemClickListener = object : HabitsAdapter.OnHabitItemClickListener {
+        habitsAdapter = HabitsAdapter(object : HabitsAdapter.OnHabitItemClickListener {
             override fun onItemClick(habitPosition: Int) {
                 clickedHabitPosition = habitPosition
 
                 resultEditLauncher.launch(AddEditHabitActivity
                     .getIntent(this@HabitsListActivity, habitsAdapter.habitsList[habitPosition]))
             }
-        }
+        })
+
+        recyclerView.adapter = habitsAdapter
 
         binding.floatingActionButtonAddHabit.setOnClickListener {
             resultAddLauncher.launch(AddEditHabitActivity.getIntent(this))
