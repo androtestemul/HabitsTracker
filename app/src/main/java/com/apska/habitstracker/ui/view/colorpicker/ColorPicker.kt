@@ -20,6 +20,22 @@ class ColorPicker(
         fun onColorClick(colorPickerView: ColorPickerView)
     }
 
+    companion object {
+        private const val SQUARE_TOTAL_COUNT = 16
+        private const val HSV_HUE_TOTAL_DEGREE = 360
+        private const val HSV_SATURATION = 100f
+        private const val HSV_VALUE = 100f
+        private const val HSV_HUE_INDEX = 0
+        private const val HSV_SATURATION_INDEX = 1
+        private const val HSV_VALUE_INDEX = 2
+        private const val HSV_COLOR_TO_INT_MULTIPLIER = 100
+        private const val SQUARE_WIDTH_MULTIPLIER = 4
+        private const val SQUARE_ON_SCREEN_COUNT = 4
+        private const val DIVIDER_CENTER_OF_SQUARE = 2
+        private const val DIVIDER_FOR_SQUARE_MARGIN = 6
+
+    }
+
     var selectedColor: Int = ColorView.DEFAULT_COLOR
         set(value) {
             field = value
@@ -35,15 +51,14 @@ class ColorPicker(
 
     var onColorClickListener: OnColorClickListener? = null
 
-    private val squareTotalCount = 16
-    private val startDegree: Float = 360 / squareTotalCount.toFloat() / 2
-    private val intColors = ArrayList<Int>(squareTotalCount)
+    private val startDegree: Float = HSV_HUE_TOTAL_DEGREE / SQUARE_TOTAL_COUNT.toFloat() / DIVIDER_CENTER_OF_SQUARE
+    private val intColors = ArrayList<Int>(SQUARE_TOTAL_COUNT)
 
     init {
 
-        for (i in 0 until squareTotalCount) {
-            val degree = startDegree + (startDegree * 2 * i)
-            val hueColor = Color.HSVToColor(floatArrayOf(degree, 100f, 100f))
+        for (i in 0 until SQUARE_TOTAL_COUNT) {
+            val degree = startDegree + (startDegree * DIVIDER_CENTER_OF_SQUARE * i)
+            val hueColor = Color.HSVToColor(floatArrayOf(degree, HSV_SATURATION, HSV_VALUE))
             intColors.add(hueColor)
         }
 
@@ -55,11 +70,10 @@ class ColorPicker(
 
         parent.background = drawable
 
-        val squareOnScreenCount = 4
         val pickerWidth =
             activity.getScreenWidth() - root.paddingLeft - root.paddingRight
-        val squareMarginWidth: Int = pickerWidth / squareOnScreenCount / 6
-        val squareWidth: Int = squareMarginWidth * 4
+        val squareMarginWidth: Int = pickerWidth / SQUARE_ON_SCREEN_COUNT / DIVIDER_FOR_SQUARE_MARGIN
+        val squareWidth: Int = squareMarginWidth * SQUARE_WIDTH_MULTIPLIER
 
         val layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -67,7 +81,7 @@ class ColorPicker(
         layoutParams.width = squareWidth
         layoutParams.height = squareWidth
 
-        for (i in 0 until squareTotalCount) {
+        for (i in 0 until SQUARE_TOTAL_COUNT) {
             val squareView = ColorPickerView(activity, layoutParams)
 
             squareView.canvasBackgroundColor = intColors[i]
@@ -101,6 +115,8 @@ class ColorPicker(
         val hsvColorArr = FloatArray(3)
         Color.colorToHSV(selectedColor, hsvColorArr)
 
-        return "${hsvColorArr[0].toInt()} ${hsvColorArr[1].toInt() * 100} ${hsvColorArr[2].toInt() * 100}"
+        return "${hsvColorArr[HSV_HUE_INDEX].toInt()} " +
+               "${hsvColorArr[HSV_SATURATION_INDEX].toInt() * HSV_COLOR_TO_INT_MULTIPLIER} " +
+               "${hsvColorArr[HSV_VALUE_INDEX].toInt() * HSV_COLOR_TO_INT_MULTIPLIER}"
     }
 }
