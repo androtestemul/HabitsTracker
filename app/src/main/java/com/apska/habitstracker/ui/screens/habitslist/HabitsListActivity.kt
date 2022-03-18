@@ -20,10 +20,35 @@ class HabitsListActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityHabitsListBinding
-    private lateinit var resultAddLauncher: ActivityResultLauncher<Intent>
-    private lateinit var resultEditLauncher: ActivityResultLauncher<Intent>
     private lateinit var habitsAdapter: HabitsAdapter
     private var clickedHabitPosition = -1
+
+    private val resultAddLauncher = registerForActivityResult(ActivityResultContracts
+        .StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.let { intent ->
+                val habit = intent.getParcelableExtra<Habit>(AddEditHabitActivity.EXTRA_HABIT)
+
+                habit?.let {
+                    habitsAdapter.addHabit(it)
+                    setEmptyListVisibility()
+                }
+            }
+        }
+    }
+
+    private val resultEditLauncher = registerForActivityResult(ActivityResultContracts
+        .StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.let { intent ->
+                val habit = intent.getParcelableExtra<Habit>(AddEditHabitActivity.EXTRA_HABIT)
+
+                habit?.let {
+                    habitsAdapter.replaceHabit(it, clickedHabitPosition)
+                }
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,33 +69,6 @@ class HabitsListActivity : AppCompatActivity() {
 
                 resultEditLauncher.launch(AddEditHabitActivity
                     .getIntent(this@HabitsListActivity, habitsAdapter.habitsList[habitPosition]))
-            }
-        }
-
-        resultAddLauncher = registerForActivityResult(ActivityResultContracts
-            .StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                result.data?.let { intent ->
-                    val habit = intent.getParcelableExtra<Habit>(AddEditHabitActivity.EXTRA_HABIT)
-
-                    habit?.let {
-                        habitsAdapter.addHabit(it)
-                        setEmptyListVisibility()
-                    }
-                }
-            }
-        }
-
-        resultEditLauncher = registerForActivityResult(ActivityResultContracts
-            .StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                result.data?.let { intent ->
-                    val habit = intent.getParcelableExtra<Habit>(AddEditHabitActivity.EXTRA_HABIT)
-
-                    habit?.let {
-                        habitsAdapter.replaceHabit(it, clickedHabitPosition)
-                    }
-                }
             }
         }
 
