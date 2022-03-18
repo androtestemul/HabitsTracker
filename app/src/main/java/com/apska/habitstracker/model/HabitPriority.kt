@@ -7,20 +7,10 @@ import kotlinx.parcelize.Parcelize
 
 
 @Parcelize
-enum class HabitPriority : Parcelable {
-    HIGH {
-        override val resourceId = R.string.habit_priority_high
-    },
+enum class HabitPriority(private val value: Int) : Parcelable {
+    HIGH(R.string.habit_priority_high),
+    MIDDLE(R.string.habit_priority_middle),
+    LOW(R.string.habit_priority_low);
 
-    MIDDLE {
-        override val resourceId = R.string.habit_priority_middle
-    },
-
-    LOW {
-        override val resourceId = R.string.habit_priority_low
-    };
-
-    abstract val resourceId: Int
-
-    fun getTextValue(context: Context) = context.getString(this.resourceId)
+    fun getTextValue(context: Context) = context.getString(this.value)
 }

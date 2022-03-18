@@ -28,6 +28,7 @@ class AddEditHabitFragment : Fragment(), HasTitle {
     companion object {
         private const val KEY_SELECTED_PRIORITY_INDEX = "selected_priority_index"
         private const val KEY_SELECTED_TYPE_INDEX = "selected_type_index"
+        private const val KEY_SELECTED_COLOR_FROM_PICKER = "selected_color_from_picker"
         //const val ARG_HABIT = "habit"
 
         const val REQUEST_KEY_ADD_HABIT = "request_key_add_habit"
@@ -41,7 +42,7 @@ class AddEditHabitFragment : Fragment(), HasTitle {
                 val bundle = Bundle()
                 bundle.putParcelable(ARG_HABIT, it)
                 fragment.arguments = bundle
-            }
+        }
 
             return fragment
         }*/
@@ -55,6 +56,7 @@ class AddEditHabitFragment : Fragment(), HasTitle {
     private var selectedPriorityIndex = -1
     private var selectedTypeIndex = -1
     private var selectedColorFromPicker = ColorView.DEFAULT_COLOR
+    private lateinit var colorPicker: ColorPicker
     private var isEdit = false
 
     override fun onCreateView(
@@ -158,7 +160,7 @@ class AddEditHabitFragment : Fragment(), HasTitle {
 
         setupValidatorListeners()
 
-        ColorPicker(requireActivity(), binding.colorsPickerView, binding.rootLinearLayout).apply {
+        colorPicker = ColorPicker(requireActivity(), binding.colorsPickerView, binding.rootLinearLayout).apply {
             this.selectedColor = selectedColorFromPicker
 
             onColorClickListener = ColorPicker.OnColorClickListener { colorPickerView ->
@@ -195,6 +197,23 @@ class AddEditHabitFragment : Fragment(), HasTitle {
         super.onSaveInstanceState(outState)
         outState.putInt(KEY_SELECTED_PRIORITY_INDEX, selectedPriorityIndex)
         outState.putInt(KEY_SELECTED_TYPE_INDEX, selectedTypeIndex)
+        outState.putInt(KEY_SELECTED_COLOR_FROM_PICKER, selectedColorFromPicker)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        selectedPriorityIndex = savedInstanceState.getInt(KEY_SELECTED_PRIORITY_INDEX)
+        selectedTypeIndex = savedInstanceState.getInt(KEY_SELECTED_TYPE_INDEX)
+        selectedColorFromPicker = savedInstanceState.getInt(KEY_SELECTED_COLOR_FROM_PICKER)
+
+        if (selectedPriorityIndex != -1) {
+            priorityEditText.setText(HabitPriority.values()[selectedPriorityIndex].getTextValue(this),
+                false)
+        }
+
+        binding.selectedColorPickerView.canvasBackgroundColor = selectedColorFromPicker
+        colorPicker.selectedColor = selectedColorFromPicker
     }
 
     override fun onDestroyView() {

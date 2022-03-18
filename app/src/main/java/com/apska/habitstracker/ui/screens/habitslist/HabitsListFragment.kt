@@ -68,21 +68,42 @@ class HabitsListFragment : Fragment() {
 
             val habit = data.getParcelable<Habit>(AddEditHabitFragment.EXTRA_HABIT)
 
-            habit?.let {
-                habitsAdapter.addHabit(it)
-                setEmptyListVisibility()
-            }
-        }
+                    habit?.let {
+                        habitsAdapter.addHabit(it)
+                        setEmptyListVisibility()
+                    }
+                }
 
         parentFragmentManager.setFragmentResultListener(AddEditHabitFragment.REQUEST_KEY_EDIT_HABIT,
             viewLifecycleOwner){ _, data ->
 
             val habit = data.getParcelable<Habit>(AddEditHabitFragment.EXTRA_HABIT)
 
-            habit?.let {
-                habitsAdapter.replaceHabit(it, clickedHabitPosition)
+                    habit?.let {
+                        habitsAdapter.replaceHabit(it, clickedHabitPosition)
+                    }
+                }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityHabitsListBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        val recyclerView = binding.habitsRecyclerView
+
+        (recyclerView.layoutManager as LinearLayoutManager)
+            .orientation = LinearLayoutManager.VERTICAL
+
+        habitsAdapter = HabitsAdapter(object : HabitsAdapter.OnHabitItemClickListener {
+            override fun onItemClick(habitPosition: Int) {
+                clickedHabitPosition = habitPosition
+
+                resultEditLauncher.launch(AddEditHabitActivity
+                    .getIntent(this@HabitsListActivity, habitsAdapter.habitsList[habitPosition]))
             }
-        }
+        })
+
+        recyclerView.adapter = habitsAdapter
 
         binding.floatingActionButtonAddHabit.setOnClickListener {
             findNavController().navigate(HabitsListFragmentDirections
