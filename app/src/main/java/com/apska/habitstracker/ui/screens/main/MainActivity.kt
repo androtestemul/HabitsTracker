@@ -1,39 +1,20 @@
 package com.apska.habitstracker.ui.screens.main
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
 import com.apska.habitstracker.R
 import com.apska.habitstracker.databinding.ActivityMainBinding
-import com.apska.habitstracker.model.Habit
-import com.apska.habitstracker.ui.screens.HasTitle
-import com.apska.habitstracker.ui.screens.addedithabit.AddEditHabitFragment
-import com.apska.habitstracker.ui.screens.habitslist.HabitsListFragment
+import com.apska.habitstracker.ui.screens.addedithabit.AddEditHabitFragmentArgs
 
 
 class MainActivity : AppCompatActivity() {
 
-    //private lateinit var navController: NavController
-
-    private val currentFragment: Fragment
-        get() = supportFragmentManager.findFragmentById(R.id.navHostFragment)!!
-
-    private val fragmentListener = object : FragmentManager.FragmentLifecycleCallbacks() {
-        override fun onFragmentViewCreated(
-            fm: FragmentManager,
-            f: Fragment,
-            v: View,
-            savedInstanceState: Bundle?,
-        ) {
-            super.onFragmentViewCreated(fm, f, v, savedInstanceState)
-            updateUi()
-        }
-    }
+    private lateinit var navController: NavController
+    private lateinit var drawerLayout: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,36 +22,37 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentListener, false)
+        drawerLayout = binding.navigationDrawerLayout
 
-        val navHostFragment = supportFragmentManager.findFragmentById(
-            R.id.navHostFragment
-        ) as NavHostFragment
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.navHostFragment) as NavHostFragment
 
-        /*navHostFragment.navController
-            .addOnDestinationChangedListener {
-                controller, destination, arguments ->
+        navController = navHostFragment.navController
 
-            if (destination.id)
-        })
+        navHostFragment.navController.addOnDestinationChangedListener {
+                _, destination, arguments ->
 
-        navController = navHostFragment.navController*/
-
-
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        supportFragmentManager.unregisterFragmentLifecycleCallbacks(fragmentListener)
-    }
-
-    private fun updateUi() {
-        val fragment = currentFragment
-
-        title = if (fragment is HasTitle) {
-            getString(fragment.getTitle())
-        } else {
-            getString(R.string.app_name)
+            title = when (destination.id) {
+                R.id.addEditHabitFragment -> {
+                    if (AddEditHabitFragmentArgs.fromBundle(arguments!!).habit == null) {
+                        getString(R.string.header_add)
+                    } else {
+                        getString(R.string.header_edit)
+                    }
+                }
+                R.id.aboutFragment -> getString(R.string.about_header)
+                else -> { getString(R.string.app_name) }
+            }
         }
+
+        // подключаем Navigation Drawer к Navigation Controller
+        NavigationUI.setupWithNavController(binding.navigationView, navController)
+
+        // Подключаем кнопку вызова Navigation Drawer
+        NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
+
     }
+
+    override fun onSupportNavigateUp() = NavigationUI.navigateUp(navController, drawerLayout)
+
 }

@@ -35,4 +35,15 @@
     <string name="rgb" translatable="false">RGB:</string>
     <string name="hsv" translatable="false">HSV:</string>
     <!-- ************************ -->
+
+    <!-- ***** About ***** -->
+    <string name="about_header">About Habits Tracker</string>
+    <string name="about_app">\t\t\tThis application is designed to track your habits. To help you get rid of bad habits and get used to good habits. With Habit Tracking, you can see how often you perform a particular habit. Based on the application data, you will be able to control and test yourself to become better!</string>
+    <!-- ************************ -->
+
+    <!-- ***** Nav Drawer Menu ***** -->
+    <string name="navdrawer_menu">Main menu</string>
+    <string name="navdrawer_menu_habit_list">Home</string>
+    <string name="navdrawer_menu_about">About</string>
+    <!-- ************************ -->
 </resources>

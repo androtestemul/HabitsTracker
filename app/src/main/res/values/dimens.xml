@@ -13,4 +13,8 @@
     <dimen name="habit_type_label_margin_bottom">5dp</dimen>
     <dimen name="habit_list_fab_margin">32dp</dimen>
     <dimen name="habit_list_item_header_text_size">16sp</dimen>
+    <dimen name="about_text_size">24sp</dimen>
+    <dimen name="nav_menu_header">24sp</dimen>
+    <dimen name="hav_menu_icon_wh">70dp</dimen>
+    <dimen name="nav_menu_header_height">150dp</dimen>
 </resources>

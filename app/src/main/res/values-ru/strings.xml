@@ -31,4 +31,15 @@
     <string name="habit_color_choose_label">Выберите цвет:</string>
     <string name="habit_color_not_selected_label">Цвет не выбран:</string>
     <!-- ************************ -->
+
+    <!-- ***** About ***** -->
+    <string name="about_app">\t\t\tЭто приложение предназначено для отслеживания Ваших привычек. Чтобы помочь Вам избавиться от вредных привычек и привыкнуть к полезным привычкам. Благодаря ослеживанию привычек Вы сможете увидеть как часто Вы выполняете ту или иную привычку. На основе данных приложения Вы сможете контролировать и проверять себя чтобы стать лучше!</string>
+    <string name="about_header">О трекере привычек</string>
+    <!-- ************************ -->
+
+    <!-- ***** Nav Drawer Menu ***** -->
+    <string name="navdrawer_menu">Главное меню</string>
+    <string name="navdrawer_menu_about">О приложении</string>
+    <string name="navdrawer_menu_habit_list">Главный экран</string>
+    <!-- ************************ -->
 </resources>

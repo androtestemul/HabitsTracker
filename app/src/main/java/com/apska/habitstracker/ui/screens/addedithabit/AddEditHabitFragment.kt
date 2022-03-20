@@ -12,24 +12,23 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.apska.habitstracker.R
 import com.apska.habitstracker.databinding.FragmentAddEditHabitBinding
 import com.apska.habitstracker.model.Habit
 import com.apska.habitstracker.model.HabitPriority
 import com.apska.habitstracker.model.HabitType
 import com.apska.habitstracker.ui.screens.FieldValidator
-import com.apska.habitstracker.ui.screens.HasTitle
 import com.apska.habitstracker.ui.view.colorpicker.ColorPicker
 import com.apska.habitstracker.ui.view.colorview.ColorView
 import com.google.android.material.textfield.TextInputLayout
 
-class AddEditHabitFragment : Fragment(), HasTitle {
+class AddEditHabitFragment : Fragment() {
 
     companion object {
         private const val KEY_SELECTED_PRIORITY_INDEX = "selected_priority_index"
         private const val KEY_SELECTED_TYPE_INDEX = "selected_type_index"
         private const val KEY_SELECTED_COLOR_FROM_PICKER = "selected_color_from_picker"
-        //const val ARG_HABIT = "habit"
 
         const val REQUEST_KEY_ADD_HABIT = "request_key_add_habit"
         const val REQUEST_KEY_EDIT_HABIT = "request_key_edit_habit"
@@ -57,7 +56,7 @@ class AddEditHabitFragment : Fragment(), HasTitle {
     private var selectedTypeIndex = -1
     private var selectedColorFromPicker = ColorView.DEFAULT_COLOR
     private lateinit var colorPicker: ColorPicker
-    private var isEdit = false
+    private val args: AddEditHabitFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -111,13 +110,9 @@ class AddEditHabitFragment : Fragment(), HasTitle {
             selectedTypeIndex = checkedId
         }
 
-        //val habit = arguments?.getParcelable(ARG_HABIT) as? Habit
-        val args = AddEditHabitFragmentArgs.fromBundle(requireArguments())
         val habit = args.habit
 
         if (habit != null) {
-            isEdit = true
-
             selectedPriorityIndex = habit.priority.ordinal
             priorityEditText.setText(habit.priority.getTextValue(requireContext()), false)
 
@@ -163,7 +158,9 @@ class AddEditHabitFragment : Fragment(), HasTitle {
 
         setupValidatorListeners()
 
-        colorPicker = ColorPicker(requireActivity(), binding.colorsPickerView, binding.rootLinearLayout).apply {
+        colorPicker = ColorPicker(requireActivity(),
+            binding.colorsPickerView,
+            binding.rootLinearLayout).apply {
             this.selectedColor = selectedColorFromPicker
 
             onColorClickListener = ColorPicker.OnColorClickListener { colorPickerView ->
@@ -281,8 +278,4 @@ class AddEditHabitFragment : Fragment(), HasTitle {
     private fun validatePriority() =
         validateEmptyField(binding.priorityTextInputLayout, binding.priorityEditText)
 
-    override fun getTitle() : Int = if (isEdit)
-        R.string.header_edit
-    else
-        R.string.header_add
 }
