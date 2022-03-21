@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 R.id.aboutFragment -> getString(R.string.about_header)
+                R.id.habitPagerFragment -> getString(R.string.habit_pager_by_type_header)
                 else -> { getString(R.string.app_name) }
             }
         }

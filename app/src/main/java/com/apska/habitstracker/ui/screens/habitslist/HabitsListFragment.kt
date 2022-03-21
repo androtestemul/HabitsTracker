@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +19,13 @@ class HabitsListFragment : Fragment() {
     companion object {
         private const val KEY_HABIT_LIST = "habit_list"
         private const val KEY_CLICKED_HABIT_POSITION = "clicked_habit_position"
+
+        fun newInstance(habitsList: ArrayList<Habit>) : HabitsListFragment {
+            val fragment = HabitsListFragment()
+            fragment.arguments = bundleOf(KEY_HABIT_LIST to habitsList)
+
+            return fragment
+        }
     }
 
     private var _binding: FragmentHabitsListBinding? = null
@@ -28,6 +36,10 @@ class HabitsListFragment : Fragment() {
     private lateinit var habitsAdapter: HabitsAdapter
     private var clickedHabitPosition = -1
 
+    private var isForViewPager = false
+    private var habitsListForViewPager: ArrayList<Habit>? = null
+    private var onHabitItemClickListener: HabitsAdapter.OnHabitItemClickListener? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,7 +47,13 @@ class HabitsListFragment : Fragment() {
     ): View {
         _binding = FragmentHabitsListBinding.inflate(inflater, container, false)
 
-        activity?.title = getString(R.string.app_name)
+        arguments?.let {
+            habitsListForViewPager = it.getParcelableArrayList(KEY_HABIT_LIST)
+
+            if (habitsListForViewPager != null) {
+                isForViewPager = true
+            }
+        }
 
         recyclerView = binding.habitsRecyclerView
 
@@ -43,15 +61,30 @@ class HabitsListFragment : Fragment() {
             .orientation = LinearLayoutManager.VERTICAL
 
         if (!::habitsAdapter.isInitialized) {
-            habitsAdapter = HabitsAdapter(object : HabitsAdapter.OnHabitItemClickListener {
-                override fun onItemClick(habitPosition: Int) {
-                    clickedHabitPosition = habitPosition
 
-                    findNavController().navigate(HabitsListFragmentDirections
-                        .actionHabitsListFragmentToAddEditHabitFragment(habitsAdapter.habitsList[habitPosition]))
+            if (!isForViewPager) {
+                onHabitItemClickListener = object : HabitsAdapter.OnHabitItemClickListener {
+                    override fun onItemClick(habitPosition: Int) {
+                        clickedHabitPosition = habitPosition
 
+                        //findNavController().navigate(HabitsListFragmentDirections
+                        //    .actionHabitsListFragmentToAddEditHabitFragment(habitsAdapter.habitsList[habitPosition]))
+
+                        findNavController().navigate(HabitsListFragmentDirections
+                            .actionHabitsListFragmentToHabitPagerFragment(
+                                habitsAdapter.habitsList.toTypedArray(),
+                                habitsAdapter.habitsList[habitPosition].type.ordinal
+                            ))
+
+                    }
                 }
-            })
+            }
+
+            habitsAdapter = HabitsAdapter(onHabitItemClickListener)
+
+            if (isForViewPager) {
+                habitsAdapter.habitsList = habitsListForViewPager ?: arrayListOf()
+            }
         }
 
         recyclerView.adapter = habitsAdapter
@@ -84,9 +117,13 @@ class HabitsListFragment : Fragment() {
             }
         }
 
-        binding.floatingActionButtonAddHabit.setOnClickListener {
-            findNavController().navigate(HabitsListFragmentDirections
-                .actionHabitsListFragmentToAddEditHabitFragment(null))
+        if (isForViewPager) {
+            binding.floatingActionButtonAddHabit.visibility = View.GONE
+        } else {
+            binding.floatingActionButtonAddHabit.setOnClickListener {
+                findNavController().navigate(HabitsListFragmentDirections
+                    .actionHabitsListFragmentToAddEditHabitFragment(null))
+            }
         }
 
         return binding.root

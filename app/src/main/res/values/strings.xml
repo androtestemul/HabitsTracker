@@ -46,4 +46,8 @@
     <string name="navdrawer_menu_habit_list">Home</string>
     <string name="navdrawer_menu_about">About</string>
     <!-- ************************ -->
+
+    <!-- ***** Habits by types ***** -->
+    <string name="habit_pager_by_type_header">Habits by types</string>
+    <!-- ************************ -->
 </resources>

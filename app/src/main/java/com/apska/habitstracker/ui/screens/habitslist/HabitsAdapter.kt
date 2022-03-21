@@ -8,7 +8,7 @@ import com.apska.habitstracker.databinding.HabitListItemBinding
 import com.apska.habitstracker.model.Habit
 
 
-class HabitsAdapter(private val onHabitItemClickListener: OnHabitItemClickListener) : RecyclerView.Adapter<HabitsViewHolder>() {
+class HabitsAdapter(private val onHabitItemClickListener: OnHabitItemClickListener?) : RecyclerView.Adapter<HabitsViewHolder>() {
 
     var habitsList: ArrayList<Habit> = arrayListOf()
 

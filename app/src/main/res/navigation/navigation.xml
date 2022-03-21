@@ -17,6 +17,9 @@
                 app:argType="com.apska.habitstracker.model.Habit"
                 app:nullable="true" />
         </action>
+        <action
+            android:id="@+id/action_habitsListFragment_to_habitPagerFragment"
+            app:destination="@id/habitPagerFragment" />
     </fragment>
     <fragment
         android:id="@+id/addEditHabitFragment"
@@ -31,4 +34,15 @@
         android:id="@+id/aboutFragment"
         android:name="com.apska.habitstracker.ui.screens.about.AboutFragment"
         tools:layout="@layout/fragment_about" />
+    <fragment
+        android:id="@+id/habitPagerFragment"
+        android:name="com.apska.habitstracker.ui.screens.habitpager.HabitPagerFragment"
+        tools:layout="@layout/fragment_habit_pager" >
+        <argument
+            android:name="habitsList"
+            app:argType="com.apska.habitstracker.model.Habit[]" />
+        <argument
+            android:name="defaultType"
+            app:argType="integer" />
+    </fragment>
 </navigation>

@@ -42,4 +42,8 @@
     <string name="navdrawer_menu_about">О приложении</string>
     <string name="navdrawer_menu_habit_list">Главный экран</string>
     <!-- ************************ -->
+
+    <!-- ***** Habits by types ***** -->
+    <string name="habit_pager_by_type_header">Привычки по типам</string>
+    <!-- ************************ -->
 </resources>

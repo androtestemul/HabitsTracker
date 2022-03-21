@@ -6,13 +6,13 @@ import com.apska.habitstracker.model.Habit
 
 class HabitsViewHolder(
     private val binding: HabitListItemBinding,
-    private val onHabitItemClickListener: HabitsAdapter.OnHabitItemClickListener
+    private val onHabitItemClickListener: HabitsAdapter.OnHabitItemClickListener?
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
         binding.root.setOnClickListener {
             if (adapterPosition != RecyclerView.NO_POSITION) {
-                onHabitItemClickListener.onItemClick(adapterPosition)
+                onHabitItemClickListener?.onItemClick(adapterPosition)
             }
         }
     }
