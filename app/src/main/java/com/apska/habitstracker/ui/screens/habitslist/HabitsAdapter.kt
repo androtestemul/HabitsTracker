@@ -8,7 +8,10 @@ import com.apska.habitstracker.databinding.HabitListItemBinding
 import com.apska.habitstracker.model.Habit
 
 
-class HabitsAdapter(private val onHabitItemClickListener: OnHabitItemClickListener?) : RecyclerView.Adapter<HabitsViewHolder>() {
+class HabitsAdapter(
+    private val onHabitItemClickListener: OnHabitItemClickListener?,
+    private val onHabitEditClickListener: OnHabitEditClickListener
+) : RecyclerView.Adapter<HabitsViewHolder>() {
 
     var habitsList: ArrayList<Habit> = arrayListOf()
 
@@ -18,7 +21,7 @@ class HabitsAdapter(private val onHabitItemClickListener: OnHabitItemClickListen
 
         val binding = HabitListItemBinding.bind(view)
 
-        return HabitsViewHolder(binding, onHabitItemClickListener)
+        return HabitsViewHolder(binding, onHabitItemClickListener, onHabitEditClickListener)
     }
 
     override fun onBindViewHolder(holder: HabitsViewHolder, position: Int) {
@@ -39,5 +42,9 @@ class HabitsAdapter(private val onHabitItemClickListener: OnHabitItemClickListen
 
     interface OnHabitItemClickListener {
         fun onItemClick(habitPosition: Int)
+    }
+
+    interface OnHabitEditClickListener {
+        fun onEditClick(habitPosition: Int)
     }
 }

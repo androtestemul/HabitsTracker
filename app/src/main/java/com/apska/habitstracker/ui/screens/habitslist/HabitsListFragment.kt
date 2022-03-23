@@ -13,6 +13,7 @@ import com.apska.habitstracker.R
 import com.apska.habitstracker.databinding.FragmentHabitsListBinding
 import com.apska.habitstracker.model.Habit
 import com.apska.habitstracker.ui.screens.addedithabit.AddEditHabitFragment
+import com.apska.habitstracker.ui.screens.habitpager.HabitPagerFragmentDirections
 
 class HabitsListFragment : Fragment() {
 
@@ -39,6 +40,26 @@ class HabitsListFragment : Fragment() {
     private var isForViewPager = false
     private var habitsListForViewPager: ArrayList<Habit>? = null
     private var onHabitItemClickListener: HabitsAdapter.OnHabitItemClickListener? = null
+
+    private val onHabitEditClickListener = object : HabitsAdapter.OnHabitEditClickListener {
+        override fun onEditClick(habitPosition: Int) {
+            clickedHabitPosition = habitPosition
+
+            findNavController().currentDestination?.let { destination ->
+                val habit = habitsAdapter.habitsList[habitPosition]
+
+                val direction = when (destination.id) {
+                    R.id.habitPagerFragment -> HabitPagerFragmentDirections
+                        .actionHabitPagerFragmentToAddEditHabitFragment(habit)
+                    R.id.habitsListFragment -> HabitsListFragmentDirections
+                        .actionHabitsListFragmentToAddEditHabitFragment(habit)
+                    else -> throw Exception("Not supported destination for Edit Habit. Destination: $destination")
+                }
+
+                findNavController().navigate(direction)
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,9 +88,6 @@ class HabitsListFragment : Fragment() {
                     override fun onItemClick(habitPosition: Int) {
                         clickedHabitPosition = habitPosition
 
-                        //findNavController().navigate(HabitsListFragmentDirections
-                        //    .actionHabitsListFragmentToAddEditHabitFragment(habitsAdapter.habitsList[habitPosition]))
-
                         findNavController().navigate(HabitsListFragmentDirections
                             .actionHabitsListFragmentToHabitPagerFragment(
                                 habitsAdapter.habitsList.toTypedArray(),
@@ -80,7 +98,7 @@ class HabitsListFragment : Fragment() {
                 }
             }
 
-            habitsAdapter = HabitsAdapter(onHabitItemClickListener)
+            habitsAdapter = HabitsAdapter(onHabitItemClickListener, onHabitEditClickListener)
 
             if (isForViewPager) {
                 habitsAdapter.habitsList = habitsListForViewPager ?: arrayListOf()
@@ -107,7 +125,8 @@ class HabitsListFragment : Fragment() {
             }
         }
 
-        parentFragmentManager.setFragmentResultListener(AddEditHabitFragment.REQUEST_KEY_EDIT_HABIT,
+        //parentFragmentManager.setFragmentResultListener(AddEditHabitFragment.REQUEST_KEY_EDIT_HABIT,
+        childFragmentManager.setFragmentResultListener(AddEditHabitFragment.REQUEST_KEY_EDIT_HABIT,
             viewLifecycleOwner) { _, data ->
 
             val habit = data.getParcelable<Habit>(AddEditHabitFragment.EXTRA_HABIT)

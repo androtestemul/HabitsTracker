@@ -44,5 +44,8 @@
         <argument
             android:name="defaultType"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_habitPagerFragment_to_addEditHabitFragment"
+            app:destination="@id/addEditHabitFragment" />
     </fragment>
 </navigation>
