@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.apska.habitstracker.databinding.FragmentHabitPagerBinding
+import com.apska.habitstracker.model.HabitType
+import com.google.android.material.tabs.TabLayoutMediator
 
 class HabitPagerFragment : Fragment() {
     private var _binding: FragmentHabitPagerBinding? = null
@@ -36,5 +38,12 @@ class HabitPagerFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        //super.onViewCreated(view, savedInstanceState)
+        TabLayoutMediator(binding.tabLayout, binding.viewPager){ tab, position ->
+            tab.text = HabitType.values()[position].getTextValue(requireContext())
+        }.attach()
     }
 }

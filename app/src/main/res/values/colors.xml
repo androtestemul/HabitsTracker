@@ -19,6 +19,7 @@
     <color name="boxStrokeColor">#C4E316</color>
 
     <color name="habitListItemBg">#747F86</color>
+    <color name="activeTabColor">#2EE7A2</color>
 
 
 </resources>
