@@ -34,10 +34,14 @@ class MainActivity : AppCompatActivity() {
 
             title = when (destination.id) {
                 R.id.addEditHabitFragment -> {
-                    if (AddEditHabitFragmentArgs.fromBundle(arguments!!).habit == null) {
+                    arguments?.let {
+                        if (AddEditHabitFragmentArgs.fromBundle(it).habit == null) {
+                            getString(R.string.header_add)
+                        } else {
+                            getString(R.string.header_edit)
+                        }
+                    } ?: kotlin.run {
                         getString(R.string.header_add)
-                    } else {
-                        getString(R.string.header_edit)
                     }
                 }
                 R.id.aboutFragment -> getString(R.string.about_header)
