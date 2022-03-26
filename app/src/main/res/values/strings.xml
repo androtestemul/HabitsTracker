@@ -48,6 +48,6 @@
     <!-- ************************ -->
 
     <!-- ***** Habits by types ***** -->
-    <string name="habit_pager_by_type_header">Habits by types</string>
+    <!--<string name="habit_pager_by_type_header">Habits by types</string>-->
     <!-- ************************ -->
 </resources>

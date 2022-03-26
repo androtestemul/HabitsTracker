@@ -2,33 +2,16 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/navigation"
-    app:startDestination="@id/habitsListFragment">
+    app:startDestination="@id/habitPagerFragment">
 
-    <fragment
-        android:id="@+id/habitsListFragment"
-        android:name="com.apska.habitstracker.ui.screens.habitslist.HabitsListFragment"
-        tools:layout="@layout/fragment_habits_list">
-        <action
-            android:id="@+id/action_habitsListFragment_to_addEditHabitFragment"
-            app:destination="@id/addEditHabitFragment">
-            <argument
-                android:name="habit"
-                app:argType="com.apska.habitstracker.model.Habit"
-                app:nullable="true" />
-        </action>
-        <action
-            android:id="@+id/action_habitsListFragment_to_habitPagerFragment"
-            app:destination="@id/habitPagerFragment" />
-    </fragment>
     <fragment
         android:id="@+id/addEditHabitFragment"
         android:name="com.apska.habitstracker.ui.screens.addedithabit.AddEditHabitFragment"
         tools:layout="@layout/fragment_add_edit_habit">
         <argument
-            android:name="habit"
-            app:argType="com.apska.habitstracker.model.Habit"
-            app:nullable="true" />
+            android:name="habitId"
+            app:argType="integer"
+            android:defaultValue="-1" />
     </fragment>
     <fragment
         android:id="@+id/aboutFragment"
@@ -38,11 +21,19 @@
         android:id="@+id/habitPagerFragment"
         android:name="com.apska.habitstracker.ui.screens.habitpager.HabitPagerFragment"
         tools:layout="@layout/fragment_habit_pager" >
-        <argument
-            android:name="habitsList"
-            app:argType="com.apska.habitstracker.model.Habit[]" />
-        <argument
-            android:name="defaultType"
-            app:argType="integer" />
+        <action
+            android:id="@+id/action_habitPagerFragment_to_addEditHabitFragment"
+            app:destination="@id/addEditHabitFragment" />
+        <action
+            android:id="@+id/action_habitPagerFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/habitsListFragment"
+        android:name="com.apska.habitstracker.ui.screens.habitslist.HabitsListFragment"
+        tools:layout="@layout/fragment_habits_list">
+        <action
+            android:id="@+id/action_habitsListFragment_to_addEditHabitFragment"
+            app:destination="@id/addEditHabitFragment" />
     </fragment>
 </navigation>

@@ -5,6 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Habit(
+    val id: Int,
     val header: String,
     val description: String,
     val priority: HabitPriority,

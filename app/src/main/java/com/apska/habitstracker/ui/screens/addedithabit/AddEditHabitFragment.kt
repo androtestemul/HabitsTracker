@@ -9,8 +9,8 @@ import android.widget.EditText
 import android.widget.RadioButton
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.apska.habitstracker.R
@@ -25,38 +25,12 @@ import com.google.android.material.textfield.TextInputLayout
 
 class AddEditHabitFragment : Fragment() {
 
-    companion object {
-        private const val KEY_SELECTED_PRIORITY_INDEX = "selected_priority_index"
-        private const val KEY_SELECTED_TYPE_INDEX = "selected_type_index"
-        private const val KEY_SELECTED_COLOR_FROM_PICKER = "selected_color_from_picker"
-
-        const val REQUEST_KEY_ADD_HABIT = "request_key_add_habit"
-        const val REQUEST_KEY_EDIT_HABIT = "request_key_edit_habit"
-        const val EXTRA_HABIT = "extra_habit"
-
-        /*fun newInstance(habit: Habit? = null): AddEditHabitFragment {
-            val fragment = AddEditHabitFragment()
-
-            habit?.let {
-                val bundle = Bundle()
-                bundle.putParcelable(ARG_HABIT, it)
-                fragment.arguments = bundle
-        }
-
-            return fragment
-        }*/
-    }
-
     private var _binding: FragmentAddEditHabitBinding? = null
     private val binding
         get() = _binding!!
 
-    private lateinit var priorityEditText: AppCompatAutoCompleteTextView
-    private var selectedPriorityIndex = -1
-    private var selectedTypeIndex = -1
-    private var selectedColorFromPicker = ColorView.DEFAULT_COLOR
-    private lateinit var colorPicker: ColorPicker
     private val args: AddEditHabitFragmentArgs by navArgs()
+    private val addEditHabitViewModel: AddEditHabitViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,27 +44,20 @@ class AddEditHabitFragment : Fragment() {
                 habitPriority.getTextValue(requireContext())
             })
 
-        priorityEditText = binding.priorityEditText as AppCompatAutoCompleteTextView
-
-        if (savedInstanceState != null) {
-            selectedPriorityIndex = savedInstanceState.getInt(KEY_SELECTED_PRIORITY_INDEX)
-            selectedTypeIndex = savedInstanceState.getInt(KEY_SELECTED_TYPE_INDEX)
-            selectedColorFromPicker = savedInstanceState.getInt(KEY_SELECTED_COLOR_FROM_PICKER)
-
-            if (selectedPriorityIndex != -1) {
-                priorityEditText.setText(HabitPriority.values()[selectedPriorityIndex]
-                    .getTextValue(requireContext()), false)
-            }
-
-            binding.selectedColorPickerView.canvasBackgroundColor = selectedColorFromPicker
-        }
-
-        priorityEditText.apply {
+        (binding.priorityEditText as AppCompatAutoCompleteTextView).apply {
             setAdapter(priorityAdapter)
+
             setOnItemClickListener { _, _, position, _ ->
-                selectedPriorityIndex = position
+                addEditHabitViewModel.selectedPriority = HabitPriority.values()[position]
+            }
+
+            addEditHabitViewModel.selectedPriority?.let {
+                setText(it.getTextValue(requireContext()), false)
             }
         }
+
+        binding.selectedColorPickerView.canvasBackgroundColor =
+            addEditHabitViewModel.selectedColorFromPicker
 
         HabitType.values().forEach { habitType ->
             val radioButton = RadioButton(requireContext())
@@ -99,7 +66,7 @@ class AddEditHabitFragment : Fragment() {
             radioButton.setTextColor(ContextCompat.getColor(requireContext(),
                 R.color.primaryTextColor))
 
-            if (habitType.ordinal == selectedTypeIndex) {
+            if (habitType == addEditHabitViewModel.selectedType) {
                 radioButton.isChecked = true
             }
 
@@ -107,25 +74,27 @@ class AddEditHabitFragment : Fragment() {
         }
 
         binding.habitTypeRadioGroup.setOnCheckedChangeListener { _, checkedId ->
-            selectedTypeIndex = checkedId
+            addEditHabitViewModel.selectedType = HabitType.values()[checkedId]
         }
 
-        val habit = args.habit
+        val habitId = args.habitId
 
-        if (habit != null) {
-            selectedPriorityIndex = habit.priority.ordinal
-            priorityEditText.setText(habit.priority.getTextValue(requireContext()), false)
+        if (habitId != -1) {
+            val habit = addEditHabitViewModel.getHabit(habitId)
+
+            addEditHabitViewModel.selectedPriority = habit.priority
 
             binding.apply {
                 headerEditText.setText(habit.header)
                 descriptionEditText.setText(habit.description)
+                priorityEditText.setText(habit.priority.getTextValue(requireContext()), false)
                 executeCountEditText.setText(habit.executeCount.toString())
                 periodEditText.setText(habit.period)
                 (habitTypeRadioGroup.getChildAt(habit.type.ordinal) as RadioButton).isChecked = true
 
                 if (habit.color != ColorView.DEFAULT_COLOR) {
                     selectedColorPickerView.canvasBackgroundColor = habit.color
-                    selectedColorFromPicker = habit.color
+                    addEditHabitViewModel.selectedColorFromPicker = habit.color
                     selectedColorTextView.text = getText(R.string.habit_color_selected_label)
                 }
             }
@@ -140,31 +109,44 @@ class AddEditHabitFragment : Fragment() {
                 return@setOnClickListener
             }
 
+            val id = if (habitId == -1) {
+                addEditHabitViewModel.habits.value?.size ?: 0
+            } else {
+                habitId
+            }
+
             val newHabit = Habit(
+                id = id,
                 header = binding.headerEditText.text.toString(),
                 description = binding.descriptionEditText.text.toString(),
-                priority = HabitPriority.values()[selectedPriorityIndex],
-                type = HabitType.values()[selectedTypeIndex],
+                priority = addEditHabitViewModel.selectedPriority
+                    ?: throw Exception("Priority of new Habit is null"),
+                type = addEditHabitViewModel.selectedType
+                    ?: throw Exception("Type of new Habit is null"),
                 executeCount = binding.executeCountEditText.text.toString().toInt(),
                 period = binding.periodEditText.text.toString(),
-                color = selectedColorFromPicker
+                color = addEditHabitViewModel.selectedColorFromPicker
             )
 
-            val key = if (habit == null) REQUEST_KEY_ADD_HABIT else REQUEST_KEY_EDIT_HABIT
+            if (habitId == -1) {
+                addEditHabitViewModel.addHabit(newHabit)
+            } else {
+                addEditHabitViewModel.updateHabit(newHabit)
+            }
 
-            parentFragmentManager.setFragmentResult(key, bundleOf(EXTRA_HABIT to newHabit))
             findNavController().popBackStack()
         }
 
         setupValidatorListeners()
 
-        colorPicker = ColorPicker(requireActivity(),
+        ColorPicker(requireActivity(),
             binding.colorsPickerView,
             binding.rootLinearLayout).apply {
-            this.selectedColor = selectedColorFromPicker
+            this.selectedColor = addEditHabitViewModel.selectedColorFromPicker
 
             onColorClickListener = ColorPicker.OnColorClickListener { colorPickerView ->
-                selectedColorFromPicker = colorPickerView.canvasBackgroundColor
+                addEditHabitViewModel.selectedColorFromPicker =
+                    colorPickerView.canvasBackgroundColor
 
                 binding.apply {
                     selectedColorPickerView.canvasBackgroundColor = selectedColor
@@ -185,19 +167,6 @@ class AddEditHabitFragment : Fragment() {
         }
 
         return binding.root
-    }
-
-
-    override fun onStop() {
-        super.onStop()
-        priorityEditText.setText("", false)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putInt(KEY_SELECTED_PRIORITY_INDEX, selectedPriorityIndex)
-        outState.putInt(KEY_SELECTED_TYPE_INDEX, selectedTypeIndex)
-        outState.putInt(KEY_SELECTED_COLOR_FROM_PICKER, selectedColorFromPicker)
     }
 
     override fun onDestroyView() {

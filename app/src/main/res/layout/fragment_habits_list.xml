@@ -11,27 +11,17 @@
         android:id="@+id/habitsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:itemCount="1"
+        tools:listitem="@layout/habit_list_item" />
 
     <TextView
         android:id="@+id/emptyListTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:text="@string/empty_list"
         android:visibility="gone"
-        tools:visibility="visible"
-        android:layout_gravity="center"/>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButtonAddHabit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/habit_list_fab_margin"
-        android:layout_marginBottom="@dimen/habit_list_fab_margin"
-        android:clickable="true"
-        android:layout_gravity="bottom|end"
-        app:srcCompat="@drawable/ic_baseline_add_24"
-        android:focusable="true"
-        android:contentDescription="@string/add_habit" />
+        tools:visibility="visible" />
 
 </FrameLayout>

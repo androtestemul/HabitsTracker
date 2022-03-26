@@ -11,6 +11,10 @@ import com.apska.habitstracker.model.Habit
 class HabitsAdapter(private val onHabitItemClickListener: OnHabitItemClickListener?) : RecyclerView.Adapter<HabitsViewHolder>() {
 
     var habitsList: ArrayList<Habit> = arrayListOf()
+        set(value) {
+            field = value
+            this.notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HabitsViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -26,16 +30,6 @@ class HabitsAdapter(private val onHabitItemClickListener: OnHabitItemClickListen
     }
 
     override fun getItemCount() = habitsList.size
-
-    fun addHabit(habit: Habit) {
-        habitsList.add(habit)
-        this.notifyItemInserted(itemCount)
-    }
-
-    fun replaceHabit(habit: Habit, position: Int) {
-        habitsList[position] = habit
-        this.notifyItemChanged(position)
-    }
 
     interface OnHabitItemClickListener {
         fun onItemClick(habitPosition: Int)
