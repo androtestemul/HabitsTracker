@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.apska.habitstracker.model.Habit
 import com.apska.habitstracker.repository.HabitStorage
+import com.apska.habitstracker.ui.screens.ViewModelEvent
 
 class HabitPagerViewModel: ViewModel() {
 
@@ -16,15 +17,12 @@ class HabitPagerViewModel: ViewModel() {
         _habits.value = HabitStorage.getAllHabits()
     }
 
-    private val _navigateToHabit = MutableLiveData<Int?>()
+    private val _navigateToHabit = MutableLiveData<ViewModelEvent<Int>>()
     val navigateToHabit
         get() = _navigateToHabit
 
     fun onHabitClicked(habitId: Int) {
-        _navigateToHabit.value = habitId
+        _navigateToHabit.value = ViewModelEvent(habitId)
     }
 
-    fun onHabitNavigated() {
-        _navigateToHabit.value = null
-    }
 }
