@@ -48,4 +48,17 @@
             tools:ignore="LabelFor" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/sortByPeriod"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_field_margin_top"
+        android:layout_gravity="center"
+        android:textAllCaps="false"
+        tools:drawableEnd="@drawable/ic_baseline_arrow_downward_24"
+        android:text="@string/sort_by_period" />
+
+
+
 </LinearLayout>

@@ -9,8 +9,15 @@ import com.apska.habitstracker.model.Habit
 import com.apska.habitstracker.model.HabitPriority
 import com.apska.habitstracker.repository.HabitStorage
 import com.apska.habitstracker.ui.screens.ViewModelEvent
+import java.util.*
+import kotlin.collections.ArrayList
 
 class HabitPagerViewModel: ViewModel() {
+
+    companion object {
+        const val SORT_ASC = "ASC"
+        const val SORT_DESC = "DESC"
+    }
 
     var searchHeader : String = ""
         set(value) {
@@ -46,6 +53,24 @@ class HabitPagerViewModel: ViewModel() {
             habitHeader = habitHeader,
             habitPriority = habitPriority
         )
+    }
+
+    private val _currentSortDirection = MutableLiveData<String>()
+    val currentSortDirection: LiveData<String>
+        get() = _currentSortDirection
+
+    fun sortHabitByPeriod() {
+        val list = _habits.value ?: arrayListOf()
+
+        if (_currentSortDirection.value == SORT_DESC || _currentSortDirection.value == null) {
+            list.sortBy { it.period }
+            _currentSortDirection.value = SORT_ASC
+        } else if (_currentSortDirection.value == SORT_ASC) {
+            list.sortByDescending { it.period }
+            _currentSortDirection.value = SORT_DESC
+        }
+
+        _habits.value = list
     }
 
 }

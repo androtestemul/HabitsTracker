@@ -45,6 +45,7 @@
 
     <!-- ***** Filter and sort Fragment ***** -->
     <string name="filter_and_sort">Фильтры и сортировки</string>
+    <string name="sort_by_period">Сортировка по периодичности</string>
     <!-- ************************ -->
 
     <!-- ***** Habits by types ***** -->
