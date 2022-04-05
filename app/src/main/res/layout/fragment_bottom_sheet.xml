@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/bottom_sheet_peek_height"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="@dimen/bottom_sheet_header_text_size"
+        android:text="@string/filter_and_sort"
+        app:drawableLeftCompat="@drawable/ic_baseline_filter_alt_24" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/headerTextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/add_edit_input_margin_top"
+        android:hint="@string/habit_name_hint"
+        app:endIconMode="clear_text"
+        app:errorEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/headerEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/priorityTextInputLayout"
+        style="@style/Widget.App.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/add_edit_input_margin_top"
+        android:hint="@string/habit_priority_hint">
+
+        <AutoCompleteTextView
+            android:id="@+id/priorityEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            tools:ignore="LabelFor" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+</LinearLayout>

@@ -47,6 +47,10 @@
     <string name="navdrawer_menu_about">About</string>
     <!-- ************************ -->
 
+    <!-- ***** Filter and sort Fragment ***** -->
+    <string name="filter_and_sort">Filter and sort</string>
+    <!-- ************************ -->
+
     <!-- ***** Habits by types ***** -->
     <!--<string name="habit_pager_by_type_header">Habits by types</string>-->
     <!-- ************************ -->
