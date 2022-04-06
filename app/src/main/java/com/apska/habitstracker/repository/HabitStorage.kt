@@ -4,18 +4,40 @@ import com.apska.habitstracker.model.Habit
 import com.apska.habitstracker.model.HabitPriority
 
 object HabitStorage {
+
+    var currentSortDirection : HabitSort? = null
+
     private val habits = arrayListOf<Habit>()
 
     fun getAllHabits() = habits
 
-    fun getHabit(index: Int) = habits[index]
+    fun getHabit(habitId: Int) : Habit? {
+        var habit: Habit? = null
+
+        for (index in 0..habits.size) {
+            if (habits[index].id == habitId) {
+                habit = habits[index]
+                break
+            }
+        }
+
+        return habit
+    }
 
     fun addHabit(habit: Habit) {
         habits.add(habit)
+        applyCurrentSort()
     }
 
     fun updateHabit(habit: Habit) {
-        habits[habit.id] = habit
+        for (index in 0..habits.size) {
+            if (habits[index].id == habit.id) {
+                habits[index] = habit
+                break
+            }
+        }
+
+        applyCurrentSort()
     }
 
     fun getFilteredHabits(habitHeader: String? = null, habitPriority: HabitPriority? = null) : ArrayList<Habit> {
@@ -34,5 +56,25 @@ object HabitStorage {
 
             headerFilter && priorityFilter
         } as ArrayList<Habit>
+    }
+
+    private fun applyCurrentSort() {
+        if (currentSortDirection == HabitSort.SORT_ASC) {
+            habits.sortBy { it.period }
+        } else if (currentSortDirection == HabitSort.SORT_DESC) {
+            habits.sortByDescending { it.period }
+        }
+    }
+
+    fun sortHabitByPeriod() : ArrayList<Habit> {
+        if (currentSortDirection == HabitSort.SORT_DESC || currentSortDirection == null) {
+            habits.sortBy { it.period }
+            currentSortDirection = HabitSort.SORT_ASC
+        } else if (currentSortDirection == HabitSort.SORT_ASC) {
+            habits.sortByDescending { it.period }
+            currentSortDirection = HabitSort.SORT_DESC
+        }
+
+        return habits
     }
 }

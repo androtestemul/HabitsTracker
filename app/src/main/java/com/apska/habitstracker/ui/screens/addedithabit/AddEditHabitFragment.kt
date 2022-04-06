@@ -80,7 +80,7 @@ class AddEditHabitFragment : Fragment() {
         val habitId = args.habitId
 
         if (habitId != -1) {
-            val habit = addEditHabitViewModel.getHabit(habitId)
+            val habit = addEditHabitViewModel.getHabit(habitId) ?: throw Exception("Привычка не найдена")
 
             addEditHabitViewModel.selectedPriority = habit.priority
 

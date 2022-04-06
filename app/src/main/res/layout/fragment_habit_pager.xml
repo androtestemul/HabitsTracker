@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:layout_marginBottom="@dimen/bottom_sheet_peek_height"
         tools:context=".ui.screens.habitpager.HabitPagerFragment">
 
         <com.google.android.material.tabs.TabLayout

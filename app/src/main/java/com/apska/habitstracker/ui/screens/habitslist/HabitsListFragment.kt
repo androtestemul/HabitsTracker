@@ -69,9 +69,9 @@ class HabitsListFragment : Fragment() {
         }
 
         habitPagerViewModel.navigateToHabit.observe(viewLifecycleOwner) { viewModelEvent ->
-            viewModelEvent.getValue()?.let { habitPosition ->
+            viewModelEvent.getValue()?.let { habitId ->
                 findNavController().navigate(HabitPagerFragmentDirections
-                    .actionHabitPagerFragmentToAddEditHabitFragment(habitPosition))
+                    .actionHabitPagerFragmentToAddEditHabitFragment(habitId))
             }
         }
 

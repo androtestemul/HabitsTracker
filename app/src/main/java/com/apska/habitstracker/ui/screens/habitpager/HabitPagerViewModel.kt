@@ -1,23 +1,19 @@
 package com.apska.habitstracker.ui.screens.habitpager
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import com.apska.habitstracker.model.Habit
 import com.apska.habitstracker.model.HabitPriority
+import com.apska.habitstracker.repository.HabitSort
 import com.apska.habitstracker.repository.HabitStorage
 import com.apska.habitstracker.ui.screens.ViewModelEvent
-import java.util.*
-import kotlin.collections.ArrayList
 
 class HabitPagerViewModel: ViewModel() {
 
-    companion object {
-        const val SORT_ASC = "ASC"
-        const val SORT_DESC = "DESC"
-    }
+    private val _currentSortDirection = MutableLiveData<HabitSort?>()
+    val currentSortDirection: LiveData<HabitSort?>
+        get() = _currentSortDirection
 
     var searchHeader : String = ""
         set(value) {
@@ -37,6 +33,7 @@ class HabitPagerViewModel: ViewModel() {
 
     init {
         _habits.value = HabitStorage.getAllHabits()
+        _currentSortDirection.value = HabitStorage.currentSortDirection
     }
 
     private val _navigateToHabit = MutableLiveData<ViewModelEvent<Int>>()
@@ -55,22 +52,9 @@ class HabitPagerViewModel: ViewModel() {
         )
     }
 
-    private val _currentSortDirection = MutableLiveData<String>()
-    val currentSortDirection: LiveData<String>
-        get() = _currentSortDirection
-
     fun sortHabitByPeriod() {
-        val list = _habits.value ?: arrayListOf()
-
-        if (_currentSortDirection.value == SORT_DESC || _currentSortDirection.value == null) {
-            list.sortBy { it.period }
-            _currentSortDirection.value = SORT_ASC
-        } else if (_currentSortDirection.value == SORT_ASC) {
-            list.sortByDescending { it.period }
-            _currentSortDirection.value = SORT_DESC
-        }
-
-        _habits.value = list
+        _habits.value = HabitStorage.sortHabitByPeriod()
+        _currentSortDirection.value = HabitStorage.currentSortDirection
     }
 
 }

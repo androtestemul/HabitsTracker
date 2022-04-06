@@ -13,6 +13,7 @@ import androidx.fragment.app.activityViewModels
 import com.apska.habitstracker.R
 import com.apska.habitstracker.databinding.FragmentBottomSheetBinding
 import com.apska.habitstracker.model.HabitPriority
+import com.apska.habitstracker.repository.HabitSort
 import com.apska.habitstracker.ui.screens.habitpager.HabitPagerViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -70,10 +71,10 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
 
         habitPagerViewModel.currentSortDirection.observe(viewLifecycleOwner) { sortDirection ->
             val sortImg = when (sortDirection) {
-                HabitPagerViewModel.SORT_ASC -> {
+                HabitSort.SORT_ASC -> {
                     requireContext().getDrawable(R.drawable.ic_baseline_arrow_upward_24)
                 }
-                HabitPagerViewModel.SORT_DESC -> {
+                HabitSort.SORT_DESC -> {
                     requireContext().getDrawable(R.drawable.ic_baseline_arrow_downward_24)
                 }
                 else -> {
