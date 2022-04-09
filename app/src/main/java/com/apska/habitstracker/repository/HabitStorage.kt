@@ -11,18 +11,7 @@ object HabitStorage {
 
     fun getAllHabits() = habits
 
-    fun getHabit(habitId: Int) : Habit? {
-        var habit: Habit? = null
-
-        for (index in 0..habits.size) {
-            if (habits[index].id == habitId) {
-                habit = habits[index]
-                break
-            }
-        }
-
-        return habit
-    }
+    fun getHabit(habitId: Int) = habits.firstOrNull { it.id == habitId }
 
     fun addHabit(habit: Habit) {
         habits.add(habit)
