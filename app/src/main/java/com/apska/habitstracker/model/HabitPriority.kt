@@ -6,8 +6,8 @@ import com.apska.habitstracker.R
 import kotlinx.parcelize.Parcelize
 
 
-@Parcelize
-enum class HabitPriority(private val value: Int) : Parcelable {
+
+enum class HabitPriority(private val value: Int) {
     HIGH(R.string.habit_priority_high),
     MIDDLE(R.string.habit_priority_middle),
     LOW(R.string.habit_priority_low);

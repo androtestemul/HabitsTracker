@@ -5,13 +5,13 @@ import com.apska.habitstracker.model.HabitPriority
 
 object HabitStorage {
 
-    var currentSortDirection : HabitSort? = null
+    var currentSortDirection = HabitSort.NONE
 
     private val habits = arrayListOf<Habit>()
 
     fun getAllHabits() = habits
 
-    fun getHabit(habitId: Int) = habits.firstOrNull { it.id == habitId }
+    fun getHabit(habitId: Long) = habits.firstOrNull { it.id == habitId }
 
     fun addHabit(habit: Habit) {
         habits.add(habit)

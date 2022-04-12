@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
             title = when (destination.id) {
                 R.id.addEditHabitFragment -> {
                     arguments?.let {
-                        if (AddEditHabitFragmentArgs.fromBundle(it).habitId == -1) {
+                        if (AddEditHabitFragmentArgs.fromBundle(it).habitId == -1L) {
                             getString(R.string.header_add)
                         } else {
                             getString(R.string.header_edit)

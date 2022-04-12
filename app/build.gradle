@@ -3,8 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
-
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 android {
@@ -60,4 +60,10 @@ dependencies {
 
     // Viewpager2
     implementation "androidx.viewpager2:viewpager2:1.0.0"
+
+    //Room
+    def room_version = "2.4.1"
+
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt("androidx.room:room-compiler:$room_version")
 }

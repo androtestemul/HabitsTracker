@@ -79,7 +79,7 @@ class AddEditHabitFragment : Fragment() {
 
         val habitId = args.habitId
 
-        if (habitId != -1) {
+        if (habitId != -1L) {
             val habit = addEditHabitViewModel.getHabit(habitId) ?: throw Exception("Привычка не найдена")
 
             addEditHabitViewModel.selectedPriority = habit.priority
@@ -109,14 +109,7 @@ class AddEditHabitFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            val id = if (habitId == -1) {
-                addEditHabitViewModel.habits.value?.size ?: 0
-            } else {
-                habitId
-            }
-
             val newHabit = Habit(
-                id = id,
                 header = binding.headerEditText.text.toString(),
                 description = binding.descriptionEditText.text.toString(),
                 priority = addEditHabitViewModel.selectedPriority
@@ -128,7 +121,7 @@ class AddEditHabitFragment : Fragment() {
                 color = addEditHabitViewModel.selectedColorFromPicker
             )
 
-            if (habitId == -1) {
+            if (habitId == -1L) {
                 addEditHabitViewModel.addHabit(newHabit)
             } else {
                 addEditHabitViewModel.updateHabit(newHabit)

@@ -1,6 +1,9 @@
 package com.apska.habitstracker.repository
 
-enum class HabitSort {
-    SORT_ASC,
-    SORT_DESC
+class HabitSort {
+    companion object {
+        const val SORT_ASC = 0
+        const val SORT_DESC = 1
+        const val NONE = 3
+    }
 }

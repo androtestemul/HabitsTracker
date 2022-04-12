@@ -1,16 +1,24 @@
 package com.apska.habitstracker.model
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import com.apska.habitstracker.repository.database.Converters
 
-@Parcelize
+@Entity(tableName = "habits")
 data class Habit(
-    val id: Int,
+    @PrimaryKey(autoGenerate = true)
+    val id: Long? = null,
     val header: String,
     val description: String,
+
+    @TypeConverters(Converters::class)
     val priority: HabitPriority,
+
+    @TypeConverters(Converters::class)
     val type: HabitType,
+
     val executeCount: Int,
     val period: String,
     val color: Int
-) : Parcelable
+)

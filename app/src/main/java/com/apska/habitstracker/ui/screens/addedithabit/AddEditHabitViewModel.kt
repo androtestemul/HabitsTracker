@@ -1,31 +1,25 @@
 package com.apska.habitstracker.ui.screens.addedithabit
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import com.apska.habitstracker.model.Habit
 import com.apska.habitstracker.model.HabitPriority
-import com.apska.habitstracker.repository.HabitStorage
 import com.apska.habitstracker.model.HabitType
+import com.apska.habitstracker.repository.Repository
 import com.apska.habitstracker.ui.view.colorview.ColorView
 
-class AddEditHabitViewModel : ViewModel() {
-    private val _habits = MutableLiveData<ArrayList<Habit>>()
-    val habits: LiveData<ArrayList<Habit>>
-        get() = _habits
+class AddEditHabitViewModel(application: Application) : AndroidViewModel(application) {
 
-    init {
-        _habits.value = HabitStorage.getAllHabits()
-    }
+    val repository by lazy { Repository(application) }
 
-    fun getHabit(id: Int) = HabitStorage.getHabit(id)
+    fun getHabit(id: Long) = repository.getHabit(id)
 
     fun addHabit(habit: Habit) {
-        HabitStorage.addHabit(habit)
+        repository.insertHabit(habit)
     }
 
     fun updateHabit(habit: Habit) {
-        HabitStorage.updateHabit(habit)
+        repository.updateHabit(habit)
     }
 
     var selectedPriority: HabitPriority? = null

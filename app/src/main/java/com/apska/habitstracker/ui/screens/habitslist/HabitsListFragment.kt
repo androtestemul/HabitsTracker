@@ -54,18 +54,22 @@ class HabitsListFragment : Fragment() {
 
         habitsAdapter = HabitsAdapter(object : HabitsAdapter.OnHabitItemClickListener {
             override fun onItemClick(habitPosition: Int) {
-                habitPagerViewModel.onHabitClicked(habitsAdapter.habitsList[habitPosition].id)
+                habitsAdapter.habitsList[habitPosition].id?.let {
+                    habitPagerViewModel.onHabitClicked(it)
+                }
             }
         })
 
         recyclerView.adapter = habitsAdapter
 
         habitPagerViewModel.habits.observe(viewLifecycleOwner) { habitList ->
-            habitsAdapter.habitsList = habitList.filter { habit ->
-                habit.type == habitType
-            } as ArrayList<Habit>
+            habitList?.let {
+                habitsAdapter.habitsList = it.filter { habit ->
+                    habit.type == habitType
+                } as ArrayList<Habit>
 
-            setEmptyListVisibility()
+                setEmptyListVisibility()
+            }
         }
 
         habitPagerViewModel.navigateToHabit.observe(viewLifecycleOwner) { viewModelEvent ->
