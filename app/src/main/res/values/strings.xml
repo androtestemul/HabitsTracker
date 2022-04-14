@@ -50,6 +50,7 @@
     <!-- ***** Filter and sort Fragment ***** -->
     <string name="filter_and_sort">Filter and sort</string>
     <string name="sort_by_period">Sort by periodicity</string>
+    <string name="reset_sorting_and_filtering">Reset sorting and filtering</string>
     <!-- ************************ -->
 
     <!-- ***** Habits by types ***** -->

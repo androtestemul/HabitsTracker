@@ -93,9 +93,11 @@ class HabitPagerViewModel(application: Application): AndroidViewModel(applicatio
         val fieldsMap = habitFilterFields.value
 
         fieldsMap?.let {
-            it.remove(habitField)
+            if (it.containsKey(habitField)) {
+                it.remove(habitField)
 
-            habitFilterFields.value = it
+                habitFilterFields.value = it
+            }
         }
     }
 
@@ -113,6 +115,18 @@ class HabitPagerViewModel(application: Application): AndroidViewModel(applicatio
         _currentSortDirection.value?.let {
             addFieldToFilter(HabitFilterFields.PERIOD, it)
         }
+    }
+
+    fun resetSortAndFilter() {
+        val fieldsMap = habitFilterFields.value
+
+        fieldsMap?.let {
+            it.clear()
+            habitFilterFields.value = it
+        }
+
+        _currentSortDirection.value = HabitSort.NONE
+        selectedPriority = null
     }
 
     private val _navigateToHabit = MutableLiveData<ViewModelEvent<Long>>()

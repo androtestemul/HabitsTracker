@@ -69,6 +69,12 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
             habitPagerViewModel.sortHabitByPeriod()
         }
 
+        binding.resetSortFilter.setOnClickListener {
+            habitPagerViewModel.resetSortAndFilter()
+            binding.headerEditText.setText("")
+            binding.priorityEditText.setText("", false)
+        }
+
         habitPagerViewModel.currentSortDirection.observe(viewLifecycleOwner) { sortDirection ->
             val sortImg = when (sortDirection) {
                 HabitSort.SORT_ASC -> {

@@ -59,6 +59,13 @@
         tools:drawableEnd="@drawable/ic_baseline_arrow_downward_24"
         android:text="@string/sort_by_period" />
 
+    <Button
+        android:id="@+id/resetSortFilter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_field_margin_top"
+        android:textAllCaps="false"
+        android:text="@string/reset_sorting_and_filtering" />
 
 
 </LinearLayout>
