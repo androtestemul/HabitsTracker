@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.EditText
 import android.widget.RadioButton
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.content.ContextCompat
@@ -15,13 +14,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.apska.habitstracker.R
 import com.apska.habitstracker.databinding.FragmentAddEditHabitBinding
-import com.apska.habitstracker.model.Habit
 import com.apska.habitstracker.model.HabitPriority
 import com.apska.habitstracker.model.HabitType
-import com.apska.habitstracker.ui.screens.FieldValidator
 import com.apska.habitstracker.ui.view.colorpicker.ColorPicker
 import com.apska.habitstracker.ui.view.colorview.ColorView
-import com.google.android.material.textfield.TextInputLayout
 
 class AddEditHabitFragment : Fragment() {
 
@@ -103,34 +99,15 @@ class AddEditHabitFragment : Fragment() {
                 true
         }
 
-
         binding.saveButton.setOnClickListener {
-            if (!isFieldsValid()) {
-                return@setOnClickListener
-            }
-
-            val newHabit = Habit(
-                header = binding.headerEditText.text.toString(),
-                description = binding.descriptionEditText.text.toString(),
-                priority = addEditHabitViewModel.selectedPriority
-                    ?: throw Exception("Priority of new Habit is null"),
-                type = addEditHabitViewModel.selectedType
-                    ?: throw Exception("Type of new Habit is null"),
-                executeCount = binding.executeCountEditText.text.toString().toInt(),
-                period = binding.periodEditText.text.toString(),
-                color = addEditHabitViewModel.selectedColorFromPicker
-            )
-
-            if (habitId == -1L) {
-                addEditHabitViewModel.addHabit(newHabit)
-            } else {
-                addEditHabitViewModel.updateHabit(newHabit)
-            }
-
-            findNavController().popBackStack()
+            addEditHabitViewModel.saveHabit(
+                    id = habitId,
+                    header = binding.headerEditText.text.toString(),
+                    description = binding.descriptionEditText.text.toString(),
+                    executeCount = binding.executeCountEditText.text.toString(),
+                    period = binding.periodEditText.text.toString()
+                )
         }
-
-        setupValidatorListeners()
 
         ColorPicker(requireActivity(),
             binding.colorsPickerView,
@@ -159,6 +136,74 @@ class AddEditHabitFragment : Fragment() {
             }
         }
 
+        addEditHabitViewModel.validateResult.observe(viewLifecycleOwner) { validateResult ->
+            if (validateResult == null) {
+                return@observe
+            }
+
+            if (validateResult.isValid) {
+                findNavController().popBackStack()
+            } else {
+                val validatedFields = validateResult.validatedFields
+
+                ValidatedFields.values().forEach { validatedField ->
+                    when (validatedField) {
+                        ValidatedFields.HEADER -> {
+                            if (validatedFields.containsKey(ValidatedFields.HEADER)) {
+                                if (validatedFields[ValidatedFields.HEADER] == ValidationErrorTypes.EMPTY) {
+                                    binding.headerTextInputLayout.error = getText(R.string.required_field_err)
+                                }
+                            } else {
+                                binding.headerTextInputLayout.error = null
+                            }
+                        }
+
+                        ValidatedFields.DESCRIPTION -> {
+                            if (validatedFields.containsKey(ValidatedFields.DESCRIPTION)) {
+                                if (validatedFields[ValidatedFields.DESCRIPTION] == ValidationErrorTypes.EMPTY) {
+                                    binding.descriptionTextInputLayout.error = getText(R.string.required_field_err)
+                                }
+                            } else {
+                                binding.descriptionTextInputLayout.error = null
+                            }
+                        }
+
+                        ValidatedFields.PRIORITY -> {
+                            if (validatedFields.containsKey(ValidatedFields.PRIORITY)) {
+                                if (validatedFields[ValidatedFields.PRIORITY] == ValidationErrorTypes.EMPTY) {
+                                    binding.priorityTextInputLayout.error = getText(R.string.required_field_err)
+                                }
+                            } else {
+                                binding.priorityTextInputLayout.error = null
+                            }
+                        }
+
+                        ValidatedFields.EXECUTE_COUNT -> {
+                            if (validatedFields.containsKey(ValidatedFields.EXECUTE_COUNT)) {
+                                if (validatedFields[ValidatedFields.EXECUTE_COUNT] == ValidationErrorTypes.EMPTY) {
+                                    binding.executeCountTextInputLayout.error = getText(R.string.required_field_err)
+                                }
+                            } else {
+                                binding.executeCountTextInputLayout.error = null
+                            }
+                        }
+
+                        ValidatedFields.PERIOD -> {
+                            if (validatedFields.containsKey(ValidatedFields.PERIOD)) {
+                                if (validatedFields[ValidatedFields.PERIOD] == ValidationErrorTypes.EMPTY) {
+                                    binding.periodTextInputLayout.error = getText(R.string.required_field_err)
+                                }
+                            } else {
+                                binding.periodTextInputLayout.error = null
+                            }
+                        }
+
+                        else -> {}
+                    }
+                }
+            }
+        }
+
         return binding.root
     }
 
@@ -166,78 +211,4 @@ class AddEditHabitFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-    private fun isFieldsValid(): Boolean {
-        val isHeaderValidated = validateHeader()
-        val isDescriptionValidated = validateDescription()
-        val isExecuteCountValidated = validateExecuteCount()
-        val isPeriodValidated = validatePeriod()
-        val isPriorityValidated = validatePriority()
-
-        return isHeaderValidated && isDescriptionValidated && isExecuteCountValidated &&
-                isPeriodValidated && isPriorityValidated
-    }
-
-    private fun setupValidatorListeners() {
-        binding.headerEditText.addTextChangedListener(
-            AddEditFieldValidator(object : FieldValidator {
-                override fun validate() {
-                    validateHeader()
-                }
-            }))
-
-        binding.descriptionEditText.addTextChangedListener(
-            AddEditFieldValidator(object : FieldValidator {
-                override fun validate() {
-                    validateDescription()
-                }
-            }))
-
-        binding.executeCountEditText.addTextChangedListener(
-            AddEditFieldValidator(object : FieldValidator {
-                override fun validate() {
-                    validateExecuteCount()
-                }
-            }))
-
-        binding.periodEditText.addTextChangedListener(
-            AddEditFieldValidator(object : FieldValidator {
-                override fun validate() {
-                    validatePeriod()
-                }
-            }))
-
-        binding.priorityEditText.addTextChangedListener(
-            AddEditFieldValidator(object : FieldValidator {
-                override fun validate() {
-                    validatePriority()
-                }
-            }))
-
-    }
-
-    private fun validateEmptyField(textInputLayout: TextInputLayout, editText: EditText) =
-        if (editText.text.toString().trim().isEmpty()) {
-            textInputLayout.error = getText(R.string.required_field_err)
-            false
-        } else {
-            textInputLayout.error = null
-            true
-        }
-
-    private fun validateHeader() =
-        validateEmptyField(binding.headerTextInputLayout, binding.headerEditText)
-
-    private fun validateDescription() =
-        validateEmptyField(binding.descriptionTextInputLayout, binding.descriptionEditText)
-
-    private fun validateExecuteCount() =
-        validateEmptyField(binding.executeCountTextInputLayout, binding.executeCountEditText)
-
-    private fun validatePeriod() =
-        validateEmptyField(binding.periodTextInputLayout, binding.periodEditText)
-
-    private fun validatePriority() =
-        validateEmptyField(binding.priorityTextInputLayout, binding.priorityEditText)
-
 }
