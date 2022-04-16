@@ -56,15 +56,12 @@ class HabitPagerViewModel(application: Application): AndroidViewModel(applicatio
                 }
             }
 
-            if (header != null && priority == null) {
-                repository.getHeaderFilteredHabits(header!!, periodSortOrder)
-            } else if (header == null && priority != null) {
-                repository.getPriorityFilteredHabits(priority!!, periodSortOrder)
-            } else if (header != null && priority != null) {
-                repository.getFilteredSortedHabit(header!!, priority!!, periodSortOrder)
-            } else {
-                repository.getAllHabitsSorted(periodSortOrder)
-            }
+            repository.getFilteredSortedHabit(
+                header ?: "",
+                priority,
+                periodSortOrder
+            )
+
 
         }
 

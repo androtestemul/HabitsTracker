@@ -14,16 +14,8 @@ import com.apska.habitstracker.repository.HabitSort.Companion.SORT_DESC
 @Dao
 interface HabitsDao {
 
-
-
     @Query("SELECT * FROM habits ORDER BY id ASC ")
     fun getAllHabits() : LiveData<List<Habit>>
-
-    @Query("SELECT * FROM habits ORDER BY " +
-            "CASE WHEN :periodSortOrder = $SORT_ASC THEN period END ASC, " +
-            "CASE WHEN :periodSortOrder = $SORT_DESC THEN period END DESC, " +
-            "CASE WHEN :periodSortOrder = $NONE THEN id END ASC ")
-    fun getAllHabitsSorted(periodSortOrder: Int) : LiveData<List<Habit>>
 
     @Query("SELECT * FROM habits WHERE id = :id LIMIT 1")
     fun getHabit(id: Long) : Habit?
@@ -34,25 +26,19 @@ interface HabitsDao {
     @Update
     fun updateHabit(habit: Habit)
 
-    @Query("SELECT * FROM habits WHERE header LIKE :habitHeader ORDER BY " +
-            "CASE WHEN :periodSortOrder = 0 THEN period END ASC, " +
-            "CASE WHEN :periodSortOrder = 1 THEN period END DESC, " +
-            "CASE WHEN :periodSortOrder = 2 THEN id END ASC ")
-    fun getHeaderFilteredHabits(habitHeader: String, periodSortOrder: Int) : LiveData<List<Habit>>
-
-    @Query("SELECT * FROM habits WHERE priority = :habitPriority ORDER BY " +
-            "CASE WHEN :periodSortOrder = 0 THEN period END ASC, " +
-            "CASE WHEN :periodSortOrder = 1 THEN period END DESC, " +
-            "CASE WHEN :periodSortOrder = 2 THEN id END ASC ")
-    fun getPriorityFilteredHabits(habitPriority: HabitPriority, periodSortOrder: Int) : LiveData<List<Habit>>
-
-    @Query("SELECT * FROM habits WHERE header LIKE :habitHeader AND priority = :habitPriority ORDER BY " +
-            "CASE WHEN :periodSortOrder = 0 THEN period END ASC, " +
-            "CASE WHEN :periodSortOrder = 1 THEN period END DESC, " +
-            "CASE WHEN :periodSortOrder = 2 THEN id END ASC "
+    @Query("SELECT * " +
+            "FROM habits " +
+            "WHERE " +
+                "CASE WHEN :habitHeader <> \"\" THEN header LIKE :habitHeader ELSE 1=1 END " +
+                " AND " +
+                "CASE WHEN :habitPriority IN (0,1,2) THEN priority = :habitPriority ELSE 1=1 END " +
+            "ORDER BY " +
+                "CASE WHEN :periodSortOrder = $SORT_ASC THEN period END ASC, " +
+                "CASE WHEN :periodSortOrder = $SORT_DESC THEN period END DESC, " +
+                "CASE WHEN :periodSortOrder = $NONE THEN id END ASC"
     )
     fun getFilteredSortedHabits(
         habitHeader: String,
-        habitPriority: HabitPriority,
+        habitPriority: HabitPriority?,
         periodSortOrder: Int) : LiveData<List<Habit>>
 }
