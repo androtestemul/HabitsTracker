@@ -31,7 +31,6 @@ abstract class HabitDatabase : RoomDatabase() {
                         "habits_database"
                     )
                         .fallbackToDestructiveMigration()
-                        .allowMainThreadQueries()
                         .build()
 
                     INSTANCE = instance

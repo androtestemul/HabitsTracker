@@ -1,11 +1,13 @@
 package com.apska.habitstracker.ui.screens.addedithabit
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.RadioButton
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -76,24 +78,7 @@ class AddEditHabitFragment : Fragment() {
         val habitId = args.habitId
 
         if (habitId != -1L) {
-            val habit = addEditHabitViewModel.getHabit(habitId) ?: throw Exception("Привычка не найдена")
-
-            addEditHabitViewModel.selectedPriority = habit.priority
-
-            binding.apply {
-                headerEditText.setText(habit.header)
-                descriptionEditText.setText(habit.description)
-                priorityEditText.setText(habit.priority.getTextValue(requireContext()), false)
-                executeCountEditText.setText(habit.executeCount.toString())
-                periodEditText.setText(habit.period)
-                (habitTypeRadioGroup.getChildAt(habit.type.ordinal) as RadioButton).isChecked = true
-
-                if (habit.color != ColorView.DEFAULT_COLOR) {
-                    selectedColorPickerView.canvasBackgroundColor = habit.color
-                    addEditHabitViewModel.selectedColorFromPicker = habit.color
-                    selectedColorTextView.text = getText(R.string.habit_color_selected_label)
-                }
-            }
+            addEditHabitViewModel.getHabit(habitId)
         } else {
             (binding.habitTypeRadioGroup.getChildAt(HabitType.NEUTRAL.ordinal) as RadioButton).isChecked =
                 true
@@ -136,71 +121,60 @@ class AddEditHabitFragment : Fragment() {
             }
         }
 
-        addEditHabitViewModel.validateResult.observe(viewLifecycleOwner) { validateResult ->
-            if (validateResult == null) {
-                return@observe
-            }
+        addEditHabitViewModel.habit.observe(viewLifecycleOwner) { habit ->
+            habit?.let {
+                binding.apply {
+                    headerEditText.setText(habit.header)
+                    descriptionEditText.setText(habit.description)
+                    priorityEditText.setText(habit.priority.getTextValue(requireContext()), false)
+                    executeCountEditText.setText(habit.executeCount.toString())
+                    periodEditText.setText(habit.period)
+                    (habitTypeRadioGroup.getChildAt(habit.type.ordinal) as RadioButton).isChecked = true
 
-            if (validateResult.isValid) {
-                findNavController().popBackStack()
-            } else {
-                val validatedFields = validateResult.validatedFields
+                    if (habit.color != ColorView.DEFAULT_COLOR) {
+                        selectedColorPickerView.canvasBackgroundColor = habit.color
 
-                ValidatedFields.values().forEach { validatedField ->
-                    when (validatedField) {
-                        ValidatedFields.HEADER -> {
-                            if (validatedFields.containsKey(ValidatedFields.HEADER)) {
-                                if (validatedFields[ValidatedFields.HEADER] == ValidationErrorTypes.EMPTY) {
-                                    binding.headerTextInputLayout.error = getText(R.string.required_field_err)
-                                }
-                            } else {
-                                binding.headerTextInputLayout.error = null
-                            }
-                        }
-
-                        ValidatedFields.DESCRIPTION -> {
-                            if (validatedFields.containsKey(ValidatedFields.DESCRIPTION)) {
-                                if (validatedFields[ValidatedFields.DESCRIPTION] == ValidationErrorTypes.EMPTY) {
-                                    binding.descriptionTextInputLayout.error = getText(R.string.required_field_err)
-                                }
-                            } else {
-                                binding.descriptionTextInputLayout.error = null
-                            }
-                        }
-
-                        ValidatedFields.PRIORITY -> {
-                            if (validatedFields.containsKey(ValidatedFields.PRIORITY)) {
-                                if (validatedFields[ValidatedFields.PRIORITY] == ValidationErrorTypes.EMPTY) {
-                                    binding.priorityTextInputLayout.error = getText(R.string.required_field_err)
-                                }
-                            } else {
-                                binding.priorityTextInputLayout.error = null
-                            }
-                        }
-
-                        ValidatedFields.EXECUTE_COUNT -> {
-                            if (validatedFields.containsKey(ValidatedFields.EXECUTE_COUNT)) {
-                                if (validatedFields[ValidatedFields.EXECUTE_COUNT] == ValidationErrorTypes.EMPTY) {
-                                    binding.executeCountTextInputLayout.error = getText(R.string.required_field_err)
-                                }
-                            } else {
-                                binding.executeCountTextInputLayout.error = null
-                            }
-                        }
-
-                        ValidatedFields.PERIOD -> {
-                            if (validatedFields.containsKey(ValidatedFields.PERIOD)) {
-                                if (validatedFields[ValidatedFields.PERIOD] == ValidationErrorTypes.EMPTY) {
-                                    binding.periodTextInputLayout.error = getText(R.string.required_field_err)
-                                }
-                            } else {
-                                binding.periodTextInputLayout.error = null
-                            }
-                        }
-
-                        else -> {}
+                        selectedColorTextView.text = getText(R.string.habit_color_selected_label)
                     }
                 }
+            }
+        }
+
+        addEditHabitViewModel.validateResult.observe(viewLifecycleOwner) { validateResult ->
+            validateResult ?: return@observe
+
+            if (!validateResult.isValid) {
+                validateForm(validateResult.validatedFields)
+            }
+        }
+
+        addEditHabitViewModel.processResult.observe(viewLifecycleOwner) { saveResult ->
+            saveResult ?: return@observe
+
+            when (saveResult) {
+                is ProcessResult.SAVED -> findNavController().popBackStack()
+                is ProcessResult.LOADED -> setProgressVisibility(false)
+                is ProcessResult.ERROR -> {
+                    setProgressVisibility(false)
+
+                    val errorDialog = AlertDialog.Builder(requireContext(), R.style.AlertDialogApp)
+                        .setMessage(saveResult.message ?: getString(R.string.error_has_occurred))
+                        .setTitle(R.string.dialog_header)
+                        .create()
+
+                    if (saveResult.formErrorType == FormError.LOAD) {
+                        errorDialog.apply {
+                            setButton(Dialog.BUTTON_POSITIVE, getText(R.string.dialog_btn_ok)) { _, _ ->
+                                findNavController().popBackStack()
+                            }
+
+                            setCancelable(false)
+                        }
+                    }
+
+                    errorDialog.show()
+                }
+                is ProcessResult.PROCESSING -> setProgressVisibility(true)
             }
         }
 
@@ -210,5 +184,71 @@ class AddEditHabitFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setProgressVisibility(show: Boolean) {
+        if (show){
+            binding.progressOverlay.visibility = View.VISIBLE
+        } else {
+            binding.progressOverlay.visibility = View.GONE
+        }
+    }
+
+    private fun validateForm(validatedFields: HashMap<ValidatedFields, ValidationErrorTypes>) {
+        ValidatedFields.values().forEach { validatedField ->
+            when (validatedField) {
+                ValidatedFields.HEADER -> {
+                    if (validatedFields.containsKey(ValidatedFields.HEADER)) {
+                        if (validatedFields[ValidatedFields.HEADER] == ValidationErrorTypes.EMPTY) {
+                            binding.headerTextInputLayout.error = getText(R.string.required_field_err)
+                        }
+                    } else {
+                        binding.headerTextInputLayout.error = null
+                    }
+                }
+
+                ValidatedFields.DESCRIPTION -> {
+                    if (validatedFields.containsKey(ValidatedFields.DESCRIPTION)) {
+                        if (validatedFields[ValidatedFields.DESCRIPTION] == ValidationErrorTypes.EMPTY) {
+                            binding.descriptionTextInputLayout.error = getText(R.string.required_field_err)
+                        }
+                    } else {
+                        binding.descriptionTextInputLayout.error = null
+                    }
+                }
+
+                ValidatedFields.PRIORITY -> {
+                    if (validatedFields.containsKey(ValidatedFields.PRIORITY)) {
+                        if (validatedFields[ValidatedFields.PRIORITY] == ValidationErrorTypes.EMPTY) {
+                            binding.priorityTextInputLayout.error = getText(R.string.required_field_err)
+                        }
+                    } else {
+                        binding.priorityTextInputLayout.error = null
+                    }
+                }
+
+                ValidatedFields.EXECUTE_COUNT -> {
+                    if (validatedFields.containsKey(ValidatedFields.EXECUTE_COUNT)) {
+                        if (validatedFields[ValidatedFields.EXECUTE_COUNT] == ValidationErrorTypes.EMPTY) {
+                            binding.executeCountTextInputLayout.error = getText(R.string.required_field_err)
+                        }
+                    } else {
+                        binding.executeCountTextInputLayout.error = null
+                    }
+                }
+
+                ValidatedFields.PERIOD -> {
+                    if (validatedFields.containsKey(ValidatedFields.PERIOD)) {
+                        if (validatedFields[ValidatedFields.PERIOD] == ValidationErrorTypes.EMPTY) {
+                            binding.periodTextInputLayout.error = getText(R.string.required_field_err)
+                        }
+                    } else {
+                        binding.periodTextInputLayout.error = null
+                    }
+                }
+
+                else -> {}
+            }
+        }
     }
 }

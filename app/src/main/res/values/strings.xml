@@ -28,6 +28,10 @@
     <string name="habit_color_choose_label">Choose a color:</string>
 
     <string name="habit_save_button">Save</string>
+
+    <string name="dialog_header">Message</string>
+    <string name="dialog_btn_ok">Ok</string>
+    <string name="error_has_occurred">An error has occurred.</string>
     <!-- ************************ -->
 
     <!-- ***** Errors ***** -->

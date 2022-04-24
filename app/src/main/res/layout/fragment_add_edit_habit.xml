@@ -1,220 +1,241 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.screens.addedithabit.AddEditHabitFragment">
 
-    <LinearLayout
-        android:id="@+id/rootLinearLayout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/default_padding">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/headerTextInputLayout"
+        <LinearLayout
+            android:id="@+id/rootLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/add_edit_input_margin_top"
-            android:hint="@string/habit_name_hint"
-            app:endIconMode="clear_text"
-            app:errorEnabled="true">
+            android:orientation="vertical"
+            android:padding="@dimen/default_padding">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/headerEditText"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/headerTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
+                android:layout_marginTop="@dimen/add_edit_input_margin_top"
+                android:hint="@string/habit_name_hint"
+                app:endIconMode="clear_text"
+                app:errorEnabled="true">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/headerEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/descriptionTextInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/add_edit_input_margin_top"
-            android:hint="@string/habit_description_hint"
-            app:endIconMode="clear_text"
-            app:errorEnabled="true">
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/descriptionEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/priorityTextInputLayout"
-            style="@style/Widget.App.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/add_edit_input_margin_top"
-            android:hint="@string/habit_priority_hint">
-
-            <AutoCompleteTextView
-                android:id="@+id/priorityEditText"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/descriptionTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="none"
-                tools:ignore="LabelFor" />
+                android:layout_marginTop="@dimen/add_edit_input_margin_top"
+                android:hint="@string/habit_description_hint"
+                app:endIconMode="clear_text"
+                app:errorEnabled="true">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/descriptionEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
 
-        <TextView
-            android:id="@+id/habitTypeLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/habit_type_label_margin_top"
-            android:layout_marginBottom="@dimen/habit_type_label_margin_bottom"
-            android:text="@string/habit_type_label" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <RadioGroup
-            android:id="@+id/habitTypeRadioGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/habit_type_radio_group_margin_bottom"
-            tools:ignore="UselessLeaf" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/executeCountTextInputLayout"
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/add_edit_input_margin_top"
-            android:hint="@string/habit_number_of_repetitions_hint"
-            app:endIconMode="clear_text"
-            app:errorEnabled="true">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/executeCountEditText"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/priorityTextInputLayout"
+                style="@style/Widget.App.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"/>
+                android:layout_marginTop="@dimen/add_edit_input_margin_top"
+                android:hint="@string/habit_priority_hint">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <AutoCompleteTextView
+                    android:id="@+id/priorityEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    tools:ignore="LabelFor" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/periodTextInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/add_edit_input_margin_top"
-            android:hint="@string/habit_period_hint"
-            app:endIconMode="clear_text"
-            app:errorEnabled="true">
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/periodEditText"
+            <TextView
+                android:id="@+id/habitTypeLabel"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/add_edit_input_margin_top">
-
-            <TextView
-                android:id="@+id/selectedColorTextView"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/default_margin"
-                android:text="@string/habit_color_not_selected_label"
-                app:layout_constraintBottom_toBottomOf="@+id/selected_color_picker_view"
-                app:layout_constraintEnd_toStartOf="@+id/selected_color_picker_view"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/selected_color_picker_view" />
+                android:layout_marginTop="@dimen/habit_type_label_margin_top"
+                android:layout_marginBottom="@dimen/habit_type_label_margin_bottom"
+                android:text="@string/habit_type_label" />
 
-            <com.apska.habitstracker.ui.view.colorview.ColorViewFramed
-                android:id="@+id/selected_color_picker_view"
-                android:layout_width="@dimen/selected_color_wh"
-                android:layout_height="@dimen/selected_color_wh"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/rgbLabelTextView"
-                android:layout_width="wrap_content"
+            <RadioGroup
+                android:id="@+id/habitTypeRadioGroup"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="@dimen/default_margin"
-                android:text="@string/rgb"
-                android:visibility="invisible"
-                tools:visibility="visible"
-                app:layout_constraintStart_toEndOf="@+id/selected_color_picker_view"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/rgbValueTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/default_margin"
-                android:visibility="invisible"
-                tools:visibility="visible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/rgbLabelTextView"
-                app:layout_constraintTop_toTopOf="@+id/rgbLabelTextView"
-                tools:text="255 255 255" />
-
-            <TextView
-                android:id="@+id/hsvLabelTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/default_margin"
-                android:layout_marginBottom="@dimen/default_margin"
-                android:text="@string/hsv"
-                android:visibility="invisible"
-                tools:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/rgbLabelTextView"
-                app:layout_constraintTop_toBottomOf="@+id/rgbValueTextView" />
-
-            <TextView
-                android:id="@+id/hsvValueTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/default_margin"
-                android:visibility="invisible"
-                tools:visibility="visible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/hsvLabelTextView"
-                app:layout_constraintTop_toTopOf="@+id/hsvLabelTextView"
-                tools:text="360 100 100" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/habit_color_choose_label"/>
-
-        <HorizontalScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/add_edit_input_margin_top">
-
-            <LinearLayout
-                android:id="@+id/colorsPickerView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/habit_type_radio_group_margin_bottom"
                 tools:ignore="UselessLeaf" />
-        </HorizontalScrollView>
 
-        <Button
-            android:id="@+id/saveButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/add_edit_input_margin_top"
-            android:text="@string/habit_save_button" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/executeCountTextInputLayout"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/add_edit_input_margin_top"
+                android:hint="@string/habit_number_of_repetitions_hint"
+                app:endIconMode="clear_text"
+                app:errorEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/executeCountEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/periodTextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/add_edit_input_margin_top"
+                android:hint="@string/habit_period_hint"
+                app:endIconMode="clear_text"
+                app:errorEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/periodEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/add_edit_input_margin_top">
+
+                <TextView
+                    android:id="@+id/selectedColorTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/default_margin"
+                    android:text="@string/habit_color_not_selected_label"
+                    app:layout_constraintBottom_toBottomOf="@+id/selected_color_picker_view"
+                    app:layout_constraintEnd_toStartOf="@+id/selected_color_picker_view"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/selected_color_picker_view" />
+
+                <com.apska.habitstracker.ui.view.colorview.ColorViewFramed
+                    android:id="@+id/selected_color_picker_view"
+                    android:layout_width="@dimen/selected_color_wh"
+                    android:layout_height="@dimen/selected_color_wh"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/rgbLabelTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:text="@string/rgb"
+                    android:visibility="invisible"
+                    tools:visibility="visible"
+                    app:layout_constraintStart_toEndOf="@+id/selected_color_picker_view"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/rgbValueTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_margin"
+                    android:visibility="invisible"
+                    tools:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/rgbLabelTextView"
+                    app:layout_constraintTop_toTopOf="@+id/rgbLabelTextView"
+                    tools:text="255 255 255" />
+
+                <TextView
+                    android:id="@+id/hsvLabelTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    android:text="@string/hsv"
+                    android:visibility="invisible"
+                    tools:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/rgbLabelTextView"
+                    app:layout_constraintTop_toBottomOf="@+id/rgbValueTextView" />
+
+                <TextView
+                    android:id="@+id/hsvValueTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_margin"
+                    android:visibility="invisible"
+                    tools:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/hsvLabelTextView"
+                    app:layout_constraintTop_toTopOf="@+id/hsvLabelTextView"
+                    tools:text="360 100 100" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/habit_color_choose_label"/>
+
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/add_edit_input_margin_top">
+
+                <LinearLayout
+                    android:id="@+id/colorsPickerView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    tools:ignore="UselessLeaf" />
+            </HorizontalScrollView>
+
+            <Button
+                android:id="@+id/saveButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/add_edit_input_margin_top"
+                android:text="@string/habit_save_button" />
 
 
-    </LinearLayout>
-</ScrollView>
+        </LinearLayout>
+    </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/progressOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/overlay_bg"
+        android:visibility="gone"
+        tools:visibility="visible"
+        >
+
+        <ProgressBar
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"/>
+    </FrameLayout>
+</FrameLayout>

@@ -24,6 +24,10 @@
     <string name="habit_priority_hint">Приоритет</string>
     <string name="habit_type_label">Выберите тип:</string>
     <string name="habit_save_button">Сохранить</string>
+
+    <string name="dialog_header">Сообщение</string>
+    <string name="dialog_btn_ok">Ok</string>
+    <string name="error_has_occurred">An error has occurred.</string>
     <!-- ************************ -->
 
     <string name="required_field_err">Обязательное поле!</string>

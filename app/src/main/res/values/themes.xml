@@ -151,4 +151,11 @@
     </style>
     <!-- ********************** -->
 
+    <!-- ***** Error Dialog Add/Edit Fragment ***** -->
+    <style name="AlertDialogApp" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <item name="colorPrimary">@color/primaryTextColor</item>
+        <item name="android:colorBackground">@color/secondaryColor</item>
+    </style>
+    <!-- ********************** -->
+
 </resources>

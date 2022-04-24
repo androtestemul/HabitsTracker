@@ -56,7 +56,7 @@ object HabitStorage {
     }
 
     fun sortHabitByPeriod() : ArrayList<Habit> {
-        if (currentSortDirection == HabitSort.SORT_DESC || currentSortDirection == null) {
+        if (currentSortDirection == HabitSort.SORT_DESC || currentSortDirection == HabitSort.NONE) {
             habits.sortBy { it.period }
             currentSortDirection = HabitSort.SORT_ASC
         } else if (currentSortDirection == HabitSort.SORT_ASC) {

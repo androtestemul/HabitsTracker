@@ -20,6 +20,7 @@
 
     <color name="habitListItemBg">#747F86</color>
     <color name="activeTabColor">#2EE7A2</color>
+    <color name="overlay_bg">#B3656565</color>
 
 
 </resources>
