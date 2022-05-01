@@ -18,13 +18,13 @@ interface HabitsDao {
     fun getAllHabits() : LiveData<List<Habit>>
 
     @Query("SELECT * FROM habits WHERE id = :id LIMIT 1")
-    fun getHabit(id: Long) : Habit?
+    suspend fun getHabit(id: Long) : Habit?
 
     @Insert
-    fun insertHabit(habit: Habit)
+    suspend fun insertHabit(habit: Habit)
 
     @Update
-    fun updateHabit(habit: Habit)
+    suspend fun updateHabit(habit: Habit)
 
     @Query("SELECT * " +
             "FROM habits " +

@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.apska.habitstracker.model.Habit
 import com.apska.habitstracker.model.HabitPriority
 import com.apska.habitstracker.model.HabitType
@@ -31,11 +32,8 @@ class AddEditHabitViewModel(application: Application) : AndroidViewModel(applica
     val processResult: LiveData<ProcessResult>
         get() = _processResult
 
-    private val viewModelJob = Job()
-    private val uiScope = CoroutineScope(viewModelJob + Dispatchers.Main)
-
     fun getHabit(id: Long) {
-        uiScope.launch {
+        viewModelScope.launch {
             try {
                 var habit: Habit?
 
@@ -82,7 +80,7 @@ class AddEditHabitViewModel(application: Application) : AndroidViewModel(applica
 
     private fun addHabit(id: Long? = null, header: String, description: String, executeCount: String, period: String) {
         getValidatedHabit(id, header, description, executeCount, period)?.let { habit ->
-            uiScope.launch {
+            viewModelScope.launch {
                 try {
                     _processResult.value = ProcessResult.PROCESSING
 
@@ -102,7 +100,7 @@ class AddEditHabitViewModel(application: Application) : AndroidViewModel(applica
 
     private fun updateHabit(id: Long, header: String, description: String, executeCount: String, period: String) {
         getValidatedHabit(id, header, description, executeCount, period)?.let { habit ->
-            uiScope.launch {
+            viewModelScope.launch {
                 try {
                     _processResult.value = ProcessResult.PROCESSING
 
@@ -184,10 +182,5 @@ class AddEditHabitViewModel(application: Application) : AndroidViewModel(applica
             period = period,
             color = selectedColorFromPicker
         )
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
     }
 }

@@ -16,11 +16,11 @@ class Repository(application: Application) {
 
     fun getAllHabits() = habitsDao.getAllHabits()
 
-    fun getHabit(id: Long) = habitsDao.getHabit(id)
+    suspend fun getHabit(id: Long) = habitsDao.getHabit(id)
 
-    fun insertHabit(habit: Habit) = habitsDao.insertHabit(habit)
+    suspend fun insertHabit(habit: Habit) = habitsDao.insertHabit(habit)
 
-    fun updateHabit(habit: Habit) = habitsDao.updateHabit(habit)
+    suspend fun updateHabit(habit: Habit) = habitsDao.updateHabit(habit)
 
     fun getFilteredSortedHabit(habitHeader: String, habitPriority: HabitPriority?, sortOrder: Int) =
         habitsDao.getFilteredSortedHabits(habitHeader, habitPriority, sortOrder)
