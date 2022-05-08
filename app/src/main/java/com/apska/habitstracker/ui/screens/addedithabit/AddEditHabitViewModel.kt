@@ -1,13 +1,16 @@
 package com.apska.habitstracker.ui.screens.addedithabit
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.apska.habitstracker.App
 import com.apska.habitstracker.model.Habit
 import com.apska.habitstracker.model.HabitPriority
 import com.apska.habitstracker.model.HabitType
+import com.apska.habitstracker.network.HabitApi
 import com.apska.habitstracker.repository.Repository
 import com.apska.habitstracker.ui.view.colorview.ColorView
 import kotlinx.coroutines.*
@@ -16,6 +19,7 @@ class AddEditHabitViewModel(application: Application) : AndroidViewModel(applica
 
     val repository by lazy { Repository(application) }
 
+    var uid: String = ""
     var selectedPriority: HabitPriority? = null
     var selectedType: HabitType? = null
     var selectedColorFromPicker = ColorView.DEFAULT_COLOR
@@ -35,17 +39,14 @@ class AddEditHabitViewModel(application: Application) : AndroidViewModel(applica
     fun getHabit(id: Long) {
         viewModelScope.launch {
             try {
-                var habit: Habit?
-
                 _processResult.value = ProcessResult.PROCESSING
 
                 delay(2000L)
 
-                withContext(Dispatchers.IO) {
-                    habit = repository.getHabit(id)
-                }
+                val habit = repository.getHabitById(id)
 
                 habit?.let { it ->
+                    uid = it.uid
                     selectedPriority = it.priority
                     selectedColorFromPicker = it.color
 
@@ -87,7 +88,33 @@ class AddEditHabitViewModel(application: Application) : AndroidViewModel(applica
                     delay(2000L)
 
                     withContext(Dispatchers.IO) {
-                        repository.insertHabit(habit)
+                        var isInserted = false
+
+                        try {
+                            val response = HabitApi.habitApiService.putHabit(habit)
+
+                            if (response.isSuccessful) {
+                                val putHabitResponse = response.body()
+
+                                putHabitResponse?.let {
+                                    repository.insertHabit(habit.copy(uid = putHabitResponse.uid, isActual = true))
+                                    isInserted = true
+                                }
+                            } else {
+                                response.errorBody()?.let {
+                                    throw Exception("Ошибка! Код: ${response.code()}, Текст: $it")
+                                } ?: kotlin.run {
+                                    throw Exception("Ошибка! Код: ${response.code()}")
+                                }
+                            }
+                        } catch (e: Exception) {
+                            Log.e(TAG, "INSERT ERROR!", e)
+                        }
+
+                        if (!isInserted) {
+                            repository.insertHabit(habit.copy(isActual = false))
+                            App().actualizeRemote()
+                        }
                     }
 
                     _processResult.value = ProcessResult.SAVED
@@ -107,7 +134,33 @@ class AddEditHabitViewModel(application: Application) : AndroidViewModel(applica
                     delay(2000L)
 
                     withContext(Dispatchers.IO) {
-                        repository.updateHabit(habit)
+                        var isUpdated = false
+
+                        try {
+                            val response = HabitApi.habitApiService.putHabit(habit)
+
+                            if (response.isSuccessful) {
+                                val putHabitResponse = response.body()
+
+                                putHabitResponse?.let {
+                                    repository.updateHabit(habit.copy(uid = putHabitResponse.uid, isActual = true))
+                                    isUpdated = true
+                                }
+                            } else {
+                                response.errorBody()?.let {
+                                    throw Exception("Ошибка! Код: ${response.code()}, Текст: $it")
+                                } ?: kotlin.run {
+                                    throw Exception("Ошибка! Код: ${response.code()}")
+                                }
+                            }
+                        } catch (e: Exception) {
+                            Log.e(TAG, "UPDATE ERROR!", e)
+                        }
+
+                        if (!isUpdated) {
+                            repository.updateHabit(habit.copy(isActual = false))
+                            App().actualizeRemote()
+                        }
                     }
 
                     _processResult.value = ProcessResult.SAVED
@@ -174,6 +227,7 @@ class AddEditHabitViewModel(application: Application) : AndroidViewModel(applica
     } else {
         Habit(
             id = id,
+            uid = uid,
             header = header,
             description = description,
             priority = selectedPriority!!,
@@ -182,5 +236,9 @@ class AddEditHabitViewModel(application: Application) : AndroidViewModel(applica
             period = period,
             color = selectedColorFromPicker
         )
+    }
+
+    companion object {
+        private val TAG = this::class.java.simpleName
     }
 }

@@ -11,7 +11,7 @@ object HabitStorage {
 
     fun getAllHabits() = habits
 
-    fun getHabit(habitId: Long) = habits.firstOrNull { it.id == habitId }
+    fun getHabit(habitId: String) = habits.firstOrNull { it.uid == habitId }
 
     fun addHabit(habit: Habit) {
         habits.add(habit)
@@ -20,7 +20,7 @@ object HabitStorage {
 
     fun updateHabit(habit: Habit) {
         for (index in 0..habits.size) {
-            if (habits[index].id == habit.id) {
+            if (habits[index].uid == habit.uid) {
                 habits[index] = habit
                 break
             }

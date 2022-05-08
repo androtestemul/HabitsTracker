@@ -1,10 +1,7 @@
 package com.apska.habitstracker.repository.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.apska.habitstracker.model.Habit
 import com.apska.habitstracker.model.HabitPriority
 import com.apska.habitstracker.repository.HabitSort.Companion.NONE
@@ -18,13 +15,25 @@ interface HabitsDao {
     fun getAllHabits() : LiveData<List<Habit>>
 
     @Query("SELECT * FROM habits WHERE id = :id LIMIT 1")
-    suspend fun getHabit(id: Long) : Habit?
+    suspend fun getHabitById(id: Long) : Habit?
+
+    @Query("SELECT * FROM habits")
+    suspend fun getAllHabitsList() : List<Habit>
+
+    @Query("SELECT * FROM habits WHERE isActual = 0")
+    suspend fun getNotActualHabits() : List<Habit>
 
     @Insert
     suspend fun insertHabit(habit: Habit)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllHabits(habits: List<Habit>)
+
     @Update
     suspend fun updateHabit(habit: Habit)
+
+    @Query("DELETE FROM habits WHERE ((uid IS NULL) OR (uid <> \"\")) AND isActual = 1")
+    suspend fun deleteAllActualHabits()
 
     @Query("SELECT * " +
             "FROM habits " +
@@ -35,7 +44,7 @@ interface HabitsDao {
             "ORDER BY " +
                 "CASE WHEN :periodSortOrder = $SORT_ASC THEN period END ASC, " +
                 "CASE WHEN :periodSortOrder = $SORT_DESC THEN period END DESC, " +
-                "CASE WHEN :periodSortOrder = $NONE THEN id END ASC"
+            "CASE WHEN :periodSortOrder = $NONE THEN uid END ASC"
     )
     fun getFilteredSortedHabits(
         habitHeader: String,
