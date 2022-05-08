@@ -7,8 +7,11 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.apska.habitstracker.R
+import com.apska.habitstracker.URL_AVATAR
 import com.apska.habitstracker.databinding.ActivityMainBinding
 import com.apska.habitstracker.ui.screens.addedithabit.AddEditHabitFragmentArgs
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
 
 
 class MainActivity : AppCompatActivity() {
@@ -54,6 +57,15 @@ class MainActivity : AppCompatActivity() {
 
         // Подключаем кнопку вызова Navigation Drawer
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
+
+        Glide.with(this)
+            .load(URL_AVATAR)
+            .placeholder(R.drawable.ic_user_placeholder)
+            .error(R.drawable.ic_baseline_terrain)
+            //.centerCrop()
+            .transform(CircleCrop())
+            .into(binding.navigationView.getHeaderView(0)
+                .findViewById(R.id.userAvatar))
 
     }
 
