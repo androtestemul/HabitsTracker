@@ -17,7 +17,7 @@ class HabitJsonDeserializer : JsonDeserializer<Habit> {
         priority = HabitPriority.values()[json.asJsonObject.get("priority").asInt],
         type = HabitType.values()[json.asJsonObject.get("type").asInt],
         executeCount = json.asJsonObject.get("count").asInt,
-        period = json.asJsonObject.get("frequency").asString,
+        period = json.asJsonObject.get("frequency").asInt,
         color = json.asJsonObject.get("color").asInt,
         lastModified = json.asJsonObject.get("date").asLong
     )

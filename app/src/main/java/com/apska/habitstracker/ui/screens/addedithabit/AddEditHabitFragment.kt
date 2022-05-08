@@ -128,7 +128,7 @@ class AddEditHabitFragment : Fragment() {
                     descriptionEditText.setText(habit.description)
                     priorityEditText.setText(habit.priority.getTextValue(requireContext()), false)
                     executeCountEditText.setText(habit.executeCount.toString())
-                    periodEditText.setText(habit.period)
+                    periodEditText.setText(habit.period.toString())
                     (habitTypeRadioGroup.getChildAt(habit.type.ordinal) as RadioButton).isChecked = true
 
                     if (habit.color != ColorView.DEFAULT_COLOR) {

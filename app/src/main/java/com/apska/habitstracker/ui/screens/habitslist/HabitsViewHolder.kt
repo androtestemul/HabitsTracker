@@ -1,5 +1,6 @@
 package com.apska.habitstracker.ui.screens.habitslist
 
+import android.annotation.SuppressLint
 import androidx.recyclerview.widget.RecyclerView
 import com.apska.habitstracker.databinding.HabitListItemBinding
 import com.apska.habitstracker.model.Habit
@@ -17,13 +18,14 @@ class HabitsViewHolder(
         }
     }
 
+    @SuppressLint("SetTextI18n")
     fun bind(habit: Habit) {
         binding.apply {
             headerTextView.text = habit.header
             descriptionTextView.text = habit.description
             priorityTextView.text = habit.priority.getTextValue(this.root.context)
             typeTextView.text = habit.type.getTextValue(this.root.context)
-            periodTextView.text = habit.period
+            periodTextView.text = "${habit.executeCount} : ${habit.period}"
 
             colorView.canvasBackgroundColor = habit.color
         }

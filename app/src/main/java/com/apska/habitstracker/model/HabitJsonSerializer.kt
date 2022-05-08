@@ -17,7 +17,7 @@ class HabitJsonSerializer : JsonSerializer<Habit> {
         addProperty("count", habit.executeCount)
         addProperty("date", habit.lastModified)
         addProperty("description", habit.description)
-        addProperty("frequency", habit.period.toInt())
+        addProperty("frequency", habit.period)
         addProperty("priority", habit.priority.ordinal)
         addProperty("title", habit.header)
         addProperty("type", habit.type.ordinal)

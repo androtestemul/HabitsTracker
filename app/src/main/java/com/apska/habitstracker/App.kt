@@ -13,23 +13,6 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
 
-        /*GlobalScope.launch {
-            val habitResponse = HabitApi.habitApiService.getHabits()
-
-            if (habitResponse.isSuccessful) {
-                val habits = habitResponse.body()
-
-                val remoteHabitsMap = habits?.associateBy { it.uid } as HashMap
-
-                val notActual = remoteHabitsMap.values.map { it.copy(isActual = true) }
-
-                log.d("","main: $notActual")
-            }
-
-        }*/
-
-
-
         actualizeRemote()
     }
 

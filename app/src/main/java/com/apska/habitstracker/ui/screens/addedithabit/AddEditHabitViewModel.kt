@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.apska.habitstracker.App
+import com.apska.habitstracker.getCurrentDate
 import com.apska.habitstracker.model.Habit
 import com.apska.habitstracker.model.HabitPriority
 import com.apska.habitstracker.model.HabitType
@@ -233,8 +234,9 @@ class AddEditHabitViewModel(application: Application) : AndroidViewModel(applica
             priority = selectedPriority!!,
             type = selectedType!!,
             executeCount = executeCount.toInt(),
-            period = period,
-            color = selectedColorFromPicker
+            period = period.toInt(),
+            color = selectedColorFromPicker,
+            lastModified = getCurrentDate()
         )
     }
 

@@ -3,8 +3,9 @@ package com.apska.habitstracker.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import com.apska.habitstracker.getCurrentDate
+import com.apska.habitstracker.getDateDefaultFormatted
 import com.apska.habitstracker.repository.database.Converters
-import java.util.*
 
 @Entity(tableName = "habits")
 data class Habit(
@@ -21,9 +22,10 @@ data class Habit(
     val type: HabitType,
 
     val executeCount: Int,
-    val period: String,
+    val period: Int,
     val color: Int,
 
-    val lastModified: Long = Calendar.getInstance().timeInMillis,
+    val lastModified: Long = getCurrentDate(),
+    val lastModifiedDateTime: String = getDateDefaultFormatted(lastModified),
     val isActual: Boolean = false
 )
