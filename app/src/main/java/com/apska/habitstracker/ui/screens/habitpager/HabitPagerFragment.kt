@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.apska.habitstracker.R
 import com.apska.habitstracker.databinding.FragmentHabitPagerBinding
 import com.apska.habitstracker.model.HabitType
+import com.apska.habitstracker.network.NetworkChecker
 import com.apska.habitstracker.ui.screens.addedithabit.FormError
 import com.apska.habitstracker.ui.screens.addedithabit.ProcessResult
 import com.google.android.material.tabs.TabLayoutMediator
@@ -54,6 +55,12 @@ class HabitPagerFragment : Fragment() {
                 }
                 is ProcessResult.PROCESSING -> setProgressVisibility(true)
                 else -> {}
+            }
+        }
+
+        NetworkChecker(requireContext()).observe(viewLifecycleOwner) { isInternetAvailable ->
+            isInternetAvailable?.let {
+
             }
         }
 

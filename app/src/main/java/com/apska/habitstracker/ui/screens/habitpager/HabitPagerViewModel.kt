@@ -7,6 +7,7 @@ import androidx.work.*
 import com.apska.habitstracker.WORK_NAME_ACTUALIZE_DATABASE
 import com.apska.habitstracker.model.Habit
 import com.apska.habitstracker.model.HabitPriority
+import com.apska.habitstracker.network.NetworkChecker
 import com.apska.habitstracker.repository.HabitFilterFields
 import com.apska.habitstracker.repository.HabitSort
 import com.apska.habitstracker.repository.Repository
