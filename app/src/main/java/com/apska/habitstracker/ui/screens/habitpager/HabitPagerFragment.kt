@@ -1,6 +1,5 @@
 package com.apska.habitstracker.ui.screens.habitpager
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import com.apska.habitstracker.R
 import com.apska.habitstracker.databinding.FragmentHabitPagerBinding
 import com.apska.habitstracker.model.HabitType
-import com.apska.habitstracker.ui.screens.addedithabit.FormError
 import com.apska.habitstracker.ui.screens.addedithabit.ProcessResult
 import com.google.android.material.tabs.TabLayoutMediator
 
