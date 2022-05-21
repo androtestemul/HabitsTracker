@@ -9,9 +9,12 @@ java {
 }
 
 dependencies {
-    //coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2"
-    implementation 'androidx.room:room-common:2.4.2'
 
     implementation project(path: ':extentions')
+
+    //coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2"
+
+    implementation 'androidx.room:room-common:2.4.2'
+
 }

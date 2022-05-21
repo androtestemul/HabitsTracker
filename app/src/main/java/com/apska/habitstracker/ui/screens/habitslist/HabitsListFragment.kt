@@ -22,7 +22,7 @@ class HabitsListFragment : Fragment() {
 
         fun newInstance(habitType: HabitType) : HabitsListFragment {
             val fragment = HabitsListFragment()
-            fragment.arguments = bundleOf(KEY_HABIT_TYPE to habitType)
+            fragment.arguments = bundleOf(KEY_HABIT_TYPE to habitType.ordinal)
 
             return fragment
         }
@@ -44,7 +44,7 @@ class HabitsListFragment : Fragment() {
         _binding = FragmentHabitsListBinding.inflate(inflater, container, false)
 
         arguments?.let {
-            habitType = it.getParcelable(KEY_HABIT_TYPE)
+            habitType = HabitType.values()[it.getInt(KEY_HABIT_TYPE)]
         }
 
         val recyclerView = binding.habitsRecyclerView
