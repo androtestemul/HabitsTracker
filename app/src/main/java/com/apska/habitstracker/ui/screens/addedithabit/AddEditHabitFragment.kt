@@ -16,8 +16,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.apska.habitstracker.R
 import com.apska.habitstracker.databinding.FragmentAddEditHabitBinding
-import com.apska.habitstracker.model.HabitPriority
-import com.apska.habitstracker.model.HabitType
+import com.apska.habitstracker.domain.model.HabitPriority
+import com.apska.habitstracker.domain.model.HabitType
+import com.apska.habitstracker.getTextValue
 import com.apska.habitstracker.ui.view.colorpicker.ColorPicker
 import com.apska.habitstracker.ui.view.colorview.ColorView
 

@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.apska.habitstracker.model.HabitType
+import com.apska.habitstracker.domain.model.HabitType
 import com.apska.habitstracker.ui.screens.habitslist.HabitsListFragment
 
 class HabitPagerAdapter(

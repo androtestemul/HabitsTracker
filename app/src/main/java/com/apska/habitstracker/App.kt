@@ -1,7 +1,7 @@
 package com.apska.habitstracker
 
 import android.app.Application
-import com.apska.habitstracker.network.HabitApi
+import com.apska.habitstracker.data.repository.network.HabitApi
 import com.apska.habitstracker.workers.ActualizeRemoteWorker
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope

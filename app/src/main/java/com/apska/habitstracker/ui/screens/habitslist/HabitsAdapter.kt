@@ -1,16 +1,18 @@
 package com.apska.habitstracker.ui.screens.habitslist
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.apska.habitstracker.R
 import com.apska.habitstracker.databinding.HabitListItemBinding
-import com.apska.habitstracker.model.Habit
+import com.apska.habitstracker.domain.model.Habit
 
 
 class HabitsAdapter(private val onHabitItemClickListener: OnHabitItemClickListener?) : RecyclerView.Adapter<HabitsViewHolder>() {
 
     var habitsList: ArrayList<Habit> = arrayListOf()
+        @SuppressLint("NotifyDataSetChanged")
         set(value) {
             field = value
             this.notifyDataSetChanged()

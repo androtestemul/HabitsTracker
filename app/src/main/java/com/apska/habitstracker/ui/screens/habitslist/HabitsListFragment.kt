@@ -10,8 +10,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.apska.habitstracker.databinding.FragmentHabitsListBinding
-import com.apska.habitstracker.model.Habit
-import com.apska.habitstracker.model.HabitType
+import com.apska.habitstracker.domain.model.Habit
+import com.apska.habitstracker.domain.model.HabitType
 import com.apska.habitstracker.ui.screens.habitpager.HabitPagerFragmentDirections
 import com.apska.habitstracker.ui.screens.habitpager.HabitPagerViewModel
 

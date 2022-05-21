@@ -10,7 +10,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.apska.habitstracker.R
 import com.apska.habitstracker.databinding.FragmentHabitPagerBinding
-import com.apska.habitstracker.model.HabitType
+import com.apska.habitstracker.domain.model.HabitType
+import com.apska.habitstracker.getTextValue
 import com.apska.habitstracker.ui.screens.addedithabit.ProcessResult
 import com.google.android.material.tabs.TabLayoutMediator
 

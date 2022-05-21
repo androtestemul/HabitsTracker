@@ -12,8 +12,9 @@ import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.fragment.app.activityViewModels
 import com.apska.habitstracker.R
 import com.apska.habitstracker.databinding.FragmentBottomSheetBinding
-import com.apska.habitstracker.model.HabitPriority
-import com.apska.habitstracker.repository.HabitSort
+import com.apska.habitstracker.domain.model.HabitPriority
+import com.apska.habitstracker.data.repository.HabitSort
+import com.apska.habitstracker.getTextValue
 import com.apska.habitstracker.ui.screens.habitpager.HabitPagerViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 

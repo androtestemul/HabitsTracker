@@ -3,7 +3,8 @@ package com.apska.habitstracker.ui.screens.habitslist
 import android.annotation.SuppressLint
 import androidx.recyclerview.widget.RecyclerView
 import com.apska.habitstracker.databinding.HabitListItemBinding
-import com.apska.habitstracker.model.Habit
+import com.apska.habitstracker.domain.model.Habit
+import com.apska.habitstracker.getTextValue
 
 class HabitsViewHolder(
     private val binding: HabitListItemBinding,

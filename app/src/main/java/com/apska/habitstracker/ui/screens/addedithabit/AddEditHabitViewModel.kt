@@ -6,21 +6,28 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.apska.extentions.getCurrentDate
 import com.apska.habitstracker.App
-import com.apska.habitstracker.getCurrentDate
-import com.apska.habitstracker.model.Habit
-import com.apska.habitstracker.model.HabitPriority
-import com.apska.habitstracker.model.HabitType
-import com.apska.habitstracker.network.HabitApi
-import com.apska.habitstracker.repository.Repository
+import com.apska.habitstracker.data.repository.Repository
+import com.apska.habitstracker.domain.model.Habit
+import com.apska.habitstracker.domain.model.HabitPriority
+import com.apska.habitstracker.domain.model.HabitType
+import com.apska.habitstracker.domain.usecases.GetHabitByIdUseCase
+import com.apska.habitstracker.domain.usecases.InsertHabitUseCase
+import com.apska.habitstracker.domain.usecases.PutHabitToRemoteUseCase
+import com.apska.habitstracker.domain.usecases.UpdateHabitUseCase
 import com.apska.habitstracker.ui.view.colorview.ColorView
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class AddEditHabitViewModel(application: Application) : AndroidViewModel(application) {
 
-    val repository by lazy { Repository(application) }
+    private val repository by lazy { Repository(application) }
+    private val insertHabitUseCase = InsertHabitUseCase(repository, Dispatchers.IO)
+    private val updateHabitUseCase = UpdateHabitUseCase(repository, Dispatchers.IO)
 
-    var uid: String = ""
+    private var uid: String = ""
     var selectedPriority: HabitPriority? = null
     var selectedType: HabitType? = null
     var selectedColorFromPicker = ColorView.DEFAULT_COLOR
@@ -44,7 +51,7 @@ class AddEditHabitViewModel(application: Application) : AndroidViewModel(applica
 
                 delay(2000L)
 
-                val habit = repository.getHabitById(id)
+                val habit = GetHabitByIdUseCase(repository, Dispatchers.IO).getHabitById(id)
 
                 habit?.let { it ->
                     uid = it.uid
@@ -88,35 +95,23 @@ class AddEditHabitViewModel(application: Application) : AndroidViewModel(applica
 
                     delay(2000L)
 
-                    withContext(Dispatchers.IO) {
-                        var isInserted = false
+                    var isInserted = false
 
-                        try {
-                            val response = HabitApi.habitApiService.putHabit(habit)
-
-                            if (response.isSuccessful) {
-                                val putHabitResponse = response.body()
-
-                                putHabitResponse?.let {
-                                    repository.insertHabit(habit.copy(uid = putHabitResponse.uid, isActual = true))
-                                    isInserted = true
-                                }
-                            } else {
-                                response.errorBody()?.let {
-                                    throw Exception("Ошибка! Код: ${response.code()}, Текст: $it")
-                                } ?: kotlin.run {
-                                    throw Exception("Ошибка! Код: ${response.code()}")
-                                }
+                    try {
+                        PutHabitToRemoteUseCase(repository, Dispatchers.IO)
+                            .putHabitToRemote(habit)?.let { uid ->
+                                insertHabitUseCase.insertHabit(habit.copy(uid = uid, isActual = true))
+                                isInserted = true
                             }
-                        } catch (e: Exception) {
-                            Log.e(TAG, "INSERT ERROR!", e)
-                        }
-
-                        if (!isInserted) {
-                            repository.insertHabit(habit.copy(isActual = false))
-                            App().actualizeRemote()
-                        }
+                    } catch (e: Exception) {
+                        Log.e(TAG, "INSERT ERROR!", e)
                     }
+
+                    if (!isInserted) {
+                        insertHabitUseCase.insertHabit(habit.copy(isActual = false))
+                        App().actualizeRemote()
+                    }
+
 
                     _processResult.value = ProcessResult.SAVED
                 } catch (e: Exception) {
@@ -134,34 +129,21 @@ class AddEditHabitViewModel(application: Application) : AndroidViewModel(applica
 
                     delay(2000L)
 
-                    withContext(Dispatchers.IO) {
-                        var isUpdated = false
+                    var isUpdated = false
 
-                        try {
-                            val response = HabitApi.habitApiService.putHabit(habit)
-
-                            if (response.isSuccessful) {
-                                val putHabitResponse = response.body()
-
-                                putHabitResponse?.let {
-                                    repository.updateHabit(habit.copy(uid = putHabitResponse.uid, isActual = true))
-                                    isUpdated = true
-                                }
-                            } else {
-                                response.errorBody()?.let {
-                                    throw Exception("Ошибка! Код: ${response.code()}, Текст: $it")
-                                } ?: kotlin.run {
-                                    throw Exception("Ошибка! Код: ${response.code()}")
-                                }
+                    try {
+                        PutHabitToRemoteUseCase(repository, Dispatchers.IO)
+                            .putHabitToRemote(habit)?.let { uid ->
+                                updateHabitUseCase.updateHabit(habit.copy(uid = uid, isActual = true))
+                                isUpdated = true
                             }
-                        } catch (e: Exception) {
-                            Log.e(TAG, "UPDATE ERROR!", e)
-                        }
+                    } catch (e: Exception) {
+                        Log.e(TAG, "UPDATE ERROR!", e)
+                    }
 
-                        if (!isUpdated) {
-                            repository.updateHabit(habit.copy(isActual = false))
-                            App().actualizeRemote()
-                        }
+                    if (!isUpdated) {
+                        updateHabitUseCase.updateHabit(habit.copy(isActual = false))
+                        App().actualizeRemote()
                     }
 
                     _processResult.value = ProcessResult.SAVED

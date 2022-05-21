@@ -5,8 +5,11 @@ import android.util.Log
 import androidx.work.*
 import com.apska.habitstracker.App
 import com.apska.habitstracker.WORK_NAME_ACTUALIZE_REMOTE
-import com.apska.habitstracker.network.HabitApi
-import com.apska.habitstracker.repository.Repository
+import com.apska.habitstracker.data.repository.Repository
+import com.apska.habitstracker.domain.usecases.GetNotActualHabitsUseCase
+import com.apska.habitstracker.domain.usecases.PutHabitToRemoteUseCase
+import com.apska.habitstracker.domain.usecases.UpdateHabitUseCase
+import kotlinx.coroutines.Dispatchers
 import java.util.concurrent.TimeUnit
 
 class ActualizeRemoteWorker(context: Context, workerParameters: WorkerParameters): CoroutineWorker(context, workerParameters) {
@@ -17,25 +20,16 @@ class ActualizeRemoteWorker(context: Context, workerParameters: WorkerParameters
 
         try {
             val repository = Repository(App())
-            val notActualHabits = repository.getNotActualHabits()
+            val notActualHabits = GetNotActualHabitsUseCase(repository, Dispatchers.IO)
+                .getNotActualHabits()
 
             notActualHabits.forEach { habit ->
                 try {
-                    val response = HabitApi.habitApiService.putHabit(habit)
-
-                    if (response.isSuccessful) {
-                        val putHabitResponse = response.body()
-
-                        putHabitResponse?.let {
-                            repository.updateHabit(habit.copy(uid = putHabitResponse.uid, isActual = true))
-                        }
-                    } else {
-                        response.errorBody()?.let {
-                            throw Exception("Ошибка! Код: ${response.code()}, Текст: ${response.message()}")
-                        } ?: kotlin.run {
-                            throw Exception("Ошибка! Код: ${response.code()}")
-                        }
-                    }
+                    PutHabitToRemoteUseCase(repository, Dispatchers.IO)
+                        .putHabitToRemote(habit)?.let { uid ->
+                            UpdateHabitUseCase(repository, Dispatchers.IO)
+                                .updateHabit(habit.copy(uid = uid, isActual = true))
+                        } ?: run { needRetry = true }
                 } catch (e: Exception) {
                     Log.e(TAG, "ActualizeRemote ERROR!", e)
                     needRetry = true

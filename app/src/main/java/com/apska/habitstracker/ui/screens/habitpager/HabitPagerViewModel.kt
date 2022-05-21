@@ -3,23 +3,24 @@ package com.apska.habitstracker.ui.screens.habitpager
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
-import androidx.work.*
-import com.apska.habitstracker.WORK_NAME_ACTUALIZE_DATABASE
-import com.apska.habitstracker.model.Habit
-import com.apska.habitstracker.model.HabitPriority
-import com.apska.habitstracker.repository.HabitFilterFields
-import com.apska.habitstracker.repository.HabitSort
-import com.apska.habitstracker.repository.Repository
+import com.apska.habitstracker.data.repository.HabitFilterFields
+import com.apska.habitstracker.data.repository.HabitSort
+import com.apska.habitstracker.data.repository.Repository
+import com.apska.habitstracker.domain.model.Habit
+import com.apska.habitstracker.domain.model.HabitPriority
+import com.apska.habitstracker.domain.usecases.GetAllHabitsUseCase
+import com.apska.habitstracker.domain.usecases.GetFilteredSortedHabitsUseCase
+import com.apska.habitstracker.domain.usecases.UpdateHabitsFromRemoteUseCase
 import com.apska.habitstracker.ui.screens.ViewModelEvent
 import com.apska.habitstracker.ui.screens.addedithabit.FormError
 import com.apska.habitstracker.ui.screens.addedithabit.ProcessResult
 import com.apska.habitstracker.workers.ActualizeDatabaseWorker
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.collections.HashMap
 
 class HabitPagerViewModel(application: Application): AndroidViewModel(application) {
 
-    val repository by lazy { Repository(application) }
+    private val repository by lazy { Repository(application) }
 
     var searchHeader : String = ""
         set(value) {
@@ -50,7 +51,9 @@ class HabitPagerViewModel(application: Application): AndroidViewModel(applicatio
     val processResult: LiveData<ProcessResult>
         get() = _processResult
 
-    private val _habits = repository.getAllHabits()
+    private val _habits = GetAllHabitsUseCase(repository)
+            .getAllHabits().asLiveData()
+
     private var _searchHabits: LiveData<List<Habit>>
 
     val habits = MediatorLiveData<List<Habit>>()
@@ -73,13 +76,12 @@ class HabitPagerViewModel(application: Application): AndroidViewModel(applicatio
                 }
             }
 
-            repository.getFilteredSortedHabit(
-                header ?: "",
-                priority,
-                periodSortOrder
-            )
-
-
+            GetFilteredSortedHabitsUseCase(repository)
+                .getFilteredSortedHabit(
+                    header ?: "",
+                    priority,
+                    periodSortOrder
+                ).asLiveData()
         }
 
         habits.addSource(_habits) {
@@ -153,7 +155,7 @@ class HabitPagerViewModel(application: Application): AndroidViewModel(applicatio
 
             Log.d(TAG, "updateHabitsFromRemote: HabitApi.habitApiService.getHabits()")
 
-            if (repository.updateHabitsFromRemote()) {
+            if (UpdateHabitsFromRemoteUseCase(repository, Dispatchers.IO).updateHabitsFromRemote()) {
                 _processResult.value = ProcessResult.LOADED
             } else {
                 _processResult.value = ProcessResult.ERROR(null, FormError.LOAD)
