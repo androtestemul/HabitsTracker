@@ -7,13 +7,16 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.apska.habitstracker.App
 import com.apska.habitstracker.databinding.FragmentHabitsListBinding
 import com.apska.habitstracker.domain.model.Habit
 import com.apska.habitstracker.domain.model.HabitType
 import com.apska.habitstracker.ui.screens.habitpager.HabitPagerFragmentDirections
 import com.apska.habitstracker.ui.screens.habitpager.HabitPagerViewModel
+import com.apska.habitstracker.ui.screens.habitpager.HabitPagerViewModelFactory
 
 class HabitsListFragment : Fragment() {
 
@@ -33,8 +36,15 @@ class HabitsListFragment : Fragment() {
         get() = _binding!!
 
     private lateinit var habitsAdapter: HabitsAdapter
-    private val habitPagerViewModel : HabitPagerViewModel by activityViewModels()
     private var habitType: HabitType? = null
+
+    private val habitPagerViewModel : HabitPagerViewModel by activityViewModels {
+        HabitPagerViewModelFactory(
+            (requireActivity().application as App).appComponent.getAllHabitsUseCase(),
+            (requireActivity().application as App).appComponent.getFilteredSortedHabitsUseCase(),
+            (requireActivity().application as App).appComponent.getUpdateHabitsFromRemoteUseCase()
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

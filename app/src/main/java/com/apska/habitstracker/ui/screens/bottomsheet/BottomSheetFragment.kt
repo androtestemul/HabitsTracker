@@ -10,12 +10,14 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.fragment.app.activityViewModels
+import com.apska.habitstracker.App
 import com.apska.habitstracker.R
+import com.apska.habitstracker.data.repository.HabitSort
 import com.apska.habitstracker.databinding.FragmentBottomSheetBinding
 import com.apska.habitstracker.domain.model.HabitPriority
-import com.apska.habitstracker.data.repository.HabitSort
 import com.apska.habitstracker.getTextValue
 import com.apska.habitstracker.ui.screens.habitpager.HabitPagerViewModel
+import com.apska.habitstracker.ui.screens.habitpager.HabitPagerViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class BottomSheetFragment : BottomSheetDialogFragment() {
@@ -28,7 +30,13 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
     private val binding
         get() = _binding!!
 
-    private val habitPagerViewModel : HabitPagerViewModel by activityViewModels()
+    private val habitPagerViewModel : HabitPagerViewModel by activityViewModels {
+        HabitPagerViewModelFactory(
+            (requireActivity().application as App).appComponent.getAllHabitsUseCase(),
+            (requireActivity().application as App).appComponent.getFilteredSortedHabitsUseCase(),
+            (requireActivity().application as App).appComponent.getUpdateHabitsFromRemoteUseCase()
+        )
+    }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreateView(

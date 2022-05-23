@@ -1,14 +1,12 @@
 package com.apska.habitstracker.ui.screens.addedithabit
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.apska.extentions.getCurrentDate
 import com.apska.habitstracker.App
-import com.apska.habitstracker.data.repository.Repository
 import com.apska.habitstracker.domain.model.Habit
 import com.apska.habitstracker.domain.model.HabitPriority
 import com.apska.habitstracker.domain.model.HabitType
@@ -17,15 +15,17 @@ import com.apska.habitstracker.domain.usecases.InsertHabitUseCase
 import com.apska.habitstracker.domain.usecases.PutHabitToRemoteUseCase
 import com.apska.habitstracker.domain.usecases.UpdateHabitUseCase
 import com.apska.habitstracker.ui.view.colorview.ColorView
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.collections.HashMap
+import kotlin.collections.set
 
-class AddEditHabitViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val repository by lazy { Repository(application) }
-    private val insertHabitUseCase = InsertHabitUseCase(repository, Dispatchers.IO)
-    private val updateHabitUseCase = UpdateHabitUseCase(repository, Dispatchers.IO)
+class AddEditHabitViewModel(
+    private val insertHabitUseCase : InsertHabitUseCase,
+    private val updateHabitUseCase : UpdateHabitUseCase,
+    private val getHabitByIdUseCase : GetHabitByIdUseCase,
+    private val putHabitToRemoteUseCase : PutHabitToRemoteUseCase
+) : ViewModel() {
 
     private var uid: String = ""
     var selectedPriority: HabitPriority? = null
@@ -51,7 +51,7 @@ class AddEditHabitViewModel(application: Application) : AndroidViewModel(applica
 
                 delay(2000L)
 
-                val habit = GetHabitByIdUseCase(repository, Dispatchers.IO).getHabitById(id)
+                val habit = getHabitByIdUseCase.getHabitById(id)
 
                 habit?.let { it ->
                     uid = it.uid
@@ -98,7 +98,7 @@ class AddEditHabitViewModel(application: Application) : AndroidViewModel(applica
                     var isInserted = false
 
                     try {
-                        PutHabitToRemoteUseCase(repository, Dispatchers.IO)
+                        putHabitToRemoteUseCase
                             .putHabitToRemote(habit)?.let { uid ->
                                 insertHabitUseCase.insertHabit(habit.copy(uid = uid, isActual = true))
                                 isInserted = true
@@ -132,7 +132,7 @@ class AddEditHabitViewModel(application: Application) : AndroidViewModel(applica
                     var isUpdated = false
 
                     try {
-                        PutHabitToRemoteUseCase(repository, Dispatchers.IO)
+                        putHabitToRemoteUseCase
                             .putHabitToRemote(habit)?.let { uid ->
                                 updateHabitUseCase.updateHabit(habit.copy(uid = uid, isActual = true))
                                 isUpdated = true

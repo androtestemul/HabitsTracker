@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.apska.habitstracker.App
 import com.apska.habitstracker.R
 import com.apska.habitstracker.databinding.FragmentAddEditHabitBinding
 import com.apska.habitstracker.domain.model.HabitPriority
@@ -29,7 +30,14 @@ class AddEditHabitFragment : Fragment() {
         get() = _binding!!
 
     private val args: AddEditHabitFragmentArgs by navArgs()
-    private val addEditHabitViewModel: AddEditHabitViewModel by viewModels()
+    private val addEditHabitViewModel: AddEditHabitViewModel by viewModels {
+        AddEditHabitViewModelFactory(
+            (requireActivity().application as App).appComponent.getInsertHabitUseCase(),
+            (requireActivity().application as App).appComponent.getUpdateHabitUseCase(),
+            (requireActivity().application as App).appComponent.getHabitByIdUseCase(),
+            (requireActivity().application as App).appComponent.getPutHabitToRemoteUseCase()
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

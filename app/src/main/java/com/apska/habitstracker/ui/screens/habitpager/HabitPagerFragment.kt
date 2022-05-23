@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.apska.habitstracker.App
 import com.apska.habitstracker.R
 import com.apska.habitstracker.databinding.FragmentHabitPagerBinding
 import com.apska.habitstracker.domain.model.HabitType
@@ -20,7 +21,13 @@ class HabitPagerFragment : Fragment() {
     private val binding
         get() = _binding!!
 
-    private val habitPagerViewModel : HabitPagerViewModel by activityViewModels()
+    private val habitPagerViewModel : HabitPagerViewModel by activityViewModels {
+        HabitPagerViewModelFactory(
+            (requireActivity().application as App).appComponent.getAllHabitsUseCase(),
+            (requireActivity().application as App).appComponent.getFilteredSortedHabitsUseCase(),
+            (requireActivity().application as App).appComponent.getUpdateHabitsFromRemoteUseCase()
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

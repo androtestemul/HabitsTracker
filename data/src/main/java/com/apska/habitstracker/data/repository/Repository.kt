@@ -1,6 +1,6 @@
 package com.apska.habitstracker.data.repository
 
-import android.app.Application
+import android.content.Context
 import android.util.Log
 import com.apska.habitstracker.data.repository.database.HabitDatabase
 import com.apska.habitstracker.data.repository.database.HabitsDao
@@ -8,14 +8,12 @@ import com.apska.habitstracker.data.repository.network.HabitApi
 import com.apska.habitstracker.domain.HabitsRepository
 import com.apska.habitstracker.domain.model.Habit
 import com.apska.habitstracker.domain.model.HabitPriority
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
-class Repository(application: Application) : HabitsRepository {
+class Repository(context: Context) : HabitsRepository {
     private val habitsDao: HabitsDao
 
     init {
-        val database = HabitDatabase.getInstance(application)
+        val database = HabitDatabase.getInstance(context)
         habitsDao = database.habitDatabaseDao
     }
 
