@@ -26,5 +26,8 @@ data class Habit(
 
     val lastModified: Long = getCurrentDate(),
     val lastModifiedDateTime: String = getDateDefaultFormatted(lastModified),
-    val isActual: Boolean = false
+    val isActual: Boolean = false,
+
+    @TypeConverters(Converters::class)
+    val done_dates: List<Long> = ArrayList()
 )

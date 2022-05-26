@@ -20,4 +20,5 @@ interface AppComponent {
     fun getUpdateHabitUseCase() : UpdateHabitUseCase
     fun getNotActualHabitsUseCase() : GetNotActualHabitsUseCase
 
+    fun getDoneHabitUseCase() : DoneHabitUseCase
 }

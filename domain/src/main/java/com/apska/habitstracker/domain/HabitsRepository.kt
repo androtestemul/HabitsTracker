@@ -26,4 +26,6 @@ interface HabitsRepository {
     suspend fun updateHabitsFromRemote() : Boolean
 
     suspend fun putHabitToRemote(habit: Habit) : String?
+
+    suspend fun doneHabit(habit: Habit) : Boolean
 }

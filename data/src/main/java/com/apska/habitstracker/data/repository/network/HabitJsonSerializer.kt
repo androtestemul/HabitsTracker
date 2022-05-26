@@ -22,6 +22,7 @@ class HabitJsonSerializer : JsonSerializer<Habit> {
         addProperty("priority", habit.priority.ordinal)
         addProperty("title", habit.header)
         addProperty("type", habit.type.ordinal)
+        addProperty("done_dates", habit.done_dates.toString())
 
         if (habit.uid.isNotBlank()) {
             addProperty("uid", habit.uid)

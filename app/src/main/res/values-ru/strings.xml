@@ -13,6 +13,16 @@
     <string name="type_label">Тип:</string>
     <string name="period_label">Периодичность:</string>
 
+    <string name="stop_doing_it">Хватит это делать!</string>
+    <string name="сan_do">Можете выполнить еще %s</string>
+    <string name="worth_doing">Стоит выполнить еще %s</string>
+
+    <plurals name="times">
+        <item quantity="one">%1$d раз</item>
+        <item quantity="few">%1$d раза</item>
+        <item quantity="many">%1$d раз</item>
+        <item quantity="other">%1$d раз</item>
+    </plurals>
 
     <!-- ***** AddEditHabit ***** -->
     <string name="header_add">Добавление привычки</string>

@@ -2,13 +2,12 @@ package com.apska.habitstracker.ui.screens.habitpager
 
 import android.util.Log
 import androidx.lifecycle.*
+import com.apska.extentions.getCurrentDate
 import com.apska.habitstracker.data.repository.HabitFilterFields
 import com.apska.habitstracker.data.repository.HabitSort
 import com.apska.habitstracker.domain.model.Habit
 import com.apska.habitstracker.domain.model.HabitPriority
-import com.apska.habitstracker.domain.usecases.GetAllHabitsUseCase
-import com.apska.habitstracker.domain.usecases.GetFilteredSortedHabitsUseCase
-import com.apska.habitstracker.domain.usecases.UpdateHabitsFromRemoteUseCase
+import com.apska.habitstracker.domain.usecases.*
 import com.apska.habitstracker.ui.screens.ViewModelEvent
 import com.apska.habitstracker.ui.screens.addedithabit.FormError
 import com.apska.habitstracker.ui.screens.addedithabit.ProcessResult
@@ -19,6 +18,8 @@ class HabitPagerViewModel(
     getAllHabitsUseCase: GetAllHabitsUseCase,
     private val getFilteredSortedHabitsUseCase: GetFilteredSortedHabitsUseCase,
     private val updateHabitsFromRemoteUseCase: UpdateHabitsFromRemoteUseCase,
+    private val getHabitByIdUseCase: GetHabitByIdUseCase,
+    private val doneHabitUseCase: DoneHabitUseCase
 ): ViewModel() {
 
     var searchHeader : String = ""
@@ -157,6 +158,38 @@ class HabitPagerViewModel(
             } else {
                 _processResult.value = ProcessResult.ERROR(null, FormError.LOAD)
                 ActualizeDatabaseWorker.actualizeDatabase()
+            }
+        }
+    }
+
+    fun onDoneHabit(habitId: Long) {
+        viewModelScope.launch {
+            _processResult.value = ProcessResult.PROCESSING
+
+            try {
+                val habit = getHabitByIdUseCase.getHabitById(habitId)
+
+                habit?.let {
+                    (habit.done_dates as ArrayList).add(getCurrentDate())
+
+                    if (doneHabitUseCase.doneHabit(habit)) {
+
+                        _processResult.value = ProcessResult.DoneHabit(
+                            habit.type,
+                            habit.executeCount - habit.done_dates.size
+                        )
+                    } else {
+                        _processResult.value = ProcessResult.ERROR(null, FormError.SAVE)
+                    }
+                } ?: run {
+                    _processResult.value = ProcessResult.ERROR(null, FormError.SAVE)
+                }
+
+
+            } catch (e: Exception) {
+                Log.e(TAG, "onDoneHabit: ", e)
+
+                _processResult.value = ProcessResult.ERROR(null, FormError.SAVE)
             }
         }
     }

@@ -39,4 +39,8 @@ class DomainModule(private val habitsRepository: HabitsRepository,
     @Provides
     fun provideUpdateHabitUseCase() =
         UpdateHabitUseCase(habitsRepository, dispatcher)
+
+    @Provides
+    fun provideDoneHabitUseCase() =
+        DoneHabitUseCase(habitsRepository, dispatcher)
 }

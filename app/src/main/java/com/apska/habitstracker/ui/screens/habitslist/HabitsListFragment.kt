@@ -42,7 +42,9 @@ class HabitsListFragment : Fragment() {
         HabitPagerViewModelFactory(
             (requireActivity().application as App).appComponent.getAllHabitsUseCase(),
             (requireActivity().application as App).appComponent.getFilteredSortedHabitsUseCase(),
-            (requireActivity().application as App).appComponent.getUpdateHabitsFromRemoteUseCase()
+            (requireActivity().application as App).appComponent.getUpdateHabitsFromRemoteUseCase(),
+            (requireActivity().application as App).appComponent.getHabitByIdUseCase(),
+            (requireActivity().application as App).appComponent.getDoneHabitUseCase()
         )
     }
 
@@ -62,13 +64,22 @@ class HabitsListFragment : Fragment() {
         (recyclerView.layoutManager as LinearLayoutManager)
             .orientation = LinearLayoutManager.VERTICAL
 
-        habitsAdapter = HabitsAdapter(object : HabitsAdapter.OnHabitItemClickListener {
-            override fun onItemClick(habitPosition: Int) {
-                habitsAdapter.habitsList[habitPosition].id?.let {
-                    habitPagerViewModel.onHabitClicked(it)
+        habitsAdapter = HabitsAdapter(
+            object : HabitsAdapter.OnHabitItemClickListener {
+                override fun onItemClick(habitPosition: Int) {
+                    habitsAdapter.habitsList[habitPosition].id?.let {
+                        habitPagerViewModel.onHabitClicked(it)
+                    }
+                }
+            },
+            object : HabitsAdapter.OnDoneClickListener {
+                override fun onItemClick(habitPosition: Int) {
+                    habitsAdapter.habitsList[habitPosition].id?.let {
+                        habitPagerViewModel.onDoneHabit(it)
+                    }
                 }
             }
-        })
+        )
 
         recyclerView.adapter = habitsAdapter
 

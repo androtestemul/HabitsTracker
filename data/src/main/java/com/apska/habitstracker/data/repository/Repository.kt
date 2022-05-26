@@ -8,6 +8,7 @@ import com.apska.habitstracker.data.repository.network.HabitApi
 import com.apska.habitstracker.domain.HabitsRepository
 import com.apska.habitstracker.domain.model.Habit
 import com.apska.habitstracker.domain.model.HabitPriority
+import com.apska.habitstracker.domain.model.RequestDoneHabit
 
 class Repository(context: Context) : HabitsRepository {
     private val habitsDao: HabitsDao
@@ -98,6 +99,21 @@ class Repository(context: Context) : HabitsRepository {
         } else {
             null
         }
+    }
+
+    override suspend fun doneHabit(habit: Habit): Boolean {
+
+        HabitApi.habitApiService.doneHabit(
+                RequestDoneHabit(
+                    (habit.done_dates.maxOrNull() ?: 0).toInt(),
+                    habit.uid
+                )
+            )?.let {
+                return it.isSuccessful
+            }
+
+        return false
+
     }
 
     companion object {

@@ -10,7 +10,7 @@ import com.apska.habitstracker.domain.model.Habit
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.internal.synchronized
 
-@Database(entities = [Habit::class], version = 5, exportSchema = false)
+@Database(entities = [Habit::class], version = 6, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class HabitDatabase : RoomDatabase() {
 

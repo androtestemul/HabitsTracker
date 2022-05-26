@@ -34,7 +34,9 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
         HabitPagerViewModelFactory(
             (requireActivity().application as App).appComponent.getAllHabitsUseCase(),
             (requireActivity().application as App).appComponent.getFilteredSortedHabitsUseCase(),
-            (requireActivity().application as App).appComponent.getUpdateHabitsFromRemoteUseCase()
+            (requireActivity().application as App).appComponent.getUpdateHabitsFromRemoteUseCase(),
+            (requireActivity().application as App).appComponent.getHabitByIdUseCase(),
+            (requireActivity().application as App).appComponent.getDoneHabitUseCase()
         )
     }
 

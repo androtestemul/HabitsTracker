@@ -8,17 +8,10 @@ import com.apska.habitstracker.getTextValue
 
 class HabitsViewHolder(
     private val binding: HabitListItemBinding,
-    private val onHabitItemClickListener: HabitsAdapter.OnHabitItemClickListener?
+    private val onHabitItemClickListener: HabitsAdapter.OnHabitItemClickListener?,
+    private val onDoneClickListener: HabitsAdapter.OnDoneClickListener?,
 ) : RecyclerView.ViewHolder(binding.root) {
-
-    init {
-        binding.root.setOnClickListener {
-            if (adapterPosition != RecyclerView.NO_POSITION) {
-                onHabitItemClickListener?.onItemClick(adapterPosition)
-            }
-        }
-    }
-
+    
     @SuppressLint("SetTextI18n")
     fun bind(habit: Habit) {
         binding.apply {
@@ -29,6 +22,18 @@ class HabitsViewHolder(
             periodTextView.text = "${habit.executeCount} : ${habit.period}"
 
             colorView.canvasBackgroundColor = habit.color
+
+            root.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    onHabitItemClickListener?.onItemClick(adapterPosition)
+                }
+            }
+
+            doneImageButton?.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    onDoneClickListener?.onItemClick(adapterPosition)
+                }
+            }
         }
     }
 }

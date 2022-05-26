@@ -12,6 +12,18 @@
     <string name="type_label">Type:</string>
     <string name="period_label">Period:</string>
 
+    <string name="you_are_breathtaking" translatable="false">You are breathtaking!</string>
+    <string name="stop_doing_it">Stop doing it!</string>
+    <string name="сan_do">Can do %s</string>
+    <string name="worth_doing">Worth doing %s</string>
+
+    <plurals name="times">
+        <item quantity="one">%1$d more time</item>
+        <item quantity="few">%1$d more times</item>
+        <item quantity="many">%1$d more times</item>
+        <item quantity="other">%1$d more times</item>
+    </plurals>
+
     <!-- ***** AddEditHabit ***** -->
     <string name="header_add">Adding a Habit</string>
     <string name="header_edit">Editing a Habit</string>
@@ -30,7 +42,7 @@
     <string name="habit_save_button">Save</string>
 
     <string name="dialog_header">Message</string>
-    <string name="dialog_btn_ok">Ok</string>
+    <string name="dialog_btn_ok">OK</string>
     <string name="error_has_occurred">An error has occurred.</string>
     <!-- ************************ -->
 
