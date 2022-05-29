@@ -11,9 +11,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.reflect.Type
 
-object HabitApi {
-    private const val BASE_URL = "https://droid-test-server.doubletapp.ru/"
-    private const val AUTH_TOKEN = "cdce755e-c8ad-445b-a96b-7bb6c9d07c0c"
+class HabitApi {
 
     private fun getRetrofit() : Retrofit {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
@@ -66,5 +64,10 @@ object HabitApi {
 
     val habitApiService: HabitApiService by lazy {
         getRetrofit().create(HabitApiService::class.java)
+    }
+
+    companion object {
+        private const val BASE_URL = "https://droid-test-server.doubletapp.ru/"
+        private const val AUTH_TOKEN = "cdce755e-c8ad-445b-a96b-7bb6c9d07c0c"
     }
 }

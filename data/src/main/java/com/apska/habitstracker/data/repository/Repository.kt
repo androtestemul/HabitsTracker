@@ -1,6 +1,5 @@
 package com.apska.habitstracker.data.repository
 
-import android.content.Context
 import android.util.Log
 import com.apska.habitstracker.data.repository.database.HabitDatabase
 import com.apska.habitstracker.data.repository.database.HabitsDao
@@ -10,11 +9,10 @@ import com.apska.habitstracker.domain.model.Habit
 import com.apska.habitstracker.domain.model.HabitPriority
 import com.apska.habitstracker.domain.model.RequestDoneHabit
 
-class Repository(context: Context) : HabitsRepository {
+class Repository(database : HabitDatabase, private val habitApi: HabitApi) : HabitsRepository {
     private val habitsDao: HabitsDao
 
     init {
-        val database = HabitDatabase.getInstance(context)
         habitsDao = database.habitDatabaseDao
     }
 
@@ -57,7 +55,7 @@ class Repository(context: Context) : HabitsRepository {
         var isUpdated = false
 
         try {
-            val habitResponse = HabitApi.habitApiService.getHabits()
+            val habitResponse = habitApi.habitApiService.getHabits()
 
             if (habitResponse.isSuccessful) {
                 val habits = habitResponse.body()
@@ -88,7 +86,7 @@ class Repository(context: Context) : HabitsRepository {
     }
 
     override suspend fun putHabitToRemote(habit: Habit): String? {
-        val response = HabitApi.habitApiService.putHabit(habit)
+        val response = habitApi.habitApiService.putHabit(habit)
 
         return if (response.isSuccessful) {
             val putHabitResponse = response.body()
@@ -103,7 +101,7 @@ class Repository(context: Context) : HabitsRepository {
 
     override suspend fun doneHabit(habit: Habit): Boolean {
 
-        HabitApi.habitApiService.doneHabit(
+        habitApi.habitApiService.doneHabit(
                 RequestDoneHabit(
                     (habit.done_dates.maxOrNull() ?: 0).toInt(),
                     habit.uid

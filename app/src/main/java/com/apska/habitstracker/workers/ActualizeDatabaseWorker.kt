@@ -6,6 +6,8 @@ import androidx.work.*
 import com.apska.habitstracker.App
 import com.apska.habitstracker.WORK_NAME_ACTUALIZE_DATABASE
 import com.apska.habitstracker.data.repository.Repository
+import com.apska.habitstracker.data.repository.database.HabitDatabase
+import com.apska.habitstracker.data.repository.network.HabitApi
 import com.apska.habitstracker.domain.usecases.UpdateHabitsFromRemoteUseCase
 import kotlinx.coroutines.Dispatchers
 import java.util.concurrent.TimeUnit
@@ -14,7 +16,7 @@ class ActualizeDatabaseWorker(ctx: Context, params: WorkerParameters) : Coroutin
     override suspend fun doWork(): Result {
         Log.d(TAG, "doWork: START")
 
-        return if (UpdateHabitsFromRemoteUseCase(Repository(App()), Dispatchers.IO)
+        return if (UpdateHabitsFromRemoteUseCase(Repository(HabitDatabase.getInstance(applicationContext), HabitApi()), Dispatchers.IO)
                 .updateHabitsFromRemote()) {
             Result.success()
         } else {

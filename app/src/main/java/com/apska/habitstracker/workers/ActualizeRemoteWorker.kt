@@ -6,6 +6,8 @@ import androidx.work.*
 import com.apska.habitstracker.App
 import com.apska.habitstracker.WORK_NAME_ACTUALIZE_REMOTE
 import com.apska.habitstracker.data.repository.Repository
+import com.apska.habitstracker.data.repository.database.HabitDatabase
+import com.apska.habitstracker.data.repository.network.HabitApi
 import com.apska.habitstracker.domain.usecases.GetNotActualHabitsUseCase
 import com.apska.habitstracker.domain.usecases.PutHabitToRemoteUseCase
 import com.apska.habitstracker.domain.usecases.UpdateHabitUseCase
@@ -19,7 +21,7 @@ class ActualizeRemoteWorker(context: Context, workerParameters: WorkerParameters
         var needRetry = false
 
         try {
-            val repository = Repository(App())
+            val repository = Repository(HabitDatabase.getInstance(applicationContext), HabitApi())
             val notActualHabits = GetNotActualHabitsUseCase(repository, Dispatchers.IO)
                 .getNotActualHabits()
 
