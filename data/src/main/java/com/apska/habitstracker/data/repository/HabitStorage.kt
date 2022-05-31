@@ -2,6 +2,7 @@ package com.apska.habitstracker.data.repository
 
 import com.apska.habitstracker.domain.model.Habit
 import com.apska.habitstracker.domain.model.HabitPriority
+import com.apska.habitstracker.domain.model.HabitSort
 
 object HabitStorage {
 

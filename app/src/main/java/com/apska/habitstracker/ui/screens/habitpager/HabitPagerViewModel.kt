@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.apska.extentions.getCurrentDate
 import com.apska.habitstracker.data.repository.HabitFilterFields
-import com.apska.habitstracker.data.repository.HabitSort
+import com.apska.habitstracker.domain.model.HabitSort
 import com.apska.habitstracker.domain.model.Habit
 import com.apska.habitstracker.domain.model.HabitPriority
 import com.apska.habitstracker.domain.usecases.*

@@ -1,4 +1,4 @@
-package com.apska.habitstracker.data.repository
+package com.apska.habitstracker.domain.model
 
 class HabitSort {
     companion object {

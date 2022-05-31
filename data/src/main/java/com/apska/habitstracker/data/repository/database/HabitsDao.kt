@@ -3,9 +3,9 @@ package com.apska.habitstracker.data.repository.database
 import androidx.room.*
 import com.apska.habitstracker.domain.model.Habit
 import com.apska.habitstracker.domain.model.HabitPriority
-import com.apska.habitstracker.data.repository.HabitSort.Companion.NONE
-import com.apska.habitstracker.data.repository.HabitSort.Companion.SORT_ASC
-import com.apska.habitstracker.data.repository.HabitSort.Companion.SORT_DESC
+import com.apska.habitstracker.domain.model.HabitSort.Companion.NONE
+import com.apska.habitstracker.domain.model.HabitSort.Companion.SORT_ASC
+import com.apska.habitstracker.domain.model.HabitSort.Companion.SORT_DESC
 import kotlinx.coroutines.flow.Flow
 
 @Dao
