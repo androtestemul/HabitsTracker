@@ -51,7 +51,8 @@ class AddEditHabitFragment : Fragment() {
                 habitPriority.getTextValue(requireContext())
             })
 
-        (binding.priorityEditText as AppCompatAutoCompleteTextView).apply {
+        //(binding.priorityEditText as AppCompatAutoCompleteTextView).apply {
+        binding.priorityEditText.apply {
             setAdapter(priorityAdapter)
 
             setOnItemClickListener { _, _, position, _ ->
