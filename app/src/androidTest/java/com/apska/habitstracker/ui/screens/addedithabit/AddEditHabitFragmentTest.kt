@@ -44,13 +44,15 @@ internal class AddEditHabitFragmentTest {
 
         Espresso.closeSoftKeyboard()
 
-        //onView(withId(R.id.addEditHabitMainScroll)).perform(scrollTo(), click())
         onView(withId(R.id.saveButton)).perform(scrollTo())
 
         onView(withId(R.id.saveButton)).perform(click())
 
+        //Espresso.
+
         //assertThat(onView(withId(R.id.periodTextInputLayout)).check(matches(withText("Bla bla bla"))))
         onView(withId(R.id.periodTextInputLayout)).check(matches(withText("Bla bla bla")))
+
 
     }
 

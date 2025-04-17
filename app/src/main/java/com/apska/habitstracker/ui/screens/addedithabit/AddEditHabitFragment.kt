@@ -185,6 +185,7 @@ class AddEditHabitFragment : Fragment() {
                     errorDialog.show()
                 }
                 is ProcessResult.PROCESSING -> setProgressVisibility(true)
+                is ProcessResult.DoneHabit -> {}
             }
         }
 

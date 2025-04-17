@@ -1,7 +1,13 @@
 package com.apska.habitstracker.ui.screens.habitpager
 
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.switchMap
+import androidx.lifecycle.viewModelScope
 import com.apska.extentions.getCurrentDate
 import com.apska.habitstracker.data.repository.HabitFilterFields
 import com.apska.habitstracker.domain.model.HabitSort
@@ -62,7 +68,9 @@ class HabitPagerViewModel(
     init {
         updateHabitsFromRemote()
 
-        _searchHabits = Transformations.switchMap(habitFilterFields) { fieldsMap ->
+
+
+        _searchHabits = habitFilterFields.switchMap { fieldsMap ->
             var header: String? = null
             var priority: HabitPriority? = null
             var periodSortOrder = HabitSort.NONE
