@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
@@ -29,8 +31,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = '17'
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+        }
     }
 
     buildFeatures {
@@ -73,12 +77,11 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:4.16.0"
 
     //Dagger
-    def daggerVersion = "2.57"
     implementation "com.google.dagger:dagger:$daggerVersion"
     kapt("com.google.dagger:dagger-compiler:$daggerVersion")
 
     //Test UI
-    testImplementation 'androidx.fragment:fragment:1.8.8'
+    testImplementation 'androidx.fragment:fragment-ktx:1.8.8'
     debugImplementation 'androidx.fragment:fragment-testing:1.8.8'
     testImplementation 'com.google.android.material:material:1.12.0'
     testImplementation 'androidx.appcompat:appcompat:1.7.1'
