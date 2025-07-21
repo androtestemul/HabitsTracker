@@ -2,36 +2,39 @@ package com.apska.habitstracker.workers
 
 import android.content.Context
 import android.util.Log
-import androidx.work.*
+import androidx.work.CoroutineWorker
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkerParameters
 import com.apska.habitstracker.App
 import com.apska.habitstracker.WORK_NAME_ACTUALIZE_REMOTE
-import com.apska.habitstracker.data.repository.Repository
-import com.apska.habitstracker.data.repository.database.HabitDatabase
-import com.apska.habitstracker.data.repository.network.HabitApi
 import com.apska.habitstracker.domain.usecases.GetNotActualHabitsUseCase
 import com.apska.habitstracker.domain.usecases.PutHabitToRemoteUseCase
 import com.apska.habitstracker.domain.usecases.UpdateHabitUseCase
-import kotlinx.coroutines.Dispatchers
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class ActualizeRemoteWorker(context: Context, workerParameters: WorkerParameters): CoroutineWorker(context, workerParameters) {
+class ActualizeRemoteWorker @Inject constructor(
+    context: Context,
+    workerParameters: WorkerParameters,
+    private val getNotActualHabitsUseCase: GetNotActualHabitsUseCase,
+    private val putHabitToRemoteUseCase: PutHabitToRemoteUseCase,
+    private val updateHabitUseCase: UpdateHabitUseCase,
+): CoroutineWorker(context, workerParameters) {
     override suspend fun doWork(): Result {
         Log.d(TAG, "doWork: START")
 
         var needRetry = false
 
         try {
-            val repository = Repository(HabitDatabase.getInstance(applicationContext), HabitApi())
-            val notActualHabits = GetNotActualHabitsUseCase(repository, Dispatchers.IO)
-                .getNotActualHabits()
+            val notActualHabits = getNotActualHabitsUseCase.getNotActualHabits()
 
             notActualHabits.forEach { habit ->
                 try {
-                    PutHabitToRemoteUseCase(repository, Dispatchers.IO)
-                        .putHabitToRemote(habit)?.let { uid ->
-                            UpdateHabitUseCase(repository, Dispatchers.IO)
-                                .updateHabit(habit.copy(uid = uid, isActual = true))
-                        } ?: run { needRetry = true }
+                    putHabitToRemoteUseCase.putHabitToRemote(habit)?.let { uid ->
+                        updateHabitUseCase.updateHabit(habit.copy(uid = uid, isActual = true))
+                    } ?: run { needRetry = true }
                 } catch (e: Exception) {
                     Log.e(TAG, "ActualizeRemote ERROR!", e)
                     needRetry = true

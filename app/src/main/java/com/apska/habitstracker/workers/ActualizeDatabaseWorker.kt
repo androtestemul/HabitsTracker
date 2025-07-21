@@ -2,22 +2,25 @@ package com.apska.habitstracker.workers
 
 import android.content.Context
 import android.util.Log
-import androidx.work.*
+import androidx.work.CoroutineWorker
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkerParameters
 import com.apska.habitstracker.App
 import com.apska.habitstracker.WORK_NAME_ACTUALIZE_DATABASE
-import com.apska.habitstracker.data.repository.Repository
-import com.apska.habitstracker.data.repository.database.HabitDatabase
-import com.apska.habitstracker.data.repository.network.HabitApi
 import com.apska.habitstracker.domain.usecases.UpdateHabitsFromRemoteUseCase
-import kotlinx.coroutines.Dispatchers
 import java.util.concurrent.TimeUnit
 
-class ActualizeDatabaseWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
+class ActualizeDatabaseWorker(
+    ctx: Context,
+    params: WorkerParameters,
+    private val updateHabitsFromRemoteUseCase: UpdateHabitsFromRemoteUseCase
+) : CoroutineWorker(ctx, params) {
     override suspend fun doWork(): Result {
         Log.d(TAG, "doWork: START")
 
-        return if (UpdateHabitsFromRemoteUseCase(Repository(HabitDatabase.getInstance(applicationContext), HabitApi()), Dispatchers.IO)
-                .updateHabitsFromRemote()) {
+        return if (updateHabitsFromRemoteUseCase.updateHabitsFromRemote()) {
             Result.success()
         } else {
             actualizeDatabase()

@@ -8,8 +8,9 @@ import com.apska.habitstracker.domain.HabitsRepository
 import com.apska.habitstracker.domain.model.Habit
 import com.apska.habitstracker.domain.model.HabitPriority
 import com.apska.habitstracker.domain.model.RequestDoneHabit
+import javax.inject.Inject
 
-class Repository(database : HabitDatabase, private val habitApi: HabitApi) : HabitsRepository {
+class Repository @Inject constructor(database : HabitDatabase, private val habitApi: HabitApi) : HabitsRepository {
     private val habitsDao: HabitsDao
 
     init {
@@ -40,7 +41,7 @@ class Repository(database : HabitDatabase, private val habitApi: HabitApi) : Hab
         databaseHabits.forEach { databaseHabit ->
             if (!databaseHabit.isActual) {
                 remoteHabitsMap.remove(databaseHabit.uid)
-            } else if (databaseHabit.uid.isNotBlank() && databaseHabit.isActual) {
+            } else if (databaseHabit.uid.isNotBlank()) {
                 if (remoteHabitsMap.containsKey(databaseHabit.uid)) {
                     val habitWithId = remoteHabitsMap[databaseHabit.uid]!!.copy(id = databaseHabit.id)
                     remoteHabitsMap[databaseHabit.uid] = habitWithId

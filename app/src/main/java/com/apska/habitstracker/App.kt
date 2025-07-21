@@ -1,12 +1,14 @@
 package com.apska.habitstracker
 
 import android.app.Application
-import com.apska.habitstracker.data.repository.Repository
-import com.apska.habitstracker.data.repository.database.HabitDatabase
-import com.apska.habitstracker.data.repository.network.HabitApi
-import com.apska.habitstracker.di.*
+import androidx.work.Configuration
+import androidx.work.WorkManager
+import com.apska.habitstracker.di.AppComponent
+import com.apska.habitstracker.di.AppModule
+import com.apska.habitstracker.di.ContextModule
+import com.apska.habitstracker.di.DaggerAppComponent
+import com.apska.habitstracker.di.DomainModule
 import com.apska.habitstracker.workers.ActualizeRemoteWorker
-import kotlinx.coroutines.Dispatchers
 
 class App: Application() {
 
@@ -20,11 +22,16 @@ class App: Application() {
             .builder()
             .contextModule(ContextModule(this))
             .appModule(AppModule())
-            .domainModule(DomainModule(
-                Repository(HabitDatabase.getInstance(applicationContext), HabitApi()),
-                Dispatchers.IO)
-            )
+            .domainModule(DomainModule())
             .build()
+
+        val myWorkerFactory = appComponent.getHabitsWorkerFactory()
+
+        val config = Configuration.Builder()
+            .setWorkerFactory(myWorkerFactory)
+            .build()
+
+        WorkManager.initialize(this, config)
 
         actualizeRemote()
     }

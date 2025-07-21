@@ -1,6 +1,7 @@
 package com.apska.habitstracker.di
 
 import com.apska.habitstracker.domain.usecases.*
+import com.apska.habitstracker.workers.HabitsWorkerFactory
 import dagger.Component
 import javax.inject.Singleton
 
@@ -21,4 +22,5 @@ interface AppComponent {
     fun getNotActualHabitsUseCase() : GetNotActualHabitsUseCase
 
     fun getDoneHabitUseCase() : DoneHabitUseCase
+    fun getHabitsWorkerFactory() : HabitsWorkerFactory
 }

@@ -14,10 +14,10 @@ data class Habit(
     val header: String,
     val description: String,
 
-    @TypeConverters(Converters::class)
+    @param:TypeConverters(Converters::class)
     val priority: HabitPriority,
 
-    @TypeConverters(Converters::class)
+    @param:TypeConverters(Converters::class)
     val type: HabitType,
 
     val executeCount: Int,
@@ -28,6 +28,6 @@ data class Habit(
     val lastModifiedDateTime: String = getDateDefaultFormatted(lastModified),
     val isActual: Boolean = false,
 
-    @TypeConverters(Converters::class)
+    @param:TypeConverters(Converters::class)
     val done_dates: List<Long> = ArrayList()
 )

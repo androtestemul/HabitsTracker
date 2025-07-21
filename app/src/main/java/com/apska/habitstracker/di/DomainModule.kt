@@ -7,40 +7,40 @@ import dagger.Provides
 import kotlinx.coroutines.CoroutineDispatcher
 
 @Module
-class DomainModule(private val habitsRepository: HabitsRepository,
-                   private val dispatcher: CoroutineDispatcher) {
+class DomainModule {
     @Provides
-    fun provideGetAllHabitsUseCase() =
+    fun provideGetAllHabitsUseCase(habitsRepository: HabitsRepository) =
         GetAllHabitsUseCase(habitsRepository)
 
     @Provides
-    fun provideGetFilteredSortedHabitsUseCase() =
+    fun provideGetFilteredSortedHabitsUseCase(habitsRepository: HabitsRepository) =
         GetFilteredSortedHabitsUseCase(habitsRepository)
 
     @Provides
-    fun provideGetHabitByIdUseCase() =
+    fun provideGetHabitByIdUseCase(habitsRepository: HabitsRepository, dispatcher: CoroutineDispatcher) =
         GetHabitByIdUseCase(habitsRepository, dispatcher)
 
     @Provides
-    fun provideGetNotActualHabitsUseCase() =
+    fun provideGetNotActualHabitsUseCase(habitsRepository: HabitsRepository, dispatcher: CoroutineDispatcher) =
         GetNotActualHabitsUseCase(habitsRepository, dispatcher)
 
     @Provides
-    fun provideInsertHabitUseCase() = InsertHabitUseCase(habitsRepository, dispatcher)
+    fun provideInsertHabitUseCase(habitsRepository: HabitsRepository, dispatcher: CoroutineDispatcher) =
+        InsertHabitUseCase(habitsRepository, dispatcher)
 
     @Provides
-    fun providePutHabitToRemoteUseCase() =
+    fun providePutHabitToRemoteUseCase(habitsRepository: HabitsRepository, dispatcher: CoroutineDispatcher) =
         PutHabitToRemoteUseCase(habitsRepository, dispatcher)
 
     @Provides
-    fun provideUpdateHabitsFromRemoteUseCase() =
+    fun provideUpdateHabitsFromRemoteUseCase(habitsRepository: HabitsRepository, dispatcher: CoroutineDispatcher) =
         UpdateHabitsFromRemoteUseCase(habitsRepository, dispatcher)
 
     @Provides
-    fun provideUpdateHabitUseCase() =
+    fun provideUpdateHabitUseCase(habitsRepository: HabitsRepository, dispatcher: CoroutineDispatcher) =
         UpdateHabitUseCase(habitsRepository, dispatcher)
 
     @Provides
-    fun provideDoneHabitUseCase() =
+    fun provideDoneHabitUseCase(habitsRepository: HabitsRepository, dispatcher: CoroutineDispatcher) =
         DoneHabitUseCase(habitsRepository, dispatcher)
 }

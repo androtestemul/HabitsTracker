@@ -1,14 +1,14 @@
 package com.apska.habitstracker.di
 
-import android.app.Application
-import android.content.Context
-import com.apska.habitstracker.data.repository.database.HabitDatabase
-import com.apska.habitstracker.data.repository.database.HabitsDao
-import com.apska.habitstracker.domain.usecases.*
+import com.apska.habitstracker.domain.usecases.DoneHabitUseCase
+import com.apska.habitstracker.domain.usecases.GetAllHabitsUseCase
+import com.apska.habitstracker.domain.usecases.GetFilteredSortedHabitsUseCase
+import com.apska.habitstracker.domain.usecases.GetHabitByIdUseCase
+import com.apska.habitstracker.domain.usecases.UpdateHabitsFromRemoteUseCase
 import com.apska.habitstracker.ui.screens.habitpager.HabitPagerViewModelFactory
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
+import kotlinx.coroutines.Dispatchers
 
 @Module
 class AppModule {
@@ -28,4 +28,6 @@ class AppModule {
         doneHabitUseCase
     )
 
+    @Provides
+    fun provideCoroutineDispatcherIo() = Dispatchers.IO
 }
