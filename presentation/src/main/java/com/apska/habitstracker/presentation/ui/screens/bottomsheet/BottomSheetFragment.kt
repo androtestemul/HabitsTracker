@@ -10,21 +10,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.apska.habitstracker.domain.model.HabitPriority
 import com.apska.habitstracker.domain.model.HabitSort
 import com.apska.habitstracker.presentation.R
 import com.apska.habitstracker.presentation.databinding.FragmentBottomSheetBinding
 import com.apska.habitstracker.presentation.di.AppComponentProvider
-import com.apska.habitstracker.presentation.di.FragmentComponent
+import com.apska.habitstracker.presentation.di.BottomSheetComponent
 import com.apska.habitstracker.presentation.di.ViewModelFactory
 import com.apska.habitstracker.presentation.getTextValue
 import com.apska.habitstracker.presentation.ui.screens.habitpager.HabitPagerViewModel
-import com.apska.habitstracker.presentation.ui.screens.habitpager.HabitPagerViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import javax.inject.Inject
-import kotlin.getValue
 
 class BottomSheetFragment : BottomSheetDialogFragment() {
 
@@ -40,17 +37,15 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
     lateinit var viewModelFactory: ViewModelFactory
     private val habitPagerViewModel : HabitPagerViewModel by viewModels { viewModelFactory }
 
-    protected lateinit var fragmentComponent: FragmentComponent
+    protected lateinit var bottomSheetComponent: BottomSheetComponent
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        // Получаем FragmentComponent из AppComponent
         val appComponentProvider = requireActivity().application as AppComponentProvider
-        fragmentComponent = appComponentProvider.getFragmentComponent()
+        bottomSheetComponent = appComponentProvider.getBottomSheetComponent()
 
-        // Выполняем инжекцию
-        fragmentComponent.inject(this)
+        bottomSheetComponent.inject(this)
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

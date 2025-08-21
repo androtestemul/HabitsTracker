@@ -2,8 +2,11 @@ package com.apska.habitstracker.di
 
 import android.app.Application
 import com.apska.habitstracker.data.repository.di.DataModule
-import com.apska.habitstracker.presentation.di.FragmentComponent
-import com.apska.habitstracker.presentation.di.MainModule
+import com.apska.habitstracker.presentation.di.AddEditHabitComponent
+import com.apska.habitstracker.presentation.di.BottomSheetComponent
+import com.apska.habitstracker.presentation.di.HabitPagerComponent
+import com.apska.habitstracker.presentation.di.HabitsListComponent
+import com.apska.habitstracker.presentation.di.SubcomponentsModule
 import com.apska.habitstracker.presentation.di.ViewModelFactory
 import com.apska.habitstracker.presentation.di.ViewModelModule
 import com.apska.habitstracker.presentation.workers.HabitsWorkerFactory
@@ -17,7 +20,7 @@ import javax.inject.Singleton
     DataModule::class,
     DomainModule::class,
     ViewModelModule::class,
-    MainModule::class
+    SubcomponentsModule::class
 ])
 interface AppComponent {
 
@@ -28,5 +31,8 @@ interface AppComponent {
 
     fun getViewModelFactory(): ViewModelFactory
     fun getHabitsWorkerFactory() : HabitsWorkerFactory
-    fun fragmentComponent(): FragmentComponent.Factory
+    fun getAddEditHabitComponent(): AddEditHabitComponent.Factory
+    fun getHabitPagerComponent(): HabitPagerComponent.Factory
+    fun getHabitsListComponent(): HabitsListComponent.Factory
+    fun getBottomSheetComponent(): BottomSheetComponent.Factory
 }

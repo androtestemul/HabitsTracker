@@ -1,24 +1,27 @@
 package com.apska.habitstracker.presentation.ui.screens.habitpager
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.apska.habitstracker.domain.model.HabitType
 import com.apska.habitstracker.presentation.R
 import com.apska.habitstracker.presentation.databinding.FragmentHabitPagerBinding
+import com.apska.habitstracker.presentation.di.AppComponentProvider
+import com.apska.habitstracker.presentation.di.HabitPagerComponent
 import com.apska.habitstracker.presentation.di.ViewModelFactory
 import com.apska.habitstracker.presentation.getTextValue
 import com.apska.habitstracker.presentation.ui.screens.addedithabit.ProcessResult
-import com.apska.habitstracker.presentation.ui.screens.base.BaseFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import javax.inject.Inject
 
-class HabitPagerFragment : BaseFragment() {
+class HabitPagerFragment : Fragment() {
     private var _binding: FragmentHabitPagerBinding? = null
     private val binding
         get() = _binding!!
@@ -27,8 +30,15 @@ class HabitPagerFragment : BaseFragment() {
     lateinit var viewModelFactory: ViewModelFactory
     private val habitPagerViewModel : HabitPagerViewModel by viewModels { viewModelFactory }
 
-    override fun injectFragment() {
-        fragmentComponent.inject(this)
+    private lateinit var habitPagerComponent: HabitPagerComponent
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        val appComponentProvider = requireActivity().application as AppComponentProvider
+        habitPagerComponent = appComponentProvider.getHabitPagerComponent()
+
+        habitPagerComponent.inject(this)
     }
 
     override fun onCreateView(

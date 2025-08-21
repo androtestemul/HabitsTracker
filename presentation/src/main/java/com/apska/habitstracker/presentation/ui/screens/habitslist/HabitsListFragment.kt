@@ -1,27 +1,26 @@
 package com.apska.habitstracker.presentation.ui.screens.habitslist
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.apska.habitstracker.domain.model.Habit
 import com.apska.habitstracker.domain.model.HabitType
 import com.apska.habitstracker.presentation.databinding.FragmentHabitsListBinding
+import com.apska.habitstracker.presentation.di.AppComponentProvider
+import com.apska.habitstracker.presentation.di.HabitsListComponent
 import com.apska.habitstracker.presentation.di.ViewModelFactory
-import com.apska.habitstracker.presentation.ui.screens.base.BaseFragment
 import com.apska.habitstracker.presentation.ui.screens.habitpager.HabitPagerFragmentDirections
 import com.apska.habitstracker.presentation.ui.screens.habitpager.HabitPagerViewModel
-import com.apska.habitstracker.presentation.ui.screens.habitpager.HabitPagerViewModelFactory
 import javax.inject.Inject
-import kotlin.getValue
 
-class HabitsListFragment : BaseFragment() {
+class HabitsListFragment : Fragment() {
 
     companion object {
         private const val KEY_HABIT_TYPE = "habit_type"
@@ -45,8 +44,15 @@ class HabitsListFragment : BaseFragment() {
     lateinit var viewModelFactory: ViewModelFactory
     private val habitPagerViewModel : HabitPagerViewModel by viewModels { viewModelFactory }
 
-    override fun injectFragment() {
-        fragmentComponent.inject(this)
+    private lateinit var habitsListComponent: HabitsListComponent
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        val appComponentProvider = requireActivity().application as AppComponentProvider
+        habitsListComponent = appComponentProvider.getHabitsListComponent()
+
+        habitsListComponent.inject(this)
     }
 
     override fun onCreateView(

@@ -1,6 +1,7 @@
 package com.apska.habitstracker.presentation.ui.screens.addedithabit
 
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,22 +12,21 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.apska.habitstracker.domain.model.HabitPriority
 import com.apska.habitstracker.domain.model.HabitType
 import com.apska.habitstracker.presentation.R
 import com.apska.habitstracker.presentation.databinding.FragmentAddEditHabitBinding
+import com.apska.habitstracker.presentation.di.AddEditHabitComponent
+import com.apska.habitstracker.presentation.di.AppComponentProvider
 import com.apska.habitstracker.presentation.di.ViewModelFactory
 import com.apska.habitstracker.presentation.getTextValue
-import com.apska.habitstracker.presentation.ui.screens.base.BaseFragment
-import com.apska.habitstracker.presentation.ui.screens.habitpager.HabitPagerViewModel
 import com.apska.habitstracker.presentation.ui.view.colorpicker.ColorPicker
 import com.apska.habitstracker.presentation.ui.view.colorview.ColorView
 import javax.inject.Inject
 
-class AddEditHabitFragment : BaseFragment() {
+class AddEditHabitFragment : Fragment() {
 
     private var _binding: FragmentAddEditHabitBinding? = null
     private val binding
@@ -38,8 +38,15 @@ class AddEditHabitFragment : BaseFragment() {
     lateinit var viewModelFactory: ViewModelFactory
     private val addEditHabitViewModel: AddEditHabitViewModel by viewModels { viewModelFactory }
 
-    override fun injectFragment() {
-        fragmentComponent.inject(this)
+    private lateinit var addEditHabitComponent: AddEditHabitComponent
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        val appComponentProvider = requireActivity().application as AppComponentProvider
+        addEditHabitComponent = appComponentProvider.getAddEditHabitComponent()
+
+        addEditHabitComponent.inject(this)
     }
 
     override fun onCreateView(
