@@ -1,7 +1,15 @@
 package com.apska.habitstracker.di
 
 import com.apska.habitstracker.domain.HabitsRepository
-import com.apska.habitstracker.domain.usecases.*
+import com.apska.habitstracker.domain.usecases.DoneHabitUseCase
+import com.apska.habitstracker.domain.usecases.GetAllHabitsUseCase
+import com.apska.habitstracker.domain.usecases.GetFilteredSortedHabitsUseCase
+import com.apska.habitstracker.domain.usecases.GetHabitByIdUseCase
+import com.apska.habitstracker.domain.usecases.GetNotActualHabitsUseCase
+import com.apska.habitstracker.domain.usecases.InsertHabitUseCase
+import com.apska.habitstracker.domain.usecases.PutHabitToRemoteUseCase
+import com.apska.habitstracker.domain.usecases.UpdateHabitUseCase
+import com.apska.habitstracker.domain.usecases.UpdateHabitsFromRemoteUseCase
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.CoroutineDispatcher

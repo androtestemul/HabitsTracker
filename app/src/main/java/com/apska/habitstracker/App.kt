@@ -4,26 +4,25 @@ import android.app.Application
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import com.apska.habitstracker.di.AppComponent
-import com.apska.habitstracker.di.AppModule
-import com.apska.habitstracker.di.ContextModule
 import com.apska.habitstracker.di.DaggerAppComponent
-import com.apska.habitstracker.di.DomainModule
-import com.apska.habitstracker.workers.ActualizeRemoteWorker
+import com.apska.habitstracker.presentation.di.AppComponentProvider
+import com.apska.habitstracker.presentation.di.FragmentComponent
+import com.apska.habitstracker.presentation.workers.ActualizeRemoteWorker
 
-class App: Application() {
+class App: Application(), AppComponentProvider {
 
     lateinit var appComponent: AppComponent
         private set
 
+    override fun getFragmentComponent(): FragmentComponent {
+        return appComponent.fragmentComponent().create()
+    }
+
     override fun onCreate() {
         super.onCreate()
 
-        appComponent = DaggerAppComponent
-            .builder()
-            .contextModule(ContextModule(this))
-            .appModule(AppModule())
-            .domainModule(DomainModule())
-            .build()
+        appComponent = DaggerAppComponent.factory()
+            .create(this)
 
         val myWorkerFactory = appComponent.getHabitsWorkerFactory()
 
@@ -37,6 +36,6 @@ class App: Application() {
     }
 
     fun actualizeRemote() {
-        ActualizeRemoteWorker.actualizeRemote()
+        ActualizeRemoteWorker.Companion.actualizeRemote(this)
     }
 }

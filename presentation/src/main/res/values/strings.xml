@@ -1,0 +1,75 @@
+<resources>
+    <string name="app_name">Habits Tracker</string>
+    <string name="empty_list">List is empty</string>
+    <string name="add_habit">Add habit</string>
+    <string name="habit_priority_high">High</string>
+    <string name="habit_priority_middle">Middle</string>
+    <string name="habit_priority_low">Low</string>
+    <string name="habit_type_bad">Bad</string>
+    <string name="habit_type_good">Good</string>
+    <string name="habit_type_neutral">Neutral</string>
+    <string name="priority_label">Priority:</string>
+    <string name="type_label">Type:</string>
+    <string name="period_label">Period:</string>
+
+    <string name="you_are_breathtaking" translatable="false">You are breathtaking!</string>
+    <string name="stop_doing_it">Stop doing it!</string>
+    <string name="сan_do">Can do %s</string>
+    <string name="worth_doing">Worth doing %s</string>
+
+    <plurals name="times">
+        <item quantity="one">%1$d more time</item>
+        <item quantity="few">%1$d more times</item>
+        <item quantity="many">%1$d more times</item>
+        <item quantity="other">%1$d more times</item>
+    </plurals>
+
+    <!-- ***** AddEditHabit ***** -->
+    <string name="header_add">Adding a Habit</string>
+    <string name="header_edit">Editing a Habit</string>
+
+    <string name="habit_name_hint">Name</string>
+    <string name="habit_description_hint">Description</string>
+    <string name="habit_number_of_repetitions_hint">Number of repetitions</string>
+    <string name="habit_period_hint">Periodicity</string>
+    <string name="habit_priority_hint">Priority</string>
+
+    <string name="habit_type_label">Choose a type:</string>
+    <string name="habit_color_selected_label">Selected color:</string>
+    <string name="habit_color_not_selected_label">No color selected:</string>
+    <string name="habit_color_choose_label">Choose a color:</string>
+
+    <string name="habit_save_button">Save</string>
+
+    <string name="dialog_header">Message</string>
+    <string name="dialog_btn_ok">OK</string>
+    <string name="error_has_occurred">An error has occurred.</string>
+    <!-- ************************ -->
+
+    <!-- ***** Errors ***** -->
+    <string name="required_field_err">Required field!</string>
+    <string name="rgb" translatable="false">RGB:</string>
+    <string name="hsv" translatable="false">HSV:</string>
+    <!-- ************************ -->
+
+    <!-- ***** About ***** -->
+    <string name="about_header">About Habits Tracker</string>
+    <string name="about_app">\t\t\tThis application is designed to track your habits. To help you get rid of bad habits and get used to good habits. With Habit Tracking, you can see how often you perform a particular habit. Based on the application data, you will be able to control and test yourself to become better!</string>
+    <!-- ************************ -->
+
+    <!-- ***** Nav Drawer Menu ***** -->
+    <string name="navdrawer_menu">Main menu</string>
+    <string name="navdrawer_menu_habit_list">Home</string>
+    <string name="navdrawer_menu_about">About</string>
+    <!-- ************************ -->
+
+    <!-- ***** Filter and sort Fragment ***** -->
+    <string name="filter_and_sort">Filter and sort</string>
+    <string name="sort_by_period">Sort by periodicity</string>
+    <string name="reset_sorting_and_filtering">Reset sorting and filtering</string>
+    <!-- ************************ -->
+
+    <!-- ***** Habits by types ***** -->
+    <!--<string name="habit_pager_by_type_header">Habits by types</string>-->
+    <!-- ************************ -->
+</resources>

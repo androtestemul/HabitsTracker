@@ -1,0 +1,46 @@
+package com.apska.habitstracker.presentation.ui.screens.habitslist
+
+import android.annotation.SuppressLint
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.apska.habitstracker.domain.model.Habit
+import com.apska.habitstracker.presentation.R
+import com.apska.habitstracker.presentation.databinding.HabitListItemBinding
+
+
+class HabitsAdapter(
+    private val onHabitItemClickListener: OnHabitItemClickListener?,
+    private val onDoneClickListener: OnDoneClickListener
+) : RecyclerView.Adapter<HabitsViewHolder>() {
+
+    var habitsList: ArrayList<Habit> = arrayListOf()
+        @SuppressLint("NotifyDataSetChanged")
+        set(value) {
+            field = value
+            this.notifyDataSetChanged()
+        }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HabitsViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.habit_list_item, parent, false)
+
+        val binding = HabitListItemBinding.bind(view)
+
+        return HabitsViewHolder(binding, onHabitItemClickListener, onDoneClickListener)
+    }
+
+    override fun onBindViewHolder(holder: HabitsViewHolder, position: Int) {
+        holder.bind(habitsList[position])
+    }
+
+    override fun getItemCount() = habitsList.size
+
+    interface OnHabitItemClickListener {
+        fun onItemClick(habitPosition: Int)
+    }
+
+    interface OnDoneClickListener {
+        fun onItemClick(habitPosition: Int)
+    }
+}

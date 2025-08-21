@@ -1,26 +1,32 @@
 package com.apska.habitstracker.di
 
-import com.apska.habitstracker.domain.usecases.*
-import com.apska.habitstracker.workers.HabitsWorkerFactory
+import android.app.Application
+import com.apska.habitstracker.data.repository.di.DataModule
+import com.apska.habitstracker.presentation.di.FragmentComponent
+import com.apska.habitstracker.presentation.di.MainModule
+import com.apska.habitstracker.presentation.di.ViewModelFactory
+import com.apska.habitstracker.presentation.di.ViewModelModule
+import com.apska.habitstracker.presentation.workers.HabitsWorkerFactory
+import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [ContextModule::class, AppModule::class, DataModule::class, DomainModule::class])
+@Component(modules = [
+    AppModule::class,
+    DataModule::class,
+    DomainModule::class,
+    ViewModelModule::class,
+    MainModule::class
+])
 interface AppComponent {
 
-    //fun getHabitPagerViewModelFactory() : HabitPagerViewModelFactory
+    @Component.Factory
+    interface Factory {
+        fun create(@BindsInstance application: Application): AppComponent
+    }
 
-    fun getAllHabitsUseCase() : GetAllHabitsUseCase
-    fun getFilteredSortedHabitsUseCase() : GetFilteredSortedHabitsUseCase
-    fun getUpdateHabitsFromRemoteUseCase() : UpdateHabitsFromRemoteUseCase
-
-    fun getHabitByIdUseCase() : GetHabitByIdUseCase
-    fun getPutHabitToRemoteUseCase() : PutHabitToRemoteUseCase
-    fun getInsertHabitUseCase() : InsertHabitUseCase
-    fun getUpdateHabitUseCase() : UpdateHabitUseCase
-    fun getNotActualHabitsUseCase() : GetNotActualHabitsUseCase
-
-    fun getDoneHabitUseCase() : DoneHabitUseCase
+    fun getViewModelFactory(): ViewModelFactory
     fun getHabitsWorkerFactory() : HabitsWorkerFactory
+    fun fragmentComponent(): FragmentComponent.Factory
 }

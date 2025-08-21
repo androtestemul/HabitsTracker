@@ -1,11 +1,14 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     ext {
-        navigationVersion = "2.9.2"
+        navigationVersion = "2.9.3"
         room_version = "2.7.2"
         okHttp_version = "5.1.0"
         retrofit_version = "3.0.0"
+        core_ktx_version = "1.16.0"
         daggerVersion = "2.57"
+        fragmentVersion = "1.8.9"
+        materialVersion = "1.12.0"
     }
     repositories {
         google()
